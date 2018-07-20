@@ -32,9 +32,9 @@
         </div>
       </template>
     </or-list>
-    <!-- <portal
+    <portal
       name="modal-portal"
-      target-el="#modal-portal"> -->
+      target-el="#modal-portal">
     <keep-alive>
     <or-modal
         :contain-focus="false"
@@ -111,7 +111,7 @@
         </div>
       </or-modal>
       </keep-alive>
-    <!-- </portal> -->
+    </portal>
     <or-modal  :contain-focus="false" ref="deleteEvent" title="Сonfirmation of delete">
         Are you sure want delete event?
 
@@ -467,10 +467,15 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
+#modal-portal {
+  transform: translate3d(0, 0, 0);
+  width: 100%;
+  height: 100%;
+}
 .schedule-events {
   &__big-modal {
     // position: absolute;
-    display: inherit;
+    // display: inherit;
     & > .ui-modal__wrapper > .ui-modal__container {
       width: 100%;
     }
