@@ -2,6 +2,7 @@
   <div
     class="schedule-events">
     <or-list
+      label="test"
       v-model="scheduleEventsLocal" 
       :steps="steps" 
       :step-id="stepId"
