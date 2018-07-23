@@ -10,6 +10,7 @@
       :drag-handle-right="true"
       @item-added="eventAdded"
       prettifyDrag
+      dragMode
     >
       <template scope="item">
         <div class="schedule__wr-event-preview" @click="doEditable(item.index)">
@@ -32,10 +33,6 @@
         </div>
       </template>
     </or-list>
-    <!-- <portal
-      name="modal-portal"
-      target-el="#modal-portal">
-    <keep-alive> -->
     <or-modal
         :contain-focus="false"
         class="schedule-events__big-modal"
@@ -43,10 +40,7 @@
         title="Set schedule"
         @close="closeModalEvent('modal')"
         size="large"
-      >dsfsdfds
-      <!-- <vue-portal>
-        <span><span>Will be appended to body</span></span>
-      </vue-portal> -->
+      >
         <div class="schedule__wr-events-calendar">
           <div class="schedule__calendar">
             <calendar
@@ -111,7 +105,6 @@
         </div>
       </or-modal>
       </keep-alive>
-    <!-- </portal> -->
     <or-modal  :contain-focus="false" ref="deleteEvent" title="Сonfirmation of delete">
         Are you sure want delete event?
 
@@ -143,7 +136,6 @@ import _ from 'lodash';
 import moment from 'moment';
 import uuid from 'uuid';
 import randomMC from 'random-material-color';
-import { Portal, PortalTarget } from 'portal-vue';
 
 /* eslint-disable */
 import defaultValues from '../Constants/DefaultValues.js';
@@ -181,8 +173,6 @@ export default {
     ScheduleEvent,
     Calendar,
     ScheduleEventPreview,
-    Portal,
-    PortalTarget,
   },
 
   data() {
@@ -467,15 +457,6 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-.ui-modal > .ui-modal__wrapper,
-.ui-modal > .ui-modal__wrapper > .ui-modal__container > .ui-modal__body {
-  overflow: hidden;
-}
-#modal-portal {
-  // transform: translate3d(0, 0, 0);
-  // width: 100%;
-  // height: 100%;
-}
 .schedule__calendar,
 .schedule__events {
   overflow: auto;
@@ -483,14 +464,21 @@ export default {
 }
 .schedule-events {
   &__big-modal {
-    // position: absolute;
-    // display: inherit;
-    // position: fixed;
     display: inline-block;
     & > .ui-modal__wrapper > .ui-modal__container {
       width: 100%;
     }
   }
+
+  .ui-modal > .ui-modal__wrapper,
+  .ui-modal > .ui-modal__wrapper > .ui-modal__container > .ui-modal__body {
+    overflow: hidden;
+  }
+
+  .ui-modal > .ui-modal__wrapper > .ui-modal__container > .ui-modal__body {
+    overflow-x: auto;
+  }
+
   .bold-text {
     color: #0f232e;
     font-size: 14px;
@@ -519,8 +507,8 @@ export default {
     display: flex;
   }
   &__calendar {
-    min-width: 930px;
-    width: 100%;
+    min-width: 650px;
+    width: calc(100% - 450px);
     padding-right: 30px;
   }
   &__wr-event-preview {
