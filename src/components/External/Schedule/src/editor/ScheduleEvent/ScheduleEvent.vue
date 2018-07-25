@@ -1,6 +1,7 @@
 <template>
   <div class="schedule-event">
-    {{$v.validationCopyScheduleEventData.$invalid}}
+    <!-- {{$v.validationCopyScheduleEventData.$invalid}} -->
+    <!-- {{runAtTimeLocal}} -->
     <!-- {{dataStateComp}} -->
     <!-- {{$v.schemaValidation.scheduleEvents.$each.$iter[index].scheduleEventData.startExpression.date}} -->
     <!-- <div class="date">
@@ -30,17 +31,14 @@
         <div class="schedule-event__label">Date</div>
         <div class="recurring-controls__date">
           <or-icon class="recurring-controls__custom-icon-date" icon="view_comfy"></or-icon>
-          <div 
-            @click="$v.validationCopyScheduleEventData.startExpression.date.$touch()"
-          >
             <ui-datepicker
               :disabled="readonly" 
               class="recurring-controls__calendar-picker-custom" iconPosition="right" placeholder="Select date"
               :custom-formatter="formatDate" v-model="startDate"
               :invalid="validationDate"
+              @touch="$v.validationCopyScheduleEventData.startExpression.date.$touch()"
             >
             </ui-datepicker>
-          </div>
         </div>
       </div>
       <label class="timezone timezone_top">
@@ -76,9 +74,6 @@
                     <div class="">
                       <div class="recurring-controls__date">
                         <or-icon class="recurring-controls__custom-icon-date" icon="view_comfy"></or-icon>
-                        <div
-                          @click="$v.validationCopyScheduleEventData.endExpression.date.$touch()"
-                        >
                           <ui-datepicker 
                             :disabled="readonly"
                             class="recurring-controls__calendar-picker-custom"
@@ -86,9 +81,9 @@
                             :custom-formatter="formatDate" 
                             v-model="endDate"
                             :invalid="$v.validationCopyScheduleEventData.endExpression.date.$invalid && $v.validationCopyScheduleEventData.endExpression.date.$dirty"
+                            @touch="$v.validationCopyScheduleEventData.endExpression.date.$touch()"
                           >
                           </ui-datepicker>
-                        </div>
                       </div>
                     </div>
                 </div>
@@ -285,6 +280,7 @@ export default {
   },
   data() {
     return {
+      i: 0,
       runAtTimeLocal: [],
       loadingApply: false,
       isEditable: false,
@@ -515,6 +511,7 @@ export default {
 
         this.dataStateComp = 'saved';
         this.$emit('update:editableEventNum', null);
+        // this.$emit('update:copyScheduleEventData.startExpression.date', '');
         // this.$emit('saved-event');
       }
     },
@@ -676,6 +673,7 @@ export default {
       handler(newVal) {
         // this.$emit('update:times', newVal);
         this.runAtTimeLocal = [];
+
         _.forEach(newVal, item => {
           const evertVal = item.every.val ? item.every.val : 1;
           if (item.start.HH && item.start.mm && parseInt(evertVal, 10)) {
@@ -694,7 +692,7 @@ export default {
                 mm: nextRunAtTime.minutes(),
               });
 
-              nextRunAtTime = nextRunAtTime.add(parseInt(10, evertVal), units);
+              nextRunAtTime = nextRunAtTime.add(evertVal, units);
             } while (
               nextRunAtTime.isSameOrBefore(endTimeHmmA) &&
               item.end.HH &&

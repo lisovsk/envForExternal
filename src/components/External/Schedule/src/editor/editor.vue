@@ -97,6 +97,7 @@ const schemaValidation = {
     $each: {
       start: {
         custom(value, state) {
+          console.log('valuevalue', value);
           let valid = true;
           if (state) {
             valid = !!value.HH && !!value.mm;

@@ -8,7 +8,7 @@
                     <or-icon class="configs-time__icon" icon="query_builder"></or-icon>
                     <or-timepicker
                       v-model="localStart"
-                      :class="[{ readony: readonly, 'timepicker-error': timepickerStartError}]"
+                      :class="[{ readony: readonly, 'timepicker-error': timepickerStartError()}]"
                       format="HH:mm"
                       hideClearButton
                       @close-dropdown="touchStartTime"
@@ -19,7 +19,7 @@
                     <or-icon class="configs-time__icon" icon="query_builder"></or-icon>
                     <or-timepicker
                       v-model="localEnd"
-                      :class="[{ readony: readonly, 'timepicker-error': timepickerEndError}]"
+                      :class="[{ readony: readonly, 'timepicker-error': timepickerEndError()}]"
                       format="HH:mm" 
                       hideClearButton
                       @close-dropdown="touchEndTime"
@@ -32,7 +32,7 @@
                   label=""
                   placeholder="00" 
                   class="xs-input"
-                  :invalid="timepickerEveryValError"
+                  :invalid="timepickerEveryValError()"
                   :disabled="readonly"
                   v-model="localEvery.val"
                   mask="##########"
@@ -133,44 +133,14 @@ export default {
         this.$emit('update:endTime', newEndTime);
       },
     },
-    timepickerStartError() {
-      const item = _.get(
-        this.$v,
-        `validationCopyScheduleEventData.times.$each.$iter[
-        ${this.index}
-      ].start`,
-      );
-      return item && item.$invalid && item.$dirty;
-      // return !(this.localStart.HH && this.localStart.mm);
-    },
-    timepickerEndError() {
-      const item = _.get(
-        this.$v,
-        `validationCopyScheduleEventData.times.$each.$iter[
-        ${this.index}
-      ].end`,
-      );
-      return item && item.$invalid && item.$dirty;
-      // return !(this.localEnd.HH && this.localEnd.mm);
-    },
-    timepickerEveryValError() {
-      const item = _.get(
-        this.$v,
-        `validationCopyScheduleEventData.times.$each.$iter[
-        ${this.index}
-      ].every`,
-      );
-      return item && item.$invalid && item.$dirty;
-      // return !(this.localEvery.val && this.localEvery.val > 0);
-    },
   },
   methods: {
     touchStartTime() {
       const touch = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each.$iter[
-        ${this.index}
-      ].start`,
+        `validationCopyScheduleEventData.times.$each.$iter[${
+          this.index
+        }].start`,
       );
       if (touch) {
         touch.$touch();
@@ -179,9 +149,7 @@ export default {
     touchEndTime() {
       const touch = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each.$iter[
-        ${this.index}
-      ].end`,
+        `validationCopyScheduleEventData.times.$each.$iter[${this.index}].end`,
       );
       if (touch) {
         touch.$touch();
@@ -190,13 +158,40 @@ export default {
     touchEveryTime() {
       const touch = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each.$iter[
-        ${this.index}
-      ].every`,
+        `validationCopyScheduleEventData.times.$each.$iter[${
+          this.index
+        }].every`,
       );
       if (touch) {
         touch.$touch();
       }
+    },
+    timepickerStartError() {
+      const item = _.get(
+        this.$v,
+        `validationCopyScheduleEventData.times.$each.$iter[${
+          this.index
+        }].start`,
+      );
+      return item && item.$invalid && item.$dirty;
+    },
+    timepickerEndError() {
+      const item = _.get(
+        this.$v,
+        `validationCopyScheduleEventData.times.$each.$iter[${this.index}].end`,
+      );
+
+      return item && item.$invalid && item.$dirty;
+    },
+    timepickerEveryValError() {
+      const item = _.get(
+        this.$v,
+        `validationCopyScheduleEventData.times.$each.$iter[${
+          this.index
+        }].every`,
+      );
+      return item && item.$invalid && item.$dirty;
+      // return !(this.localEvery.val && this.localEvery.val > 0);
     },
   },
 };

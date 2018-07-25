@@ -56,22 +56,24 @@
 
         </div>
     </div>
-    <one-month-calendar
-        :year="year"
-        :month="month"
-        v-model="interval"
-        v-show="state === 'month'"
-        @selected-date="selectDateHandler"
-        :highlighted-dates="highlightedDates"
-    >
-    </one-month-calendar>
-    <one-year-calendar
-        :year="year"
-        v-show="state === 'year'"
-        @selected-date="selectDateHandler"
-        :highlighted-dates="highlightedDates"
-    >
-    </one-year-calendar>
+    <div :class="{'disabled-calendar': !editable}">
+      <one-month-calendar
+          :year="year"
+          :month="month"
+          v-model="interval"
+          v-show="state === 'month'"
+          @selected-date="selectDateHandler"
+          :highlighted-dates="highlightedDates"
+      >
+      </one-month-calendar>
+      <one-year-calendar
+          :year="year"
+          v-show="state === 'year'"
+          @selected-date="selectDateHandler"
+          :highlighted-dates="highlightedDates"
+      >
+      </one-year-calendar>
+    </div>
   </div>
 </template>
 
@@ -112,6 +114,10 @@ export default {
       default() {
         return [];
       },
+    },
+    editable: {
+      default: true,
+      type: Boolean,
     },
   },
   components: { OneMonthCalendar, OneYearCalendar },
@@ -230,5 +236,9 @@ export default {
   font-size: 17px;
   font-weight: bold;
   line-height: 23px;
+}
+
+.disabled-calendar {
+  pointer-events: none;
 }
 </style>

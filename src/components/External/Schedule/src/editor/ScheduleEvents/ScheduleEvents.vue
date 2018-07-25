@@ -1,8 +1,10 @@
 <template>
   <div
     class="schedule-events">
+    <div class="schedule-events__title">
+      Scheduled Events
+    </div>
     <or-list
-      label="test"
       v-model="scheduleEventsLocal" 
       :steps="steps" 
       :step-id="stepId"
@@ -11,7 +13,6 @@
       :drag-handle-right="true"
       @item-added="eventAdded"
       prettifyDrag
-      dragMode
     >
       <template scope="item">
         <div class="schedule__wr-event-preview" @click="doEditable(item.index)">
@@ -48,7 +49,7 @@
               :month="1"
               @selected-date="changeSelectedDate"
               :selected-days="startDays"
-
+              :editable="!!editableEventNum || editableEventNum === 0"
             >
             </calendar>
           </div>
@@ -61,6 +62,7 @@
               :new-item-method="listNewItemMethod"
               :drag-handle-right="true"
               @item-added="eventAdded"
+              prettifyDrag
             >
               <template scope="item">
                 <schedule-event
@@ -105,7 +107,6 @@
           </div>
         </div>
       </or-modal>
-      </keep-alive>
     <or-modal  :contain-focus="false" ref="deleteEvent" title="Сonfirmation of delete">
         Are you sure want delete event?
 
@@ -351,6 +352,8 @@ export default {
         this.editableEventNum
       ].scheduleEventData = _.cloneDeep(this.copyScheduleEventData);
       this.$emit('update:scheduleEvents', this.scheduleEventsLocal);
+      this.copyScheduleEventData.startExpression.date = '';
+      this.editableEventNum = null;
     },
     cancelChanges() {
       this.copyScheduleEventData = _.cloneDeep(
@@ -435,6 +438,8 @@ export default {
       this.deleteNotSaved();
     },
     deleteСonfirmation() {
+      this.copyScheduleEventData.startExpression.date = '';
+      this.editableEventNum = null;
       this.editableEventNum = null;
       this.dataStates[this.itemIndexForDelete] = 'canceled';
       this.scheduleEventsLocal.splice(this.itemIndexForDelete, 1);
@@ -464,6 +469,13 @@ export default {
   max-height: calc(100vh - 100px);
 }
 .schedule-events {
+  &__title {
+    color: #0f232e;
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 22px;
+  }
+
   &__big-modal {
     display: inline-block;
     & > .ui-modal__wrapper > .ui-modal__container {
