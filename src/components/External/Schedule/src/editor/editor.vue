@@ -93,60 +93,60 @@ const schemaValidation = {
       required,
     },
   },
-  times: {
-    $each: {
-      start: {
-        custom(value, state) {
-          console.log('valuevalue', value);
-          let valid = true;
-          if (state) {
-            valid = !!value.HH && !!value.mm;
-          }
-          return valid;
-        },
-      },
-      end: {
-        custom(value, state) {
-          let valid = true;
-          if (state) {
-            if (_.get(state, 'endTime', false)) {
-              valid = !!value.HH && !!value.mm;
-            }
-          }
-          return valid;
-        },
-      },
-      endTime: {},
-      every: {
-        custom(value, state) {
-          let valid = true;
-          if (state) {
-            valid = value.val && parseInt(value.val, 10) > 0;
-          }
-          return valid;
-        },
-      },
-    },
-    // custom(value) {
-    //   // console.log('valuevalue', value);
-    //   if (!value) {
-    //     return false;
-    //   }
-    //   let valid = true;
-    //   value.forEach(item => {
-    //     if (!item.start.HH || !item.start.mm) {
-    //       valid = false;
-    //     }
-    //     if (item.endTime && (!item.end.HH || !item.end.mm)) {
-    //       valid = false;
-    //     }
-    //     if (item.endTime && (!item.every.val || item.every.val < 1)) {
-    //       valid = false;
-    //     }
-    //   });
-    //   return valid;
-    // },
-  },
+  // times: {
+  //   $each: {
+  //     start: {
+  //       custom(value, state) {
+  //         console.log('valuevalue', value);
+  //         let valid = true;
+  //         if (state) {
+  //           valid = !!value.HH && !!value.mm;
+  //         }
+  //         return valid;
+  //       },
+  //     },
+  //     end: {
+  //       custom(value, state) {
+  //         let valid = true;
+  //         if (state) {
+  //           if (_.get(state, 'endTime', false)) {
+  //             valid = !!value.HH && !!value.mm;
+  //           }
+  //         }
+  //         return valid;
+  //       },
+  //     },
+  //     endTime: {},
+  //     every: {
+  //       custom(value, state) {
+  //         let valid = true;
+  //         if (state) {
+  //           valid = value.val && parseInt(value.val, 10) > 0;
+  //         }
+  //         return valid;
+  //       },
+  //     },
+  //   },
+  //   // custom(value) {
+  //   //   // console.log('valuevalue', value);
+  //   //   if (!value) {
+  //   //     return false;
+  //   //   }
+  //   //   let valid = true;
+  //   //   value.forEach(item => {
+  //   //     if (!item.start.HH || !item.start.mm) {
+  //   //       valid = false;
+  //   //     }
+  //   //     if (item.endTime && (!item.end.HH || !item.end.mm)) {
+  //   //       valid = false;
+  //   //     }
+  //   //     if (item.endTime && (!item.every.val || item.every.val < 1)) {
+  //   //       valid = false;
+  //   //     }
+  //   //   });
+  //   //   return valid;
+  //   // },
+  // },
   savedAccordionSlotName: {
     custom(value) {
       let valid = true;

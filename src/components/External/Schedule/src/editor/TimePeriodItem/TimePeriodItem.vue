@@ -136,6 +136,7 @@ export default {
   },
   methods: {
     touchStartTime() {
+      console.log('touchStartTime');
       const touch = _.get(
         this.$v,
         `validationCopyScheduleEventData.times.$each.$iter[${
@@ -147,6 +148,7 @@ export default {
       }
     },
     touchEndTime() {
+      console.log('touchEndTime');
       const touch = _.get(
         this.$v,
         `validationCopyScheduleEventData.times.$each.$iter[${this.index}].end`,
@@ -156,6 +158,7 @@ export default {
       }
     },
     touchEveryTime() {
+      console.log('touchEveryTime');
       const touch = _.get(
         this.$v,
         `validationCopyScheduleEventData.times.$each.$iter[${
