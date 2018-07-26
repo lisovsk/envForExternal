@@ -13,6 +13,8 @@
       :drag-handle-right="true"
       @item-added="eventAdded"
       prettifyDrag
+      :can-delete-items="false"
+      :can-drag-items="false"
     >
       <template scope="item">
         <div class="schedule__wr-event-preview" @click="doEditable(item.index)">
@@ -63,6 +65,8 @@
               :drag-handle-right="true"
               @item-added="eventAdded"
               prettifyDrag
+              :can-delete-items="false"
+              :can-drag-items="false"
             >
               <template scope="item">
                 <schedule-event

@@ -7,6 +7,7 @@
       add-button-label="Add Time" 
       :new-item-method="listNewItemTime"
       :can-remove-last-item="false"
+      :can-drag-items="false"
     >
         <template scope="item">
             <time-period-item
@@ -72,6 +73,6 @@ export default {
 
 <style lang="scss" scoped>
 .time-period-list {
- margin-top: -12px; 
+  margin-top: -12px;
 }
 </style>
