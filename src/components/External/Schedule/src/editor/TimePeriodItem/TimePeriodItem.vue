@@ -2,7 +2,7 @@
     <div class="wr-time-item">
         <div class="wr-configs-every">
             <div class="configs-time__wr">
-              <!-- {{$v.validationCopyScheduleEventData.times.$each.$iter[this.index]
+              <!-- {{$v.validationCopyScheduleEventData.times.$each[this.index]
           .start}} -->
                 <div class="configs-time">
                     <or-icon class="configs-time__icon" icon="query_builder"></or-icon>
@@ -139,9 +139,7 @@ export default {
       console.log('touchStartTime');
       const touch = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each.$iter[${
-          this.index
-        }].start`,
+        `validationCopyScheduleEventData.times.$each[${this.index}].start`,
       );
       if (touch) {
         touch.$touch();
@@ -151,7 +149,7 @@ export default {
       console.log('touchEndTime');
       const touch = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each.$iter[${this.index}].end`,
+        `validationCopyScheduleEventData.times.$each[${this.index}].end`,
       );
       if (touch) {
         touch.$touch();
@@ -161,9 +159,7 @@ export default {
       console.log('touchEveryTime');
       const touch = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each.$iter[${
-          this.index
-        }].every`,
+        `validationCopyScheduleEventData.times.$each[${this.index}].every`,
       );
       if (touch) {
         touch.$touch();
@@ -172,16 +168,14 @@ export default {
     timepickerStartError() {
       const item = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each.$iter[${
-          this.index
-        }].start`,
+        `validationCopyScheduleEventData.times.$each[${this.index}].start`,
       );
       return item && item.$invalid && item.$dirty;
     },
     timepickerEndError() {
       const item = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each.$iter[${this.index}].end`,
+        `validationCopyScheduleEventData.times.$each[${this.index}].end`,
       );
 
       return item && item.$invalid && item.$dirty;
@@ -189,9 +183,7 @@ export default {
     timepickerEveryValError() {
       const item = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each.$iter[${
-          this.index
-        }].every`,
+        `validationCopyScheduleEventData.times.$each[${this.index}].every`,
       );
       return item && item.$invalid && item.$dirty;
       // return !(this.localEvery.val && this.localEvery.val > 0);

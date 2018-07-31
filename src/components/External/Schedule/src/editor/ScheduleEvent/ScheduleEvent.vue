@@ -609,12 +609,29 @@ export default {
     },
 
     doExpressions() {
-      this.copyScheduleEventData.expressions = [].concat(
+      let expressions = [].concat(
         this.copyScheduleEventData.daily.cronExpressions,
         this.copyScheduleEventData.weekly.cronExpressions,
         this.copyScheduleEventData.monthly.cronExpressions,
         this.copyScheduleEventData.yearly.cronExpressions,
       );
+      // if (!expressions.length) {
+      //   const startDay = moment(
+      //     this.copyScheduleEventData.startExpression.date,
+      //   ).format('DD');
+      //   const startMonth = moment(
+      //     this.copyScheduleEventData.startExpression.date,
+      //   ).format('MM');
+      //   const startYear = moment(
+      //     this.copyScheduleEventData.startExpression.date,
+      //   ).format('YYYY');
+      //   expressions = this.runAtTimeLocal.map(
+      //     item =>
+      //       `${item.mm} ${item.HH} ${startDay} ${startMonth} * ${startYear}`,
+      //   );
+      // }
+      // console.log('expressionsexpressionsexpressions', expressions);
+      this.copyScheduleEventData.expressions = expressions;
     },
     changeSavedAccordionSlotName(number) {
       // console.log(number);
@@ -759,6 +776,12 @@ export default {
     //     this.dataState = 'saved';
     //   }
     // }
+    runAtTimeLocal: {
+      handler(newValue) {
+        this.$emit('run-at-time', newValue);
+      },
+      deep: true,
+    },
   },
   components: {
     Accordion,

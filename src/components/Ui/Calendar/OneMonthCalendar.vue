@@ -1,12 +1,6 @@
 <template>
   <div class="wr-calendar">
-    <!-- {{isHighlightedItem({day: 31, month: 2, year: 2018}, 'prevMonth')}} -->
     <div class="calendar">
-      <!-- {{currDays}}<br>
-      {{highlightedCurrDays}}<br>
-      12131231
-      {{highlightedPreviousMonthDays}}<br> -->
-      <!-- {{highlightedDNextDays}} -->
       <div class="calendar__items" v-if="yearsCalendar">
         <div class="calendar__item">
           <div><span class="calendar__title">{{monthNames[month - 1]}} {{year}}</span></div>
@@ -55,6 +49,16 @@
                           :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
                         ></span>
                         {{value.eventName}}
+                        <times
+                          :items="value.times"
+                          :color="value.color"
+                          :lighter="value.lighter"
+                        ></times>
+                        <times
+                          :items="value.times"
+                          :color="value.color"
+                          :lighter="value.lighter"
+                        ></times>
                       </span>
                     </div>
                     <span
@@ -83,6 +87,11 @@
                           :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
                         ></span>
                         {{value.eventName}}
+                        <times
+                          :items="value.times"
+                          :color="value.color"
+                          :lighter="value.lighter"
+                        ></times>
                       </span>
                     </div>
                   </div>
@@ -96,13 +105,13 @@
                         <circle 
                           v-for="(value, key) in previousMonthDaysValue"
                           :key="key"
-                          :style="{stroke: value.color, 'stroke-dasharray': key !== 0 ? 
-                          `${(previousMonthDaysValue.length - parseInt(key)) * 2 * 15 * Math.PI / previousMonthDaysValue.length},
-                          ${2 * 15 * Math.PI / previousMonthDaysValue.length * parseInt(key)}`
+                          :style="{stroke: value.lighter ? convertColor(value.color, '0.3') : value.color, 'stroke-dasharray': key !== 0 ? 
+                          `${(previousMonthDaysValue.length - parseInt(key)) * 2 * radius * Math.PI / previousMonthDaysValue.length},
+                          ${2 * radius * Math.PI / previousMonthDaysValue.length * parseInt(key)}`
                           : ''}"
                           class="stroke" 
                           cy="17" cx="17" 
-                          r="15"
+                          :r="radius"
                         ></circle>
                       </svg>
                     </div>
@@ -140,6 +149,11 @@
                           :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
                         ></span>
                         {{value.eventName}}
+                        <times
+                          :items="value.times"
+                          :color="value.color"
+                          :lighter="value.lighter"
+                        ></times>
                       </span>
                     </div>
                     <span
@@ -168,6 +182,11 @@
                           :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
                         ></span>
                         {{value.eventName}}
+                        <times
+                          :items="value.times"
+                          :color="value.color"
+                          :lighter="value.lighter"
+                        ></times>
                       </span>
                     </div>
                   </div>
@@ -181,13 +200,13 @@
                         <circle 
                           v-for="(value, key) in dayValue"
                           :key="key"
-                          :style="{stroke: value.color, 'stroke-dasharray': key !== 0 ? 
-                          `${(dayValue.length - parseInt(key)) * 2 * 15 * Math.PI / dayValue.length},
-                          ${2 * 15 * Math.PI / dayValue.length * parseInt(key)}`
+                          :style="{stroke: value.lighter ? convertColor(value.color, '0.3') : value.color, 'stroke-dasharray': key !== 0 ? 
+                          `${(dayValue.length - parseInt(key)) * 2 * radius * Math.PI / dayValue.length},
+                          ${2 * radius * Math.PI / dayValue.length * parseInt(key)}`
                           : ''}"
                           class="stroke" 
                           cy="17" cx="17" 
-                          r="15"
+                          :r="radius"
                         ></circle>
                       </svg>
                     </div>
@@ -224,6 +243,11 @@
                       :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
                     ></span>
                     {{value.eventName}}
+                    <times
+                      :items="value.times"
+                      :color="value.color"
+                      :lighter="value.lighter"
+                    ></times>
                   </span>
                 </div>
                 <span
@@ -252,6 +276,11 @@
                       :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
                     ></span>
                     {{value.eventName}}
+                    <times
+                      :items="value.times"
+                      :color="value.color"
+                      :lighter="value.lighter"
+                    ></times>
                   </span>
                 </div>
               </div>
@@ -265,13 +294,13 @@
                     <circle 
                       v-for="(value, key) in nextMonthDayValue"
                       :key="key"
-                      :style="{stroke: value.color, 'stroke-dasharray': key !== 0 ? 
-                      `${(nextMonthDayValue.length - parseInt(key)) * 2 * 15 * Math.PI / nextMonthDayValue.length},
-                      ${2 * 15 * Math.PI / nextMonthDayValue.length * parseInt(key)}`
+                      :style="{stroke: value.lighter ? convertColor(value.color, '0.3') : value.color, 'stroke-dasharray': key !== 0 ? 
+                      `${(nextMonthDayValue.length - parseInt(key)) * 2 * radius * Math.PI / nextMonthDayValue.length},
+                      ${2 * radius * Math.PI / nextMonthDayValue.length * parseInt(key)}`
                       : ''}"
                       class="stroke" 
                       cy="17" cx="17" 
-                      r="15"
+                      :r="radius"
                     ></circle>
                   </svg>
                 </div>
@@ -286,11 +315,11 @@
 </template>
 
 <script>
-// import _  'lodash';
 import _ from 'lodash';
-// import moment from 'moment';
-
-// console.log('____', _);
+/* eslint-disable */
+import Times from './Times.vue';
+import hex2rgb from '../../helpers/convertColor.js';
+/* eslint-enable */
 
 export default {
   beforeUpdate() {
@@ -298,6 +327,7 @@ export default {
   },
   data() {
     return {
+      radius: 15,
       mon: this.month - 1,
       monthNames: [
         'January',
@@ -584,6 +614,12 @@ export default {
     isShowMoreItems(len) {
       return len > 3;
     },
+    convertColor(color, transparency) {
+      return hex2rgb(color, transparency);
+    },
+  },
+  components: {
+    Times,
   },
   watch: {
     interval: {
@@ -593,6 +629,19 @@ export default {
       deep: true,
     },
   },
+  // created() {
+  //   window.addEventListener('resize', () => {
+  //     const windowW =
+  //       window.innerWidth ||
+  //       document.documentElement.clientWidth ||
+  //       document.body.clientWidth;
+  //     if (windowW < 1380) {
+  //       this.radius = 12;
+  //     } else {
+  //       this.radius = 15;
+  //     }
+  //   });
+  // },
 };
 </script>
 
@@ -688,6 +737,10 @@ export default {
   z-index: 1;
   white-space: nowrap;
   min-height: 20px;
+  &:hover {
+    overflow: visible;
+    z-index: 1;
+  }
 
   &_more {
     color: #0f232e;

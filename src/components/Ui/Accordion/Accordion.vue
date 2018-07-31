@@ -115,6 +115,10 @@ ul {
   list-style: none;
 }
 
+.accordion {
+  padding-left: 0;
+}
+
 .accordion_invalid {
   border: red 1px solid;
   padding-left: 5px;

@@ -3,10 +3,19 @@ import later from "later";
 import moment from "moment-timezone";
 
 export default {
-    created() {
-        console.log('selectedDays', this.selectedDays);
+    // created() {
+    //     console.log('selectedDays', this.selectedDays);
+    // },
+    props: {
+        runAtTime: {
+            type: Array,
+            default: () => [],
+        },
     },
     computed: {
+        runAtTimeComp() {
+            return this.runAtTime || [];
+        },
         highlightedDates() {
             const resultArr = {};
             [].concat(
@@ -26,7 +35,6 @@ export default {
                         if (startInterval.format('MM') === '12' && startInterval.format('DD') !== '01') {
                             startInterval.subtract(1, 'years');
                         }
-                        console.log('endInterval.getMonth()', endInterval.format('MM'));
 
                         startInterval = startInterval.format('YYYY-MM-DD');
                         endInterval = endInterval.format('YYYY-MM-DD');
@@ -37,31 +45,10 @@ export default {
                     if (startDate && startInterval !== 'Invalid date') {
                         const start = !startDate || moment(startInterval).isSameOrBefore(moment(startDate)) ? startDate : startInterval;
                         const end = moment(!endDate || moment(endInterval).isSameOrBefore(moment(endDate)) ? endInterval : endDate).add(1, 'days').format('YYYY-MM-DD');
-                        console.log('endend', end);
-                        // if (parseInt(end.format('MM'), 10) === 12) {
-                        //     end.add('month', 1);
-                        // }
-                        // if (.format('MM')) {}
-                        console.log('start', start);
-                        console.log('end', end);
-                        // end = end.format('YYYY-MM-DD');
-                        // console.log('startDate', startDate);
-                        // console.log('startInterval', startInterval);
                         if (item.isReccuring && item.expressions.length > 0) {
                             atDates = item.expressions.map(expItem => later.schedule(later.parse.cron(expItem)).next(Infinity, new Date(start), new Date(end)));
-                            // console.log('atDatesatDates', atDates);
-                            // console.log('atDates', atDates);
                             returnValue = {
                                 dates: [].concat(...atDates.map(itemExprs =>
-                                    //     {
-                                    //     const itemExprSplit = moment(itemExprs[0]).format('YYYY-MM-DD').split('-');
-                                    //     return {
-                                    //         year: parseInt(itemExprSplit[0], 10),
-                                    //         month: parseInt(itemExprSplit[1], 10),
-                                    //         day: parseInt(itemExprSplit[2], 10), 
-                                    //     }
-                                    // })),
-
                                     itemExprs
                                         ?
                                         itemExprs.map(itemExpr => {
@@ -100,10 +87,8 @@ export default {
                                     }, []),
                                 color: item.color,
                                 eventName: item.eventName,
-                                // lighter: true,
 
                             };
-                            console.log('returnValue', returnValue);
                         } else {
                             returnValue = null;
                         }
@@ -111,12 +96,22 @@ export default {
                     return returnValue;
 
                 }),
-                this.selectedDays.filter(item => !item.isReccuring).map(itemSelectedDays => ({
-                    dates: [{ date: itemSelectedDays.date }],
-                    color: itemSelectedDays.color,
-                    eventName: itemSelectedDays.eventName,
-                    // lighter: false,
-                }))).
+                this.selectedDays.filter(item => !item.isReccuring).map(itemSelectedDays => {
+                    ;
+                    const times = this.runAtTimeComp.map(
+                        item => `${moment(`${item.HH}:${item.mm}`, 'HH:mm').format('HH:mm')}`
+                    );
+                    return {
+                        dates: [{ date: itemSelectedDays.date, }],
+                        color: itemSelectedDays.color,
+                        times,
+                        eventName: itemSelectedDays.eventName,
+                        reccuring: false
+                        // lighter: false,}
+
+                    }
+                })
+            ).
                 forEach(item => {
                     if (!item || !item.dates) return;
                     item.dates.forEach((datesItemFromArr, index) => {
@@ -127,20 +122,20 @@ export default {
                         resultArr[`${datesItem.year}-${datesItem.month}-${datesItem.day}`].push({
                             color: item.color,
                             eventName: item.eventName,
+                            times: _.get(item, 'reccuring', true) ? _.get(datesItemFromArr, 'time', []) : _.get(item, 'times', []),
                             lighter: !(index === 0),
                         });
                     });
                 });
-            console.log('resultArr', resultArr);
             return resultArr;
         }
     },
-    watch: {
-        selectedDays: {
-            handler(newValue) {
-                console.log('newValue', newValue);
-            },
-            deep: true
-        }
-    }
+    // watch: {
+    //     selectedDays: {
+    //         handler(newValue) {
+    //             console.log('newValue', newValue);
+    //         },
+    //         deep: true
+    //     }
+    // }
 }

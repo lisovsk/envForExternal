@@ -52,6 +52,7 @@
               @selected-date="changeSelectedDate"
               :selected-days="startDays"
               :editable="!!editableEventNum || editableEventNum === 0"
+              :run-at-time="runAtTime"
             >
             </calendar>
           </div>
@@ -88,6 +89,7 @@
                   @data-state="/*changeDataState*/"
                   @delete-event="deleteEvent"
                   @cancel-event="cancelEvent"
+                  @run-at-time="catchRunAtTime"
                 >
                 </schedule-event>
                 <schedule-event-preview
@@ -189,6 +191,7 @@ export default {
       copyScheduleEventData: null,
       dataStates: [],
       numOfTryEdit: null,
+      runAtTime: null,
     };
   },
   beforeCreate() {
@@ -212,6 +215,7 @@ export default {
             startExpression: item.scheduleEventData.startExpression,
             isEndTime: item.scheduleEventData.isEndTime,
             eventName: item.scheduleEventData.eventName,
+            times: item.scheduleEventData.times,
             date: {
               day: parseInt(dateSplice[2], 10),
               month: parseInt(dateSplice[1], 10),
@@ -233,6 +237,7 @@ export default {
           startExpression: this.copyScheduleEventData.startExpression,
           isEndTime: this.copyScheduleEventData.isEndTime,
           eventName: this.copyScheduleEventData.eventName,
+          times: this.copyScheduleEventData.times,
           date: {
             day: parseInt(copyScheduleEventDataSplice[2], 10),
             month: parseInt(copyScheduleEventDataSplice[1], 10),
@@ -451,6 +456,9 @@ export default {
       this.closeModal('deleteEvent');
       this.$v.validationCopyScheduleEventData.$reset();
     },
+    catchRunAtTime(newValue) {
+      this.runAtTime = newValue;
+    },
   },
   watch: {
     copyScheduleEventData: {
@@ -467,11 +475,22 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
+.schedule__calendar {
+  padding-left: 20px;
+  margin-left: -20px;
+}
+
+.schedule__events {
+  max-width: 510px;
+}
+
 .schedule__calendar,
 .schedule__events {
-  overflow: auto;
+  overflow-y: auto;
+  // overflow-x: visible;
   max-height: calc(100vh - 100px);
 }
+
 .schedule-events {
   &__title {
     color: #0f232e;
@@ -524,9 +543,9 @@ export default {
     display: flex;
   }
   &__calendar {
-    min-width: 650px;
+    min-width: 950px;
     width: calc(100% - 450px);
-    padding-right: 30px;
+    padding-right: 60px;
   }
   &__wr-event-preview {
     width: 100%;
