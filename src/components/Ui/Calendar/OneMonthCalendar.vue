@@ -2,7 +2,9 @@
   <div class="wr-calendar">
     <div class="calendar">
       <div class="calendar__items" v-if="yearsCalendar">
-        <div class="calendar__item">
+        <div 
+          class="calendar__item"
+        >
           <div><span class="calendar__title">{{monthNames[month - 1]}} {{year}}</span></div>
         </div>
       </div>
@@ -23,6 +25,7 @@
         >
           <div
               class="calendar__item calendar__item_not-curr"
+              :class="{'calendar__item_not-edit': !editable}"
               v-if="!index"
               v-for="(previousMonthDaysValue, previousMonthDaysKey) in highlightedPreviousMonthDays"
               :key="previousMonthDaysKey"
@@ -124,6 +127,7 @@
           </div>
           <div
               class="calendar__item"
+              :class="{'calendar__item_not-edit': !editable}"
               v-for="(dayValue, dayKey) in monthDays"
               :key="dayKey"
               @click="sendChosenDate(dayKey, month, year)"
@@ -217,6 +221,7 @@
           </div>
           <div
               class="calendar__item calendar__item_not-curr"
+              :class="{'calendar__item_not-edit': !editable}"
               v-if="index === currDays.length - 1"
               v-for="(nextMonthDayValue, nextMonthDayKey) in highlightedDNextDays"
               :key="nextMonthDayKey"
@@ -374,6 +379,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    editable: {
+      default: true,
+      type: Boolean,
+    },
   },
   computed: {
     dPrevDays() {
@@ -489,6 +498,7 @@ export default {
       return date.getDay();
     },
     sendChosenDate(day, month, year) {
+      if (!this.editable) return;
       let localMonth = month;
       let localYear = year;
       if (localMonth === 0) {
@@ -815,10 +825,22 @@ export default {
   display: grid;
   cursor: pointer;
   /* min-height: 120px; */
+  &_not-edit {
+    cursor: default;
+  }
 }
 
 .calendar__item_not-curr {
   color: rgba(15, 35, 46, 0.55);
+  position: relative;
+  // &::before {
+  //   content: '';
+  //   position: absolute;
+  //   width: 100%;
+  //   height: 100%;
+  //   background: rgba(15, 35, 46, 0.1);
+  //   // z-index: 999;
+  // }
 }
 
 .calendar__item:not(:last-child) {
@@ -875,6 +897,12 @@ export default {
     padding-top: 0;
     padding-bottom: 0;
     box-shadow: none;
+  }
+
+  .calendar__item_not-curr {
+    &::before {
+      content: none;
+    }
   }
 }
 </style>

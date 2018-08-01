@@ -11,11 +11,12 @@
     <br>
     <br>
     {{selectedDays}} -->
-    <!-- {{interval.year}} -->
+    <!-- {{interval}} -->
     <div class="nav">
         <div>
             <span class="nav__interval">
-                {{state === 'month' ?  `${interval.start} - ${interval.end}, ${interval.year}` : year}}
+                <!-- {{state === 'month' ?  `${interval.start} - ${interval.end}, ${interval.year}` : year}} -->
+                {{state === 'month' ?  `${monthComp}, ${interval.year}` : year}}
             </span>
         </div>
         <div class="nav__wr-right">
@@ -65,6 +66,7 @@
           v-show="state === 'month'"
           @selected-date="selectDateHandler"
           :highlighted-dates="highlightedDates"
+          :editable="editable"
       >
       </one-month-calendar>
       <one-year-calendar
@@ -72,6 +74,7 @@
           v-show="state === 'year'"
           @selected-date="selectDateHandler"
           :highlighted-dates="highlightedDates"
+          :editable="editable"
       >
       </one-year-calendar>
     </div>
@@ -80,6 +83,7 @@
 
 <script>
 /* eslint-disable */
+import moment from 'moment';
 import OneMonthCalendar from './OneMonthCalendar.vue';
 import OneYearCalendar from './OneYearCalendar.vue';
 import getScheduledDays from './getScheduledDaysMixin.js';
@@ -175,6 +179,15 @@ export default {
       // this.selectedDate = { day, month, year };
       this.$emit('selected-date', day, month, year);
     },
+    // preventClickOnCalendar(event) {
+    //   event.stopPropagation();
+    //   event.preventDefault();
+    // },
+  },
+  computed: {
+    monthComp() {
+      return moment(this.month, 'MM').format('MMMM');
+    },
   },
 
   mixins: [getScheduledDays],
@@ -239,7 +252,7 @@ export default {
   line-height: 23px;
 }
 
-.disabled-calendar {
+/* .disabled-calendar {
   pointer-events: none;
-}
+} */
 </style>

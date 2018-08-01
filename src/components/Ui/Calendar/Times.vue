@@ -8,8 +8,8 @@
     >
     <div
         class="ctimes__item"
-        v-for="time in items"
-        :key="time"
+        v-for="(time, index) in items"
+        :key="`${time}${index}`"
     >
         {{time}}
     </div>

@@ -70,7 +70,7 @@ export default {
                                             day: null,
                                         }))
                                     .reduce((res, cur) => {
-                                        const index = _.findIndex(res, itemFilter => _.get(itemFilter, 'date.year') === cur.date.year && itemFilter.date.month === cur.date.month && itemFilter.date.day === cur.date.day);
+                                        const index = _.findIndex(res, itemFilter => _.get(itemFilter, 'date.year') === _.get(cur, 'date.year') && _.get(itemFilter, 'date.month') === _.get(cur, 'date.month') && _.get(itemFilter, 'date.day') === _.get(cur, 'date.day'));
                                         if (index === -1) {
                                             res.push({
                                                 date: {
@@ -116,10 +116,10 @@ export default {
                     if (!item || !item.dates) return;
                     item.dates.forEach((datesItemFromArr, index) => {
                         const datesItem = datesItemFromArr.date;
-                        if (!_.isArray(resultArr[`${datesItem.year}-${datesItem.month}-${datesItem.day}`])) {
-                            resultArr[`${datesItem.year}-${datesItem.month}-${datesItem.day}`] = [];
+                        if (!_.isArray(resultArr[`${_.get(datesItem, 'year')}-${datesItem.month}-${datesItem.day}`])) {
+                            resultArr[`${_.get(datesItem, 'year')}-${datesItem.month}-${datesItem.day}`] = [];
                         }
-                        resultArr[`${datesItem.year}-${datesItem.month}-${datesItem.day}`].push({
+                        resultArr[`${_.get(datesItem, 'year')}-${datesItem.month}-${datesItem.day}`].push({
                             color: item.color,
                             eventName: item.eventName,
                             times: _.get(item, 'reccuring', true) ? _.get(datesItemFromArr, 'time', []) : _.get(item, 'times', []),
@@ -127,7 +127,12 @@ export default {
                         });
                     });
                 });
-            return resultArr;
+
+            Object.keys(resultArr).map((key) => {
+                resultArr[key] = resultArr[key].sort((a, b) => a.eventName > b.eventName)
+                return undefined;
+            });
+            return resultArr
         }
     },
     // watch: {

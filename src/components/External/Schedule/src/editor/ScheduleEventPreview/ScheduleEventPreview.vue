@@ -7,7 +7,7 @@
         ></span>
         <div class="schedule-event-preview__content">
           <div class="schedule-event-preview__title-text">{{eventName}}</div>
-          <div class="schedule-event-preview__dates">
+          <div class="schedule-event-preview__dates" v-if="startsAt.length">
             <span
               :key="index"
               v-for="(date, index) in startsAt || []"
@@ -55,6 +55,7 @@
       has-dropdown icon="more_vert" 
       :ref="ref" 
       size="normal"
+      :class="{'schedule-event-preview__settings_disabled': editable}"
       class="schedule-event-preview__settings"
       @click.stop="/**/"
     >
@@ -150,6 +151,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    editable: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     doEditable() {
@@ -231,7 +236,7 @@ export default {
 
         // console.log('startsAt', result);
 
-        return result;
+        return _.uniq(result);
       } catch (e) {
         return [];
       }
@@ -295,6 +300,9 @@ export default {
   &__settings {
     position: absolute;
     right: 25px;
+    &_disabled {
+      pointer-events: none;
+    }
   }
 
   &__title-text {

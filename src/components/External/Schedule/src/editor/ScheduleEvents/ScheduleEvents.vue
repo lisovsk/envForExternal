@@ -19,6 +19,7 @@
       <template scope="item">
         <div class="schedule__wr-event-preview" @click="doEditable(item.index)">
           <!-- {{$v.schemaValidation.scheduleEvents.$each.$iter[item.index].scheduleEventData.$invalid}} -->
+          <transition name="fade">
           <schedule-event-preview
             :color="item.item.scheduleEventData.color"
             :event-name="item.item.scheduleEventData.eventName"
@@ -34,6 +35,7 @@
             @delete-event="deleteEvent"
           >
           </schedule-event-preview>
+          </transition>
         </div>
       </template>
     </or-list>
@@ -51,7 +53,7 @@
               :month="1"
               @selected-date="changeSelectedDate"
               :selected-days="startDays"
-              :editable="!!editableEventNum || editableEventNum === 0"
+              :editable="editable"
               :run-at-time="runAtTime"
             >
             </calendar>
@@ -103,6 +105,7 @@
                   :end-date="{ noEnd: item.item.scheduleEventData.isEndTime, date: item.item.scheduleEventData.endExpression.date}"
                   :start-date="item.item.scheduleEventData.startExpression.date"
                   :expressions="item.item.scheduleEventData.expressions"
+                  :editable="editable"
                   @do-editable="doEditable"
                   @copy-event="copyEvent"
                   @delete-event="deleteEvent"
@@ -200,6 +203,9 @@ export default {
     document.body.appendChild(div);
   },
   computed: {
+    editable() {
+      return !!this.editableEventNum || this.editableEventNum === 0;
+    },
     startDays() {
       const dates = this.scheduleEventsLocal
         .map(item => {
@@ -553,5 +559,14 @@ export default {
   &__events {
     min-width: 410px;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

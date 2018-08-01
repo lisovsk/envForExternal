@@ -8,6 +8,7 @@
           :month="month"
           :years-calendar="true"
           :highlighted-dates="highlightedDates"
+          :editable="editable"
           not-show-selected-on-prev-next-days
           class="calendar_years"
           @selected-date="selectDateHandler"
@@ -39,6 +40,10 @@ export default {
       default() {
         return {};
       },
+    },
+    editable: {
+      default: true,
+      type: Boolean,
     },
   },
 

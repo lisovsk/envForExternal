@@ -14,6 +14,7 @@
 </template>
 <script>
 import * as _ from 'lodash';
+import moment from 'moment';
 
 /* eslint-disable */
 // if (process.env.NODE_ENV === 'development') {
@@ -170,7 +171,11 @@ export default {
               _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
               !_.get(this, 'validationCopyScheduleEventData.isEndTime')
             ) {
-              valid = !!value;
+              valid =
+                !!value &&
+                moment(
+                  this.validationCopyScheduleEventData.startExpression.date,
+                ).isSameOrBefore(moment(value));
             }
             return valid;
           },
