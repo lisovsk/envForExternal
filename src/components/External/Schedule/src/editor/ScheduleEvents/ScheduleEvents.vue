@@ -15,6 +15,7 @@
       prettifyDrag
       :can-delete-items="false"
       :can-drag-items="false"
+      :readonly="readonly"
     >
       <template scope="item">
         <div class="schedule__wr-event-preview" @click="doEditable(item.index)">
@@ -70,6 +71,7 @@
               prettifyDrag
               :can-delete-items="false"
               :can-drag-items="false"
+              :readonly="readonly"
             >
               <template scope="item">
                 <schedule-event

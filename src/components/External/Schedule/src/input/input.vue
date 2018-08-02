@@ -1,6 +1,6 @@
 <template>
     <div class="schedule-wrapper">
-        <div class="wrapper" @click="$refs.configModal.open()">
+        <div class="wrapper">
             <editor>
             </editor>
         </div>
@@ -15,30 +15,30 @@
 </template>
 
 <script>
-    import _ from 'lodash';
-    import base from '@default/src/inputs/_design_base.vue';
-    import editor from '../editor/editor.vue';
+import _ from 'lodash';
+import base from '@default/src/inputs/_design_base.vue';
+import editor from '../editor/editor.vue';
 
-    export default {
-        extends    : base,
+export default {
+  extends: base,
 
-        components : {
-            editor
-        },
+  components: {
+    editor,
+  },
 
-        defaultValue () {
-            return _.cloneDeep(data);
-        }
-    };
+  defaultValue() {
+    return _.cloneDeep(data);
+  },
+};
 
-    export const label = 'Schedule v0.5.0';
-    export const data = {
-        scheduleEvents : [],
-    };
+export const label = 'Schedule v0.5.0';
+export const data = {
+  scheduleEvents: [],
+};
 
-    export const meta = {
-        name    : 'schedule-component',
-        type    : 'onereach-studio-form-input',
-        version : '0.5.0'
-    };
+export const meta = {
+  name: 'schedule-component',
+  type: 'onereach-studio-form-input',
+  version: '0.5.0',
+};
 </script>

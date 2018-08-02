@@ -8,6 +8,7 @@
         :step="step"
         :stepId="stepId"
         :$v="$v"
+        :readonly="readonly"
         @new-copy-schedule-event-data="newCopyScheduleEventData"
       ></schedule-events>
   </div>
