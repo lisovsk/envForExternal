@@ -3,7 +3,7 @@
     class="times__wr"
 >
     <div
-    :style="{background: lighter ? convertColor(color, '0.3') : color}"
+    :style="{background: lighter ? convertColor(color, '0.3') : color, opacity: opacity}"
     class="times"
     >
     <div
@@ -36,6 +36,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    opacity: {
+      type: Number,
+      default: 1,
+    },
   },
   methods: {
     convertColor(color, transparency) {
@@ -58,13 +62,20 @@ export default {
     left: 100%;
     top: 0;
     background: #fff;
-    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
     border-top-right-radius: 2px;
     border-bottom-left-radius: 2px;
     border-bottom-right-radius: 2px;
   }
   &__item {
     height: 20px;
+  }
+}
+</style>
+
+<style lang="scss">
+.calendar__event:hover {
+  .times__wr {
+    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
   }
 }
 </style>

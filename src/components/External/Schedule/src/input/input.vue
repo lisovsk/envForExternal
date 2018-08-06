@@ -1,7 +1,7 @@
 <template>
     <div class="schedule-wrapper">
         <div class="wrapper">
-            <editor>
+            <editor class="disabled">
             </editor>
         </div>
 
@@ -42,3 +42,9 @@ export const meta = {
   version: '0.5.0',
 };
 </script>
+
+<style lang="postcss" scoped>
+.disabled {
+  pointer-events: none;
+}
+</style>

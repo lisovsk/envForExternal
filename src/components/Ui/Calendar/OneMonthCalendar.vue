@@ -49,24 +49,21 @@
                       >
                         <span 
                           class="calendar__event-background"
-                          :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
+                          :style="{background: convertColor(value.color, 0.5), opacity : value.lighter ? '0.3' : ''}"
                         ></span>
-                        {{value.eventName}}
+                        <span :style="{opacity : value.lighter ? '0.5' : ''}">{{value.eventName}}</span>
                         <times
                           :items="value.times"
                           :color="value.color"
                           :lighter="value.lighter"
-                        ></times>
-                        <times
-                          :items="value.times"
-                          :color="value.color"
-                          :lighter="value.lighter"
+                          :opacity="0.5"
                         ></times>
                       </span>
                     </div>
                     <span
                       class="calendar__event calendar__event_more"
                       v-if="isShowButtonMore(previousMonthDaysValue.length)"
+                      style="opacity :0.5"
                     >
                       <span 
                         class="calendar__event-background calendar__event-background_more"
@@ -87,13 +84,14 @@
                       >
                         <span 
                           class="calendar__event-background"
-                          :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
+                          :style="{background: convertColor(value.color, 0.5), opacity : value.lighter ? '0.3' : ''}"
                         ></span>
-                        {{value.eventName}}
+                        <span :style="{opacity : value.lighter ? '0.5' : ''}">{{value.eventName}}</span>
                         <times
                           :items="value.times"
                           :color="value.color"
                           :lighter="value.lighter"
+                          :opacity="0.5"
                         ></times>
                       </span>
                     </div>
@@ -245,19 +243,21 @@
                   >
                     <span 
                       class="calendar__event-background"
-                      :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
+                      :style="{background: convertColor(value.color, 0.5), opacity : value.lighter ? '0.3' : ''}"
                     ></span>
-                    {{value.eventName}}
+                    <span :style="{opacity : value.lighter ? '0.5' : ''}">{{value.eventName}}</span>
                     <times
                       :items="value.times"
                       :color="value.color"
                       :lighter="value.lighter"
+                      :opacity="0.5"
                     ></times>
                   </span>
                 </div>
                 <span
                   class="calendar__event calendar__event_more"
                   v-if="isShowButtonMore(nextMonthDayValue.length)"
+                  style="opacity :0.5"
                 >
                   <span 
                     class="calendar__event-background calendar__event-background_more"
@@ -278,13 +278,14 @@
                   >
                     <span 
                       class="calendar__event-background"
-                      :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
+                      :style="{background: convertColor(value.color, 0.5), opacity : value.lighter ? '0.3' : ''}"
                     ></span>
-                    {{value.eventName}}
+                    <span :style="{opacity : value.lighter ? '0.5' : ''}">{{value.eventName}}</span>
                     <times
                       :items="value.times"
                       :color="value.color"
                       :lighter="value.lighter"
+                      :opacity="0.5"
                     ></times>
                   </span>
                 </div>
@@ -293,7 +294,7 @@
                 <span></span>
                 <div
                   class="stroke__wr"
-                  v-if="isShowCircle(nextMonthDayValue.length)" 
+                  v-if="isShowCircle(nextMonthDayValue.length)"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" height="34" width="34">
                     <circle 
@@ -801,6 +802,10 @@ export default {
     text-align: center;
     background-color: #dfdfdf;
   }
+
+  // &_not-rurr {
+  //   // opacity: 0.2 !important;
+  // }
 }
 
 .calendar__day-num {
@@ -832,6 +837,7 @@ export default {
 
 .calendar__item_not-curr {
   color: rgba(15, 35, 46, 0.55);
+  background: #fff;
   position: relative;
   // &::before {
   //   content: '';

@@ -87,6 +87,7 @@ export default {
                                     }, []),
                                 color: item.color,
                                 eventName: item.eventName,
+                                startDate
 
                             };
                         } else {
@@ -106,7 +107,7 @@ export default {
                         color: itemSelectedDays.color,
                         times,
                         eventName: itemSelectedDays.eventName,
-                        reccuring: false
+                        reccuring: false,
                         // lighter: false,}
 
                     }
@@ -119,11 +120,12 @@ export default {
                         if (!_.isArray(resultArr[`${_.get(datesItem, 'year')}-${datesItem.month}-${datesItem.day}`])) {
                             resultArr[`${_.get(datesItem, 'year')}-${datesItem.month}-${datesItem.day}`] = [];
                         }
-                        resultArr[`${_.get(datesItem, 'year')}-${datesItem.month}-${datesItem.day}`].push({
+                        const date = `${_.get(datesItem, 'year')}-${datesItem.month}-${datesItem.day}`;
+                        resultArr[date].push({
                             color: item.color,
                             eventName: item.eventName,
                             times: _.get(item, 'reccuring', true) ? _.get(datesItemFromArr, 'time', []) : _.get(item, 'times', []),
-                            lighter: !(index === 0),
+                            lighter: !(moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD') === item.startDate),
                         });
                     });
                 });

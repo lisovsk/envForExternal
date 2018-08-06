@@ -10,6 +10,7 @@
         :$v="$v"
         :readonly="readonly"
         @new-copy-schedule-event-data="newCopyScheduleEventData"
+        :class="{disabled: readonly}"
       ></schedule-events>
   </div>
 </template>
@@ -67,7 +68,10 @@ export default {
     step: null,
     stepId: null,
     steps: null,
-    readonly: null,
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
   },
   computed: {
     scheduleEventsComp: {
@@ -411,3 +415,9 @@ export const meta = {
   version: '0.5.0',
 };
 </script>
+
+<style lang="scss" scoped>
+.disabled {
+  pointer-events: none;
+}
+</style>
