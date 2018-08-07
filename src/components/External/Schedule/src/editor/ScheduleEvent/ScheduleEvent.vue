@@ -1,5 +1,6 @@
 <template>
   <div class="schedule-event">
+    <!-- {{copyScheduleEventData.expressions}} -->
     <!-- {{$v.validationCopyScheduleEventData.$invalid}} -->
     <!-- {{runAtTimeLocal}} -->
     <!-- {{dataStateComp}} -->
@@ -501,6 +502,7 @@ export default {
         this.dataStateComp !== 'canceled' &&
         this.dataStateComp !== 'saved'
       ) {
+        this.expressionsForNotRecurring();
         this.copyScheduleEventData.saved = true;
         this.$emit('apply-changes');
 
@@ -527,80 +529,6 @@ export default {
         this.openModal('cancelAndDataNotSave');
       }
     },
-
-    // // methods generates next time that shown on UI
-    // getNextTimeRunUI() {
-    //   const dateFormat = 'YYYY-MM-DD HH:mm:ss';
-    //   let startTime = this._getStartTime();
-    //   if (!startTime) {
-    //     return;
-    //   }
-    //   if (this.isReccuring) {
-    //     startTime =
-    //       startTime.valueOf() > this._getNowInClientZone().valueOf()
-    //         ? startTime
-    //         : this._getNowInClientZone();
-    //   }
-    //   const crons = this.generateCronExpression(false);
-    //   let cronExpressions = _.compact(this.expressions);
-    //   if (!this.isReccuring) {
-    //     // generte cron based on start date
-    //     const month = startTime.format('M');
-    //     const day = startTime.format('D');
-    //     const hour = startTime.format('HH');
-    //     const min = startTime.format('mm');
-    //     const startExpression = `${min} ${hour} ${day} ${month} *`;
-    //     cronExpressions =
-    //       this._getNowInClientZone().valueOf() > startTime.valueOf()
-    //         ? []
-    //         : _.compact(_.concat(cronExpressions, startExpression));
-    //   }
-    //   let nextRuns = [];
-    //   _.forEach(cronExpressions, expression => {
-    //     later.date.UTC();
-    //     const parsedCron = later.parse.cron(expression);
-    //     const nextRunTimeString = later
-    //       .schedule(parsedCron)
-    //       .next(5, startTime.toDate());
-    //     if (nextRunTimeString) {
-    //       nextRuns = _.concat(nextRuns, nextRunTimeString);
-    //     }
-    //   });
-    //   const numberOfRun = this.isReccuring ? 5 : 1;
-    //   const firstFive = _.slice(
-    //     this._getClosestTimeMs(nextRuns),
-    //     0,
-    //     numberOfRun,
-    //   );
-    //   this.nextRuns = _.map(firstFive, timeMs => {
-    //     return moment(timeMs).format('YYYY-MM-DD, hh:mm A');
-    //   });
-    // },
-    // _getStartTime() {
-    //   if (this.startDate) {
-    //     moment.tz.setDefault('Etc/UTC');
-    //     const dateFormat = 'YYYY-MM-DD HH:mm:ss';
-    //     // const start = moment.utc(this.startDate).format('YYYY-MM-DD');
-    //     const timeZone = moment.tz.guess();
-    //     const start = moment(this.startDate)
-    //       .tz(timeZone)
-    //       .format('YYYY-MM-DD');
-    //     var timeString = start;
-    //     // validate entered time
-    //     const _startTime = moment(this.startTime, 'HH:mm').format('HH:mm');
-    //     if (this.startTime && _startTime !== 'Invalid date') {
-    //       timeString = `${start} ${_startTime}`;
-    //     }
-    //     const years = moment(timeString).year();
-    //     const months = moment(timeString).month();
-    //     const dates = moment(timeString).date();
-    //     const hours = moment(timeString).hour();
-    //     const minutes = moment(timeString).minute();
-    //     return this.startDate && !this.startTime
-    //       ? moment(start, dateFormat)
-    //       : moment([years, months, dates, hours, minutes]);
-    //   }
-    // },
     formatDate(date) {
       const timeZone = moment.tz.guess();
       return moment(date)
@@ -609,28 +537,12 @@ export default {
     },
 
     doExpressions() {
-      let expressions = [].concat(
+      const expressions = [].concat(
         this.copyScheduleEventData.daily.cronExpressions,
         this.copyScheduleEventData.weekly.cronExpressions,
         this.copyScheduleEventData.monthly.cronExpressions,
         this.copyScheduleEventData.yearly.cronExpressions,
       );
-      // if (!expressions.length) {
-      //   const startDay = moment(
-      //     this.copyScheduleEventData.startExpression.date,
-      //   ).format('DD');
-      //   const startMonth = moment(
-      //     this.copyScheduleEventData.startExpression.date,
-      //   ).format('MM');
-      //   const startYear = moment(
-      //     this.copyScheduleEventData.startExpression.date,
-      //   ).format('YYYY');
-      //   expressions = this.runAtTimeLocal.map(
-      //     item =>
-      //       `${item.mm} ${item.HH} ${startDay} ${startMonth} * ${startYear}`,
-      //   );
-      // }
-      // console.log('expressionsexpressionsexpressions', expressions);
       this.copyScheduleEventData.expressions = expressions;
     },
     changeSavedAccordionSlotName(number) {
@@ -684,41 +596,56 @@ export default {
       this.dataStateComp = 'canceled';
       this.$emit('cancel-event');
     },
+    expressionsForNotRecurring() {
+      const date = moment(
+        this.copyScheduleEventData.startExpression.date,
+        'YYYY-MM-DD',
+      );
+      if (!this.copyScheduleEventData.isReccuring) {
+        this.copyScheduleEventData.expressions = this.runAtTimeLocal.map(
+          item =>
+            `${item.HH} ${item.mm} ${date.format('DD')} ${date.format(
+              'MM',
+            )} ? ${date.format('YYYY')}`,
+        );
+      }
+    },
+    getRunAtTimeLocal(newVal) {
+      const runAtTimeLocal = [];
+
+      _.forEach(newVal, item => {
+        const evertVal = item.every.val ? item.every.val : 1;
+        if (item.start.HH && item.start.mm && parseInt(evertVal, 10)) {
+          const units = item.every.units === 'hh' ? 'hours' : 'minutes';
+
+          let nextRunAtTime = moment(`${item.start.HH}:${item.start.mm}`, [
+            'HH:mm',
+          ]);
+          const endTimeHmmA = moment(`${item.end.HH}:${item.end.mm}`, [
+            'HH:mm',
+          ]);
+
+          do {
+            runAtTimeLocal.push({
+              HH: nextRunAtTime.hours(),
+              mm: nextRunAtTime.minutes(),
+            });
+
+            nextRunAtTime = nextRunAtTime.add(evertVal, units);
+          } while (
+            nextRunAtTime.isSameOrBefore(endTimeHmmA) &&
+            item.end.HH &&
+            item.end.mm
+          );
+        }
+      });
+      return _.uniqWith(runAtTimeLocal, _.isEqual);
+    },
   },
   watch: {
     'copyScheduleEventData.times': {
       handler(newVal) {
-        // this.$emit('update:times', newVal);
-        this.runAtTimeLocal = [];
-
-        _.forEach(newVal, item => {
-          const evertVal = item.every.val ? item.every.val : 1;
-          if (item.start.HH && item.start.mm && parseInt(evertVal, 10)) {
-            const units = item.every.units === 'hh' ? 'hours' : 'minutes';
-
-            let nextRunAtTime = moment(`${item.start.HH}:${item.start.mm}`, [
-              'HH:mm',
-            ]);
-            const endTimeHmmA = moment(`${item.end.HH}:${item.end.mm}`, [
-              'HH:mm',
-            ]);
-
-            do {
-              this.runAtTimeLocal.push({
-                HH: nextRunAtTime.hours(),
-                mm: nextRunAtTime.minutes(),
-              });
-
-              nextRunAtTime = nextRunAtTime.add(evertVal, units);
-            } while (
-              nextRunAtTime.isSameOrBefore(endTimeHmmA) &&
-              item.end.HH &&
-              item.end.mm
-            );
-          }
-        });
-        this.runAtTimeLocal = _.uniqWith(this.runAtTimeLocal, _.isEqual);
-        // console.log('this.runAtTimeLocal', this.runAtTimeLocal);
+        this.runAtTimeLocal = this.getRunAtTimeLocal(newVal);
       },
       deep: true,
     },

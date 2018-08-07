@@ -101,6 +101,7 @@
                     <div
                       class="stroke__wr"
                       v-if="isShowCircle(previousMonthDaysValue.length)"
+                      style="opacity :0.5"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" height="34" width="34">
                         <circle 
@@ -116,7 +117,9 @@
                         ></circle>
                       </svg>
                     </div>
-                    <div class="calendar__day-num-text">
+                    <div
+                      style="opacity :0.5"
+                      class="calendar__day-num-text">
                       {{previousMonthDaysKey}}
                     </div>
                   </div>
@@ -295,6 +298,7 @@
                 <div
                   class="stroke__wr"
                   v-if="isShowCircle(nextMonthDayValue.length)"
+                  style="opacity :0.5"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" height="34" width="34">
                     <circle 
@@ -310,7 +314,12 @@
                     ></circle>
                   </svg>
                 </div>
-                <span class="calendar__day-num-text">{{nextMonthDayKey}}</span>
+                <span 
+                  class="calendar__day-num-text"
+                  style="opacity :0.5"
+                >
+                    {{nextMonthDayKey}}
+                </span>
               </div>
               </span>
             </div>
@@ -909,6 +918,10 @@ export default {
     &::before {
       content: none;
     }
+  }
+
+  .calendar__item_not-curr {
+    background: inherit;
   }
 }
 </style>
