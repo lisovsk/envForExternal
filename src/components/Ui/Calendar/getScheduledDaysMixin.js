@@ -6,6 +6,10 @@ export default {
     // created() {
     //     console.log('selectedDays', this.selectedDays);
     // },
+    data() {
+        return { startDate: null }
+
+    },
     props: {
         runAtTime: {
             type: Array,
@@ -23,7 +27,7 @@ export default {
                     let startInterval;
                     let endInterval;
                     const endDate = !item.isEndTime ? item.endExpression.date : undefined;
-                    const startDate = item.startExpression.date;
+                    this.startDate = item.startExpression.date;
                     let atDates = [];
                     let returnValue = [];
                     if (this.state === 'month') {
@@ -42,8 +46,8 @@ export default {
                         startInterval = `${_.get(this.interval, 'year')}-01-01`;
                         endInterval = moment(`${_.get(this.interval, 'year')}-12-31`).add(7, 'days').format('YYYY-MM-DD');
                     }
-                    if (startDate && startInterval !== 'Invalid date') {
-                        const start = !startDate || moment(startInterval).isSameOrBefore(moment(startDate)) ? startDate : startInterval;
+                    if (this.startDate && startInterval !== 'Invalid date') {
+                        const start = !this.startDate || moment(startInterval).isSameOrBefore(moment(this.startDate)) ? this.startDate : startInterval;
                         const end = moment(!endDate || moment(endInterval).isSameOrBefore(moment(endDate)) ? endInterval : endDate).add(1, 'days').format('YYYY-MM-DD');
                         if (item.isReccuring && item.expressions.length > 0) {
                             atDates = item.expressions.map(expItem => later.schedule(later.parse.cron(expItem)).next(Infinity, new Date(start), new Date(end)));
@@ -87,7 +91,7 @@ export default {
                                     }, []),
                                 color: item.color,
                                 eventName: item.eventName,
-                                startDate
+                                startDate: this.startDate
 
                             };
                         } else {
@@ -108,14 +112,15 @@ export default {
                         times,
                         eventName: itemSelectedDays.eventName,
                         reccuring: false,
-                        // lighter: false,}
+                        lighter: false,
+                        startDate: this.startDate
 
                     }
                 })
             ).
                 forEach(item => {
                     if (!item || !item.dates) return;
-                    item.dates.forEach((datesItemFromArr, index) => {
+                    item.dates.forEach((datesItemFromArr) => {
                         const datesItem = datesItemFromArr.date;
                         if (!_.isArray(resultArr[`${_.get(datesItem, 'year')}-${datesItem.month}-${datesItem.day}`])) {
                             resultArr[`${_.get(datesItem, 'year')}-${datesItem.month}-${datesItem.day}`] = [];
