@@ -34,6 +34,7 @@
             @do-editable="doEditable"
             @copy-event="copyEvent"
             @delete-event="deleteEvent"
+            :readonly="readonly"
           >
           </schedule-event-preview>
           </transition>
@@ -330,6 +331,7 @@ export default {
     changeSelectedDate(day, month, year) {
       this.copyScheduleEventData.startExpression.date = moment(
         `${year}-${month}-${day}`,
+        'YYYY-MM-DD',
       ).format('YYYY-MM-DD');
       // this.copyScheduleEventData.startExpression.date = new Date(`${year}-${month}-${day}`);
       // this.selectedDateLocal = `${year}-${month}-${day}`;

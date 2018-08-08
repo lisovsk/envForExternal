@@ -5,6 +5,7 @@
     <div
     :style="{background: lighter ? convertColor(color, '0.3') : color, opacity: opacity}"
     class="times"
+    v-if="items.length"
     >
     <div
         class="ctimes__item"

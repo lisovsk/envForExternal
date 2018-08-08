@@ -102,16 +102,17 @@ export default {
 
                 }),
                 this.selectedDays.filter(item => !item.isReccuring).map(itemSelectedDays => {
-                    ;
+                    console.log('this.runAtTimeComp', this.runAtTimeComp);
                     const times = this.runAtTimeComp.map(
                         item => `${moment(`${item.HH}:${item.mm}`, 'HH:mm').format('HH:mm')}`
                     );
+                    console.log('times', times);
                     return {
                         dates: [{ date: itemSelectedDays.date, }],
                         color: itemSelectedDays.color,
                         times,
                         eventName: itemSelectedDays.eventName,
-                        reccuring: false,
+                        recurring: false,
                         lighter: false,
                         startDate: this.startDate
 
@@ -126,11 +127,12 @@ export default {
                             resultArr[`${_.get(datesItem, 'year')}-${datesItem.month}-${datesItem.day}`] = [];
                         }
                         const date = `${_.get(datesItem, 'year')}-${datesItem.month}-${datesItem.day}`;
+                        const lighter = !_.get(item, 'recurring', true) ? false : moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD') !== item.startDate;
                         resultArr[date].push({
                             color: item.color,
                             eventName: item.eventName,
-                            times: _.get(item, 'reccuring', true) ? _.get(datesItemFromArr, 'time', []) : _.get(item, 'times', []),
-                            lighter: !(moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD') === item.startDate),
+                            times: _.get(item, 'recurring', true) ? _.get(datesItemFromArr, 'time', []) : _.get(item, 'times', []),
+                            lighter,
                         });
                     });
                 });
