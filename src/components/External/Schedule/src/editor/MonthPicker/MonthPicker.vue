@@ -1,4 +1,5 @@
 <template>
+<div class="month-picker-scope">
   <div :class="['month-picker', {'month-picker_invalid': invalid}]">
     <button
       :disabled="disabled"
@@ -10,6 +11,7 @@
       {{ month.label }}
     </button>
   </div>
+</div>
 </template>
 
 
@@ -71,40 +73,42 @@ export default {
 </script>
 
 <style lang="scss">
-.month-picker {
-  margin: 10px 0 0 0;
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  border-top: solid 1px #e3e3e3;
-  border-left: solid 1px #e3e3e3;
+.month-picker-scope {
+  .month-picker {
+    margin: 10px 0 0 0;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    border-top: solid 1px #e3e3e3;
+    border-left: solid 1px #e3e3e3;
 
-  &_invalid {
-    border: #f95d5d 1px solid;
-  }
-  .month-picker-item {
-    height: 25px;
-    width: 25%;
-    padding: 0;
-    border: none;
-    border-right: solid 1px #e3e3e3;
-    border-bottom: solid 1px #e3e3e3;
-    background-color: #fafafa;
-    color: #0f232e;
-    font-size: 13px;
-
-    &:hover {
-      background-color: #e3e3e3;
+    &_invalid {
+      border: #f95d5d 1px solid;
     }
-
-    &.disabled:hover {
+    .month-picker-item {
+      height: 25px;
+      width: 25%;
+      padding: 0;
+      border: none;
+      border-right: solid 1px #e3e3e3;
+      border-bottom: solid 1px #e3e3e3;
       background-color: #fafafa;
-    }
+      color: #0f232e;
+      font-size: 13px;
 
-    &.is-active {
-      background-color: #64b2da !important;
-      color: white !important;
+      &:hover {
+        background-color: #e3e3e3;
+      }
+
+      &.disabled:hover {
+        background-color: #fafafa;
+      }
+
+      &.is-active {
+        background-color: #64b2da !important;
+        color: white !important;
+      }
     }
   }
 }

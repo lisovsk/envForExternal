@@ -1,6 +1,7 @@
 <template>
+<div class="weekly-scope">
 <div class="weekly">
-    <div v-if="isEditable">
+    <div v-show="isEditable">
       <div class="radio-custom__wr">
           <!-- <or-radio v-model="periodMode" true-value="everyWeek" :disabled="readonly">
               Every:
@@ -38,18 +39,19 @@
           </button>
       </div>
     </div>
-    <div v-else>
+    <div v-show="!isEditable">
         <div 
           v-html="textWhenScheduled"
-          v-if="!invalid"
+          v-show="!invalid"
         ></div>
         <div
-          v-else
+          v-show="invalid"
           class="cron-gen__error"
         >
           Please correct errors
         </div>
     </div>
+</div>
 </div>
 </template>
 
@@ -135,18 +137,21 @@ export default {
       }
     },
     cronExpression() {
-      // console.log(this.runAtTime);
-      return _.map(
-        this.runAtTime,
-        item =>
-          `${item.mm} ${item.HH} ${_.map(
-            this.weekDaysLocal,
-            weekDay =>
-              `${weekDay.label.toUpperCase()}${
-                this.periodLocal ? `#${this.periodLocal}` : ''
-              }`,
-          )}  * ? *`,
-      );
+      return _.map(this.runAtTime, item => {
+        if (
+          this.periodLocal === '0' ||
+          this.periodLocal === '' ||
+          !this.weekDaysLocal.length
+        )
+          return '';
+        return `${item.mm} ${item.HH} ${_.map(
+          this.weekDaysLocal,
+          weekDay =>
+            `${weekDay.label.toUpperCase()}${
+              this.periodLocal ? `#${this.periodLocal}` : ''
+            }`,
+        )}  * ? *`;
+      });
     },
   },
   computed: {
@@ -227,75 +232,77 @@ export default {
 </script>
 
 <style lang="scss">
-.weekly {
-  .radio-custom__wr {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-
-    .xs-input {
-      margin-bottom: 0;
-      padding-right: 16px;
-    }
-
-    .xs-input .ui-textbox__input {
-      min-height: 26px;
-      height: 26px;
-      width: 41px;
-      padding-top: 6px;
-      padding-bottom: 6px;
-    }
-    .ui-radio__label-text {
-      color: #0f232e;
-      font-size: 14px;
-      line-height: 16px;
-    }
-
-    .ui-radio {
+.weekly-scope {
+  .weekly {
+    .radio-custom__wr {
       display: flex;
       align-items: center;
-      padding-right: 16px;
-    }
-  }
+      margin-bottom: 5px;
 
-  .weekly-days {
-    margin: 10px 0 0 0;
-
-    &_error {
-      border: #f95d5d 1px solid;
-    }
-
-    .btn-group {
-      font-size: 14px;
-      color: #0f232e;
-      width: 34px;
-      height: 25px;
-      border: solid 1px #e7e7e7;
-      background-color: #fbfbfb;
-      padding: 0;
-      font-size: 12px;
-      cursor: pointer;
-      &:hover {
-        color: #59a9d5;
-        border: solid 1px #59a9d5;
-        background-color: #fbfbfb;
+      .xs-input {
+        margin-bottom: 0;
+        padding-right: 16px;
       }
-      &.is-disabled:hover {
+
+      .xs-input .ui-textbox__input {
+        min-height: 26px;
+        height: 26px;
+        width: 41px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+      }
+      .ui-radio__label-text {
         color: #0f232e;
+        font-size: 14px;
+        line-height: 16px;
+      }
+
+      .ui-radio {
+        display: flex;
+        align-items: center;
+        padding-right: 16px;
+      }
+    }
+
+    .weekly-days {
+      margin: 10px 0 0 0;
+
+      &_error {
+        border: #f95d5d 1px solid;
+      }
+
+      .btn-group {
+        font-size: 14px;
+        color: #0f232e;
+        width: 34px;
+        height: 25px;
         border: solid 1px #e7e7e7;
         background-color: #fbfbfb;
-        cursor: default;
-      }
-      &.is-active,
-      &.is-active:hover {
-        background-color: #59a9d5;
-        // border-color: #59a9d5;
-        color: #ffffff;
+        padding: 0;
+        font-size: 12px;
+        cursor: pointer;
+        &:hover {
+          color: #59a9d5;
+          border: solid 1px #59a9d5;
+          background-color: #fbfbfb;
+        }
+        &.is-disabled:hover {
+          color: #0f232e;
+          border: solid 1px #e7e7e7;
+          background-color: #fbfbfb;
+          cursor: default;
+        }
+        &.is-active,
+        &.is-active:hover {
+          background-color: #59a9d5;
+          // border-color: #59a9d5;
+          color: #ffffff;
+        }
       }
     }
-  }
-  .cron-gen__error {
-    color: #f95d5d;
+    .cron-gen__error {
+      color: #f95d5d;
+    }
   }
 }
 </style>

@@ -1,7 +1,8 @@
 <template>
+<div class="daily-scope">
   <div class="daily">
       <!-- {{value}} -->
-      <div v-if="isEditable">
+      <div v-show="isEditable">
         <div class="radio-custom__wr">
               <or-radio v-model="periodModeLocal" true-value="everyDay" class="" :disabled="readonly">
                   Every:
@@ -31,19 +32,20 @@
               <div class="">odd day</div>
           </div>
       </div>
-      <div v-else>
+      <div v-show="!isEditable">
         <div 
           v-html="textWhenScheduled"
-          v-if="!invalid"
+          v-show="!invalid"
         ></div>
         <div
-          v-else
+          v-show="invalid"
           class="cron-gen__error"
         >
           Please correct errors
         </div>
       </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -177,38 +179,40 @@ export default {
 </script>
 
 <style lang="scss">
-.daily {
-  .radio-custom__wr {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-
-    .xs-input {
-      margin-bottom: 0;
-      padding-right: 16px;
-    }
-
-    .xs-input .ui-textbox__input {
-      min-height: 26px;
-      height: 26px;
-      width: 41px;
-      padding-top: 6px;
-      padding-bottom: 6px;
-    }
-    .ui-radio__label-text {
-      color: #0f232e;
-      font-size: 14px;
-      line-height: 16px;
-    }
-
-    .ui-radio {
+.daily-scope {
+  .daily {
+    .radio-custom__wr {
       display: flex;
       align-items: center;
-      padding-right: 16px;
+      margin-bottom: 5px;
+
+      .xs-input {
+        margin-bottom: 0;
+        padding-right: 16px;
+      }
+
+      .xs-input .ui-textbox__input {
+        min-height: 26px;
+        height: 26px;
+        width: 41px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+      }
+      .ui-radio__label-text {
+        color: #0f232e;
+        font-size: 14px;
+        line-height: 16px;
+      }
+
+      .ui-radio {
+        display: flex;
+        align-items: center;
+        padding-right: 16px;
+      }
     }
-  }
-  .cron-gen__error {
-    color: #f95d5d;
+    .cron-gen__error {
+      color: #f95d5d;
+    }
   }
 }
 </style>

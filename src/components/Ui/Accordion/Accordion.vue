@@ -14,7 +14,7 @@
                             {{slot[0].data.attrs.titleItem}}
                         </span>
                         <div v-if="openedItemComp === index" class="accordion__slot">
-                            <slot 
+                            <slot
                               :name="index"
                             ></slot>
                         </div>
@@ -23,15 +23,15 @@
                         </span>
                     </div>
                     <div v-if="openedItemComp === index" class="accordion__close-item" @click="deleteItem">
-                        <or-icon  icon="clear"></or-icon>
+                        <or-icon  icon="delete_forever"></or-icon>
                     </div>
                 </li>
             </ul>
         </div>
         <or-modal  :contain-focus="false" ref="deleteSettingsInAccordionItemConfirmation" title="Delete settings">
-          Do you really want to delete the settings?
+          Do you really want to delete <span class="accordion__bold">{{currentRecurringName}}</span> recurrent settings?
           <div slot="footer">
-              <or-button color="red" @click="deleteSettingsInAccordionItem">Delete</or-button>
+              <or-button color="red" @click="isDelete ? deleteSettingsInAccordionItemOrOpenOther() : deleteSettingsInAccordionItemOrOpenOther(true)">Delete</or-button>
               <or-button color="primary" type="secondary" @click="closeModal('deleteSettingsInAccordionItemConfirmation')">Cancel</or-button>
           </div>
         </or-modal>
@@ -39,13 +39,14 @@
 </template>
 
 <script>
-/* eslint-disable */
-/* eslint-enable */
+import _ from 'lodash';
 
 export default {
   data() {
     return {
       slots: this.$slots,
+      indexLocal: null,
+      isDelete: false,
     };
   },
   props: {
@@ -73,22 +74,38 @@ export default {
     deleteItem() {
       if (this.savedAccordionNumItem) {
         this.openModal('deleteSettingsInAccordionItemConfirmation');
+        this.isDelete = true;
       } else {
         this.$emit('close-item', this.openedItemComp);
         this.openedItemComp = null;
       }
     },
     openItem(index) {
+      if (this.openedItemComp === index) return;
+
       this.$emit('touch');
       this.$emit('do-editable', index);
-      if (this.openedItemComp) return;
+      this.indexLocal = index;
+      if (this.openedItemComp) {
+        this.openModal('deleteSettingsInAccordionItemConfirmation');
+        return;
+      }
       this.$emit('opened-item', index);
       this.openedItemComp = index;
     },
-    deleteSettingsInAccordionItem() {
-      this.$emit('close-item', this.openedItemComp);
-      this.openedItemComp = null;
+    deleteSettingsInAccordionItemOrOpenOther(openOther) {
+      if (openOther) {
+        this.$emit('close-item', this.openedItemComp);
+
+        this.$emit('do-editable', this.indexLocal);
+        this.$emit('opened-item', this.indexLocal);
+        this.openedItemComp = this.indexLocal;
+      } else {
+        this.$emit('close-item', this.openedItemComp);
+        this.openedItemComp = null;
+      }
       this.closeModal('deleteSettingsInAccordionItemConfirmation');
+      this.isDelete = false;
     },
   },
   computed: {
@@ -100,10 +117,13 @@ export default {
         this.$emit('update:openedItem', newValue);
       },
     },
+    currentRecurringName() {
+      return _.get(
+        this.$slots,
+        `[${this.openedItemComp}][0].data.attrs.titleItem`,
+      );
+    },
   },
-  // created() {
-  //   console.log(this.slots);
-  // },
 };
 </script>
 <style scoped lang="scss">
@@ -117,6 +137,10 @@ ul {
 
 .accordion {
   padding-left: 0;
+
+  &__bold {
+    font-weight: bold;
+  }
 }
 
 .accordion_invalid {
@@ -142,7 +166,7 @@ ul {
 
 .accordion__slot {
   display: inline-block;
-  max-width: 276px;
+  max-width: 270px;
 }
 
 .accordion__title {
@@ -178,7 +202,7 @@ ul {
 }
 
 .ui-icon {
-  font-size: 12px;
+  font-size: 16px;
   color: #8c9492;
   cursor: pointer;
 }

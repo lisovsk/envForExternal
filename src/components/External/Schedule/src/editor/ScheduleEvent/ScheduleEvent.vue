@@ -1,18 +1,6 @@
 <template>
+<div class="schedule-event-scope">
   <div class="schedule-event">
-    <!-- {{copyScheduleEventData.expressions}} -->
-    <!-- {{$v.validationCopyScheduleEventData.$invalid}} -->
-    <!-- {{runAtTimeLocal}} -->
-    <!-- {{dataStateComp}} -->
-    <!-- {{$v.schemaValidation.scheduleEvents.$each.$iter[index].scheduleEventData.startExpression.date}} -->
-    <!-- <div class="date">
-      <span v-if="!copyScheduleEventData.eventName">Choose date on calendar</span>
-      <span v-else class="date__start-date">{{startDateUi}}</span>
-    </div> -->
-    <!-- <div class="date">
-      <span v-if="!copyScheduleEventData.eventName">Choose date on calendar</span>
-      <span v-else class="date__start-date">{{startDateUi}}</span>
-    </div> -->
     <div class="schedule-event__title">
       <div 
         :style="{background: copyScheduleEventData.color}"
@@ -67,7 +55,7 @@
       </time-period-list>
     </div>
     <div class="recurring-controls">
-        <or-checkbox v-model="copyScheduleEventData.isReccuring" :disabled="readonly">Recurring</or-checkbox>
+        <or-checkbox class="recurring-controls__checkbox" v-model="copyScheduleEventData.isReccuring" :disabled="readonly">Recurring</or-checkbox>
         <span v-if="!copyScheduleEventData.isEndTime && copyScheduleEventData.isReccuring" class="recurring-controls__recuring-till">till</span>
         <div class="recurring-controls__wr-configs-time">
             <div class="" v-if="!copyScheduleEventData.isEndTime && copyScheduleEventData.isReccuring">
@@ -90,13 +78,10 @@
                 </div>
             </div>
             <div v-if="copyScheduleEventData.isReccuring" class="recurring-controls__wr-is-end">
-                <or-checkbox v-model="copyScheduleEventData.isEndTime" :disabled="readonly">No end</or-checkbox>
+                <or-checkbox class="recurring-controls__checkbox" v-model="copyScheduleEventData.isEndTime" :disabled="readonly">No end</or-checkbox>
             </div>
         </div>
     </div>
-          <!-- :saved-accordion-slot-name="copyScheduleEventData.savedAccordionSlotName" -->
-          <!-- {{copyScheduleEventData.savedAccordionSlotName}}
-          {{savedAccordionNumItemComp}} -->
     <accordion
       :opened-item.sync="copyScheduleEventData.savedAccordionSlotName"
       v-if="copyScheduleEventData.isReccuring"
@@ -221,6 +206,7 @@
         </div>
     </or-modal>
   </div>
+</div>
 </template>
 
 <script>
@@ -318,43 +304,9 @@ export default {
             value: newValue,
             label: newValue,
           };
-          // this.$nextTick(this.getNextTimeRunUI); // update UI based on new regions
         }
       },
     },
-    // startDateUi() {
-    //   return moment(this.copyScheduleEventData.startExpression.date).format('LL');
-    // },
-    // copyData.isReccuringLocal: {
-    //   get() {
-    //     return this.isReccuring;
-    //   },
-    //   secopyScheduleEventData(newValue) {
-    //     this.$emit('update:isReccuring', this.copyData.isReccuringLocal);
-    //     // delete all setting if checkbox uncheked
-    //     // if (!newValue) {
-    //     //   this.resetRecurringData();
-    //     // }
-    //     // // update crons when data changed
-    //     // this.$nextTick(this.generateCronExpression);
-    //   },
-    // },
-    // isEndTimeLocal: {
-    //   get() {
-    //     return this.isEndTime;
-    //   },
-    //   set(newValue) {
-    //     // if end day unchecked - clear date
-    //     // if (!newValue) {
-    //     //   // direct mutation
-    //     //   _.set(this.endExpression, 'date', '');
-    //     //   _.set(this.endExpression, 'time', '00:00');
-    //     //   this.isIncludedEndTime = false;
-    //     // }
-    //     this.$emit('update:isEndTime', newValue);
-    //     // this.generateCronExpression(); // update crons when data changed
-    //   },
-    // },
     endDate: {
       get() {
         const date = _.get(this.copyScheduleEventData.endExpression, 'date');
@@ -572,16 +524,17 @@ export default {
       // this.copyScheduleEventData.savedAccordionSlotName = null;
     },
     openedAccordionItem(itemNum) {
-      console.log(itemNum);
+      console.log('itemNum', itemNum);
       // this.copyScheduleEventData.savedAccordionSlotName = itemNum;
     },
-    doEditable(index) {
-      if (
-        this.copyScheduleEventData.savedAccordionSlotName === index ||
-        this.savedAccordionNumItemComp === -1
-      ) {
-        this.isEditable = true;
-      }
+    doEditable() {
+      this.isEditable = true;
+      // if (
+      //   this.copyScheduleEventData.savedAccordionSlotName === index ||
+      //   this.savedAccordionNumItemComp === -1
+      // ) {
+      //   this.isEditable = true;
+      // }
     },
     deleteEvent() {
       this.$emit('delete-event', this.index);
@@ -602,12 +555,41 @@ export default {
         'YYYY-MM-DD',
       );
       if (!this.copyScheduleEventData.isReccuring) {
-        this.copyScheduleEventData.expressions = this.runAtTimeLocal.map(
-          item =>
-            `${item.HH} ${item.mm} ${date.format('DD')} ${date.format(
-              'MM',
-            )} ? ${date.format('YYYY')}`,
-        );
+        // this.copyScheduleEventData.expressions = this.runAtTimeLocal.map(
+        //   item =>
+        //     `${parseInt(item.mm, 10)} ${parseInt(item.HH, 10)} ${parseInt(
+        //       date.format('DD'),
+        //       10,
+        //     )}  ${parseInt(date.format('MM'), 10)} * ${parseInt(
+        //       date.format('YYYY'),
+        //       10,
+        //     )}`,
+        // );
+        const expressionsLocal = [];
+        const secondsOfhours = {};
+        this.runAtTimeLocal.forEach(item => {
+          if (!secondsOfhours[item.HH]) secondsOfhours[item.HH] = [];
+          secondsOfhours[item.HH].push(item.mm);
+        });
+
+        Object.keys(secondsOfhours).forEach(keySecondsOfhours => {
+          expressionsLocal.push(
+            `-1,${secondsOfhours[keySecondsOfhours]} ${parseInt(
+              keySecondsOfhours,
+              10,
+            )} ${parseInt(date.format('DD'), 10)}  ${parseInt(
+              date.format('MM'),
+              10,
+            )} * ${parseInt(date.format('YYYY'), 10)}`,
+          );
+        });
+
+        this.copyScheduleEventData.expressions = expressionsLocal;
+        // console.log('this.runAtTimeLocal', this.runAtTimeLocal);
+        // console.log('secondsOfhours', secondsOfhours);
+        // console.log('expressionsLocal', expressionsLocal);
+        // this.copyScheduleEventData.endExpression.date = date.add(1, 'day').format('YYYY-MM-DD');
+        //  console.log('this.copyScheduleEventData.endExpression',this.copyScheduleEventData.endExpression.date);
       }
     },
     getRunAtTimeLocal(newVal) {
@@ -722,232 +704,242 @@ export default {
 </script>
 
 <style lang="scss">
-.schedule-event {
-  min-width: 410px;
-  padding-left: 16px;
+.schedule-event-scope {
+  .schedule-event {
+    min-width: 410px;
+    padding-left: 16px;
 
-  &__wr-buttons {
-    padding-top: 25px;
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 30px;
-  }
-
-  &__circle {
-    width: 20px;
-    min-width: 20px;
-    height: 20px;
-    display: inline-block;
-    border-radius: 50%;
-    margin-bottom: 25px;
-    margin-right: 16px;
-  }
-
-  &__title {
-    display: flex;
-    align-items: center;
-  }
-
-  &__label {
-    color: #91969d;
-    font-size: 12px;
-    line-height: 16px;
-    padding-bottom: 8px;
-  }
-
-  &__bottom-button {
-    &_delete.ui-button.ui-button--type-secondary.ui-button--color-red {
-      border: none;
+    &__wr-buttons {
+      padding-top: 25px;
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 30px;
     }
-    &:not(:last-child) {
-      margin-right: 12px;
+
+    &__circle {
+      width: 20px;
+      min-width: 20px;
+      height: 20px;
+      display: inline-block;
+      border-radius: 50%;
+      margin-bottom: 25px;
+      margin-right: 16px;
     }
-  }
 
-  .wr-tizezone-start-date {
-    display: flex;
-  }
-
-  .wr-top-start-date {
-    padding-right: 30px;
-  }
-
-  .ui-select .ui-select__content .ui-select__label .ui-select__display {
-    min-height: 32px;
-  }
-
-  .wr-time-period-list {
-    padding-top: 16px;
-  }
-
-  .textbox-without-border {
-    &_invalid {
-      border-bottom: 1.2px solid #f95d5d;
+    &__title {
+      display: flex;
+      align-items: center;
     }
-    .ui-textbox__input {
-      border: none;
-      background: #fff;
-      color: #0f232e;
-      font-size: 17px;
-      font-weight: bold;
-      line-height: 23px;
-      padding: 0;
-      &::placeholder {
-        font-size: 17px !important;
+
+    &__label {
+      color: #91969d;
+      font-size: 12px;
+      line-height: 16px;
+      padding-bottom: 8px;
+    }
+
+    &__bottom-button {
+      &_delete.ui-button.ui-button--type-secondary.ui-button--color-red {
+        border: none;
+      }
+      &:not(:last-child) {
+        margin-right: 12px;
       }
     }
-    &.ui-textbox {
-      margin-bottom: 25px;
+
+    .wr-tizezone-start-date {
+      display: flex;
+    }
+
+    .wr-top-start-date {
+      padding-right: 30px;
+    }
+
+    .ui-select .ui-select__content .ui-select__label .ui-select__display {
+      min-height: 32px;
+    }
+
+    .wr-time-period-list {
+      padding-top: 16px;
+    }
+
+    .textbox-without-border {
+      &_invalid {
+        border-bottom: 1.2px solid #f95d5d;
+      }
+      .ui-textbox__input {
+        border: none;
+        background: #fff;
+        color: #0f232e;
+        font-size: 17px;
+        font-weight: bold;
+        line-height: 23px;
+        padding: 0;
+        &::placeholder {
+          font-size: 17px !important;
+        }
+      }
+      &.ui-textbox {
+        margin-bottom: 25px;
+        width: 100%;
+      }
     }
   }
-}
 
-.config-line__select {
-  height: 25px;
-  white-space: nowrap;
-  margin-right: 5px;
-  &.ui-select {
-    margin-bottom: 0;
-    .ui-select__display {
-      min-width: 80px;
-      padding: 0 11px;
-      height: 25px;
-      border-radius: 3px;
-      background-color: #fbfbfb;
-      border: solid 1px #e7e7e7;
-      .ui-select__display-value {
-        font-size: 14px;
+  .config-line__select {
+    height: 25px;
+    white-space: nowrap;
+    margin-right: 5px;
+    &.ui-select {
+      margin-bottom: 0;
+      .ui-select__display {
+        min-width: 80px;
+        padding: 0 11px;
+        height: 25px;
+        border-radius: 3px;
+        background-color: #fbfbfb;
+        border: solid 1px #e7e7e7;
+        .ui-select__display-value {
+          font-size: 14px;
+          color: #0f232e;
+        }
+      }
+      &.is-active {
+        .ui-select__display {
+          border: 1px solid #64b2da;
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+        .ui-select__dropdown {
+          border: 1px solid #64b2da;
+          min-width: 80px;
+          padding: 0;
+          .is-highlighted {
+            color: #000000;
+            background-color: #f9f9f9;
+          }
+        }
+      }
+    }
+    &.select-box-error {
+      .ui-select__content {
+        .ui-select__label {
+          .ui-select__display {
+            border: 1px solid rgba(244, 67, 5, 0.46);
+          }
+        }
+      }
+    }
+  }
+
+  .timezone {
+    display: flex;
+    align-items: baseline;
+    flex-direction: column;
+    &_top {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+    }
+    &__label {
+      padding-right: 25px;
+      color: #91969d;
+      font-size: 14px;
+      line-height: 16px;
+    }
+
+    .ui-select {
+      width: 100%;
+      margin-bottom: 0px;
+    }
+  }
+
+  .date {
+    color: rgba(15, 35, 46, 0.55);
+    font-size: 17px;
+    font-weight: bold;
+    line-height: 23px;
+    padding-top: 8px;
+    padding-bottom: 6px;
+
+    &_start {
+      padding-right: 10px;
+    }
+
+    // &_end {
+    //   max-width: 120px;
+    //   display: flex;
+    //   align-items: center;
+    // }
+  }
+
+  .recurring-controls {
+    display: flex;
+    height: 70px;
+    padding-top: 23px;
+    padding-bottom: 15px;
+
+    &__checkbox {
+      &.ui-checkbox .ui-checkbox__label-text {
         color: #0f232e;
       }
     }
-    &.is-active {
-      .ui-select__display {
-        border: 1px solid #64b2da;
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-      }
-      .ui-select__dropdown {
-        border: 1px solid #64b2da;
-        min-width: 80px;
-        padding: 0;
-        .is-highlighted {
-          color: #000000;
-          background-color: #f9f9f9;
-        }
-      }
+
+    .ui-checkbox--color-primary {
+      display: flex;
+      align-self: center;
     }
-  }
-  &.select-box-error {
-    .ui-select__content {
-      .ui-select__label {
-        .ui-select__display {
-          border: 1px solid rgba(244, 67, 5, 0.46);
-        }
-      }
+
+    &__wr-is-end {
+      padding-left: 30px;
     }
-  }
-}
 
-.timezone {
-  display: flex;
-  align-items: baseline;
-  flex-direction: column;
-  &_top {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-  }
-  &__label {
-    padding-right: 25px;
-    color: #91969d;
-    font-size: 14px;
-    line-height: 16px;
-  }
+    &__calendar-picker-custom.ui-datepicker
+      .ui-datepicker__content
+      .ui-datepicker__display {
+      padding-left: 35px;
+      width: 140px;
+      min-height: 30.8px;
+      color: #0f232e;
+      font-size: 12px;
+      background: #fff;
+      border-radius: 0;
+    }
 
-  .ui-select {
-    width: 100%;
-    margin-bottom: 0px;
-  }
-}
+    &__calendar-picker-custom.ui-datepicker {
+      margin-bottom: 0;
+    }
+    .ui-checkbox {
+      margin-bottom: 0;
+    }
 
-.date {
-  color: rgba(15, 35, 46, 0.55);
-  font-size: 17px;
-  font-weight: bold;
-  line-height: 23px;
-  padding-top: 8px;
-  padding-bottom: 6px;
+    &__date {
+      position: relative;
+    }
 
-  &_start {
-    padding-right: 10px;
-  }
+    &__custom-icon-date {
+      position: absolute;
+      z-index: 1;
+      font-size: 12px;
+      color: #e1e1e1;
+      top: 50%;
+      margin-top: -6px;
+      left: 8px;
+    }
 
-  // &_end {
-  //   max-width: 120px;
-  //   display: flex;
-  //   align-items: center;
-  // }
-}
+    &__recuring-till {
+      padding: 0 16px;
+      color: #0f232e;
+      font-size: 14px;
+      line-height: 19px;
+      display: flex;
+      align-items: center;
+    }
 
-.recurring-controls {
-  display: flex;
-  height: 70px;
-  padding-top: 23px;
-  padding-bottom: 15px;
-  .ui-checkbox--color-primary {
-    display: flex;
-    align-self: center;
-  }
-
-  &__wr-is-end {
-    padding-left: 30px;
-  }
-
-  &__calendar-picker-custom.ui-datepicker
-    .ui-datepicker__content
-    .ui-datepicker__display {
-    padding-left: 35px;
-    width: 140px;
-    min-height: 30.8px;
-    color: #0f232e;
-    font-size: 12px;
-    background: #fff;
-    border-radius: 0;
-  }
-
-  &__calendar-picker-custom.ui-datepicker {
-    margin-bottom: 0;
-  }
-  .ui-checkbox {
-    margin-bottom: 0;
-  }
-
-  &__date {
-    position: relative;
-  }
-
-  &__custom-icon-date {
-    position: absolute;
-    z-index: 1;
-    font-size: 12px;
-    color: #e1e1e1;
-    top: 50%;
-    margin-top: -6px;
-    left: 8px;
-  }
-
-  &__recuring-till {
-    padding: 0 16px;
-    color: #0f232e;
-    font-size: 14px;
-    line-height: 19px;
-    display: flex;
-    align-items: center;
-  }
-
-  &__wr-configs-time {
-    display: flex;
-    align-items: center;
+    &__wr-configs-time {
+      display: flex;
+      align-items: center;
+    }
   }
 }
 </style>

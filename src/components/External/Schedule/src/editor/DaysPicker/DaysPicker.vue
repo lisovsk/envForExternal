@@ -1,6 +1,6 @@
 <template>
   <div 
-      class="recuring-configs__monthly-day_configs-calendar"
+      class="recuring-configs__monthly-day_configs-calendar days-picker-scope"
       v-if="months.length"
   >
       <div :class="['month-calendar', {'month-calendar-invalid' : invalid}]">
@@ -104,7 +104,7 @@ export default {
 </script>
 
 <style lang="scss">
-.recuring-configs__monthly-day_configs {
+.recuring-configs__monthly-day_configs.days-picker-scope {
   margin-top: 10px;
   .config-line {
     flex-direction: column;

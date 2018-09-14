@@ -1,7 +1,8 @@
 <template>
-  <div class="recuring-configs__monthly-day_configs yearly">
+<div class="yearly-scope">
+<div class="recuring-configs__monthly-day_configs yearly">
     <!-- {{value}} -->
-    <div v-if="isEditable">
+    <div v-show="isEditable">
       <div class="radio-custom__wr">
           Every
           <or-textbox
@@ -46,19 +47,19 @@
         </or-select>
       </div>
     </div>
-    <div v-else>
+    <div v-show="!isEditable">
         <div 
           v-html="textWhenScheduled"
-          v-if="!invalid"
+          v-show="!invalid"
         ></div>
         <div
-          v-else
+          v-show="invalid"
           class="cron-gen__error"
         >
           Please correct errors
         </div>
     </div>
-
+  </div>
   </div>
 </template>
 
@@ -293,81 +294,85 @@ export default {
 </script>
 
 <style lang="scss">
-.yearly {
-  // &__onThe {
-  //   margin-right: 5px;
-  // }
-  .radio-custom__wr {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-
-    .xs-input {
-      margin-bottom: 0;
-      padding-right: 16px;
-      padding-left: 16px;
-    }
-
-    .xs-input .ui-textbox__input {
-      min-height: 26px;
-      height: 26px;
-      width: 41px;
-      padding-top: 6px;
-      padding-bottom: 6px;
-    }
-    .ui-radio__label-text {
-      color: #0f232e;
-      font-size: 14px;
-      line-height: 16px;
-    }
-
-    .ui-radio {
+.yearly-scope {
+  .yearly {
+    // &__onThe {
+    //   margin-right: 5px;
+    // }
+    .radio-custom__wr {
       display: flex;
       align-items: center;
-      padding-right: 16px;
-    }
-  }
+      margin-bottom: 5px;
 
-  .monthly-periods {
-    display: flex;
-    align-items: center;
-    .config-line__label {
-      margin-right: 5px;
-    }
-    &__yearly {
-      padding-top: 16px;
-
-      .config-line__select:last-child {
-        margin-right: 0;
+      .xs-input {
+        margin-bottom: 0;
+        padding-right: 16px;
+        padding-left: 16px;
       }
-      // .ui-checkbox {
-      //   margin-bottom: 0;
-      // }
 
-      // .ui-checkbox .ui-checkbox__label-text {
-      //   color: #0f232e;
-      //   font-size: 14px;
-      // }
+      .xs-input .ui-textbox__input {
+        min-height: 26px;
+        height: 26px;
+        width: 41px;
+        padding-top: 6px;
+        padding-bottom: 6px;
+      }
+      .ui-radio__label-text {
+        color: #0f232e;
+        font-size: 14px;
+        line-height: 16px;
+      }
+
+      .ui-radio {
+        display: flex;
+        align-items: center;
+        padding-right: 16px;
+      }
     }
-  }
 
-  .ui-select .ui-select__content .ui-select__label .ui-select__display {
-    min-height: 26px;
-    max-width: 120px;
-    width: 100px;
-  }
+    .monthly-periods {
+      display: flex;
+      align-items: center;
+      .config-line__label {
+        margin-right: 5px;
+      }
+      &__yearly {
+        padding-top: 16px;
 
-  .config-line__select.ui-select .ui-select__display .ui-select__display-value {
-    max-width: 60px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+        .config-line__select:last-child {
+          margin-right: 0;
+        }
+        // .ui-checkbox {
+        //   margin-bottom: 0;
+        // }
 
-  &.recuring-configs__monthly-day_configs {
-    margin-top: 0;
-  }
-  .cron-gen__error {
-    color: #f95d5d;
+        // .ui-checkbox .ui-checkbox__label-text {
+        //   color: #0f232e;
+        //   font-size: 14px;
+        // }
+      }
+    }
+
+    .ui-select .ui-select__content .ui-select__label .ui-select__display {
+      min-height: 26px;
+      max-width: 120px;
+      width: 100px;
+    }
+
+    .config-line__select.ui-select
+      .ui-select__display
+      .ui-select__display-value {
+      max-width: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &.recuring-configs__monthly-day_configs {
+      margin-top: 0;
+    }
+    .cron-gen__error {
+      color: #f95d5d;
+    }
   }
 }
 </style>

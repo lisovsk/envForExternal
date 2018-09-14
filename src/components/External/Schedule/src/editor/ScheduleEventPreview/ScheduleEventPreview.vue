@@ -16,7 +16,7 @@
               }"
               v-if="conditionalStartsAt(index)"
             >
-            {{date}}<span v-if="startsAt && index !== startsAt.length - 1">,</span><span v-if="conditionalEllipsisForDate(index)">...</span>
+            {{date}}<span v-if="startsAt && index !== startsAt.length - 1 && !conditionalEllipsisForDate(index)">,</span><span v-if="conditionalEllipsisForDate(index)">...</span>
             </span>
             <span
               class="schedule-event-preview__see-more"
@@ -32,7 +32,7 @@
               v-for="(time, index) in startTimes"
               v-if="conditionalStartTimes"
             >
-              <span v-html="`<span class='bold-text'>${time.start.HH}:${time.start.mm}</span>`"></span><span v-html="time.endTime ? ` to  <span class='bold-text'>${time.end.HH}:${time.end.mm}</span> every <span class='bold-text'>${time.every.val} ${time.every.units === 'mm' ? 'min' : 'h'}</span>`: ''"></span><span v-if="conditionalTimeСomma(index)">, </span></span><span v-if="conditionalEllipsisForTimes">,...</span>
+              <span v-html="`<span class='bold-text'>${time.start.HH}:${time.start.mm}</span>`"></span><span v-html="time.endTime ? ` to  <span class='bold-text'>${time.end.HH}:${time.end.mm}</span> every <span class='bold-text'>${time.every.val} ${time.every.units === 'mm' ? 'min' : 'h'}</span>`: ''"></span><span v-if="conditionalTimeСomma(index)">, </span></span><span v-if="conditionalEllipsisForTimes">...</span>
               <span 
                 class="schedule-event-preview__see-more"
                 @click.stop="seeMoreTimes"
@@ -51,24 +51,28 @@
     <template v-else>
       The event was created with an error.
     </template>
-    <or-icon-button
-      has-dropdown icon="more_vert" 
-      :ref="ref" 
-      size="normal"
-      :class="{'schedule-event-preview__settings_disabled': editable}"
-      class="schedule-event-preview__settings"
+    <div
       @click.stop="/**/"
     >
-        <or-menu
-          contain-focus
-          has-icons
-          slot="dropdown"
-          :options="menuOptions"
-          @close="$refs[ref].closeDropdown()"
-          @select="selectOption"
-        >
-        </or-menu>
+    <or-icon-button
+      icon="more_vert" 
+      size="normal"
+      :class="{'schedule-event-preview__settings_hide': editable}"
+      class="schedule-event-preview__settings"
+      @click="doMenuVisible"
+      :id="index"
+    >
     </or-icon-button>
+     <or-menu
+        contain-focus
+        has-icons
+        :options="menuOptions"
+        @select="selectOption"
+        class="schedule-event-preview__menu"
+        :class="{'schedule-event-preview__is-visible': !isMenuVisible}"
+      >
+      </or-menu>
+    </div>
   </div>
 </template>
 
@@ -77,6 +81,7 @@ import moment from 'moment';
 import later from 'later';
 import _ from 'lodash';
 import uuid from 'uuid';
+import ClickOutside from 'vue-click-outside';
 
 export default {
   // created() {
@@ -84,6 +89,12 @@ export default {
   // console.log('moreDates', this.moreDates);
   // this.ref = uuid.v4()
   // },
+  created() {
+    document.body.addEventListener('click', () => {
+      console.log(1);
+      this.isMenuVisible = false;
+    })
+  },
   data() {
     return {
       countAtDates: 16,
@@ -107,6 +118,7 @@ export default {
           id: 'delete',
         },
       ],
+      isMenuVisible: false,
     };
   },
   props: {
@@ -189,6 +201,7 @@ export default {
             this.name = 'UnexpectedId';
           }();
       }
+      document.body.click();
     },
     conditionalStartsAt(index) {
       return !!(index < this.countAtDates && (index < 3 || this.moreDates));
@@ -210,6 +223,18 @@ export default {
         ? index !== 2 && index !== this.startTimes.length - 1
         : index !== this.startTimes.length - 1;
     },
+    getRef() {
+      console.log('getRef', `menu${this.index}`);
+      return `menu${this.index}`;
+    },
+    doMenuVisible() {
+      document.body.click();
+      this.isMenuVisible = true;
+    },
+    doMenuUnvisible() {
+      console.log('1sdffsfsdsdsfsfsdffsfsdsdsfsfsdffsfsdsdsfsf')
+      this.isMenuVisible = false;
+    }
   },
   computed: {
     endDateComp() {
@@ -264,12 +289,15 @@ export default {
       return !this.moreTimes && this.startTimes.length > 3;
     },
   },
+  directives: {
+    ClickOutside,
+  },
 };
 </script>
 
 <style lang="scss">
 .schedule-event-preview {
-  min-width: 410px;
+  // min-width: 305px;
   .ui-icon-button--type-primary.ui-icon-button--color-default {
     &:hover {
       background-color: inherit;
@@ -304,9 +332,16 @@ export default {
   &__settings {
     position: absolute;
     right: 25px;
-    &_disabled {
-      pointer-events: none;
+    &_hide {
+      display: hide;
     }
+  }
+
+  &__menu {
+    position: absolute;
+    height: 130px;
+    right: 25px;
+    top: 70px;
   }
 
   &__title-text {
@@ -346,6 +381,10 @@ export default {
 
   &__content {
     padding-left: 16px;
+  }
+
+  &__is-visible {
+    display: none;
   }
 }
 </style>

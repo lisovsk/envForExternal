@@ -1,6 +1,7 @@
 <template>
+<div class="monthly-scope">
 <div class="monthly">
-    <div v-if="isEditable">
+    <div v-show="isEditable">
       <div class="monthly__month-picker">
           <month-picker 
             v-model="selectedMonthsComp" 
@@ -60,18 +61,19 @@
           </div>
       </div>
     </div>
-    <div v-else>
+    <div v-show="!isEditable">
         <div 
           v-html="textWhenScheduled"
-          v-if="!invalid"
+          v-show="!invalid"
         ></div>
         <div
-          v-else
+          v-show="invalid"
           class="cron-gen__error"
         >
           Please correct errors
         </div>
     </div>
+</div>
 </div>
 </template>
 
@@ -240,6 +242,7 @@ export default {
         }</span>`;
       }
       this.previewTexts.reccuring = text;
+      console.log('previewTexts', this.previewTexts.reccuring);
       return text;
     },
     validdationSelectedMonths() {
@@ -327,39 +330,43 @@ export default {
 </script>
 
 <style lang="scss">
-.monthly {
-  &__month-picker {
-    // padding-left: 85px;
-    width: 262px;
-  }
-  &__each {
-    margin-bottom: 10px;
-  }
-  .recuring-configs__monthly-day_configs div.config-line {
-    flex-direction: row;
-    display: flex;
-    max-width: 294px;
-  }
-  .config-line__radio {
-    padding-right: 10px;
-    width: 85px;
-  }
-  .ui-select .ui-select__content .ui-select__label .ui-select__display {
-    min-height: 26px;
-    max-width: 120px;
-    width: 100px;
-  }
+.monthly-scope {
+  .monthly {
+    &__month-picker {
+      // padding-left: 85px;
+      width: 262px;
+    }
+    &__each {
+      margin-bottom: 10px;
+    }
+    .recuring-configs__monthly-day_configs div.config-line {
+      flex-direction: row;
+      display: flex;
+      max-width: 294px;
+    }
+    .config-line__radio {
+      padding-right: 10px;
+      width: 85px;
+    }
+    .ui-select .ui-select__content .ui-select__label .ui-select__display {
+      min-height: 26px;
+      max-width: 120px;
+      width: 100px;
+    }
 
-  .config-line__select.ui-select .ui-select__display .ui-select__display-value {
-    max-width: 60px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .ui-radio .ui-radio__label-text {
-    white-space: nowrap;
-  }
-  .cron-gen__error {
-    color: #f95d5d;
+    .config-line__select.ui-select
+      .ui-select__display
+      .ui-select__display-value {
+      max-width: 60px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .ui-radio .ui-radio__label-text {
+      white-space: nowrap;
+    }
+    .cron-gen__error {
+      color: #f95d5d;
+    }
   }
 }
 </style>

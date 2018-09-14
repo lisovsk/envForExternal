@@ -49,6 +49,8 @@ export default {
                     if (this.startDate && startInterval !== 'Invalid date') {
                         const start = !this.startDate || moment(startInterval).isSameOrBefore(moment(this.startDate)) ? this.startDate : startInterval;
                         const end = moment(!endDate || moment(endInterval).isSameOrBefore(moment(endDate)) ? endInterval : endDate).add(1, 'days').format('YYYY-MM-DD');
+                        console.log('start', start);
+                        console.log('end', end);
                         if (item.isReccuring && item.expressions.length > 0) {
                             atDates = item.expressions.map(expItem => later.schedule(later.parse.cron(expItem)).next(Infinity, new Date(start), new Date(end)));
                             returnValue = {

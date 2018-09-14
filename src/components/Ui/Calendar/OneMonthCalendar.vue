@@ -51,7 +51,7 @@
                           class="calendar__event-background"
                           :style="{background: convertColor(value.color, 0.5), opacity : value.lighter ? '0.3' : ''}"
                         ></span>
-                        <span :style="{opacity : value.lighter ? '0.5' : ''}">{{value.eventName}}</span>
+                        <span class="calendar__event-text" :style="{opacity : value.lighter ? '0.5' : ''}">{{value.eventName}}</span>
                         <times
                           :items="value.times"
                           :color="value.color"
@@ -86,7 +86,7 @@
                           class="calendar__event-background"
                           :style="{background: convertColor(value.color, 0.5), opacity : value.lighter ? '0.3' : ''}"
                         ></span>
-                        <span :style="{opacity : value.lighter ? '0.5' : ''}">{{value.eventName}}</span>
+                        <span class="calendar__event-text" :style="{opacity : value.lighter ? '0.5' : ''}">{{value.eventName}}</span>
                         <times
                           :items="value.times"
                           :color="value.color"
@@ -153,7 +153,7 @@
                           class="calendar__event-background"
                           :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
                         ></span>
-                        {{value.eventName}}
+                        <span class="calendar__event-text">{{value.eventName}}</span>
                         <times
                           :items="value.times"
                           :color="value.color"
@@ -186,7 +186,7 @@
                           class="calendar__event-background"
                           :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
                         ></span>
-                        {{value.eventName}}
+                        <span class="calendar__event-text">{{value.eventName}}</span>
                         <times
                           :items="value.times"
                           :color="value.color"
@@ -248,7 +248,7 @@
                       class="calendar__event-background"
                       :style="{background: convertColor(value.color, 0.5), opacity : value.lighter ? '0.3' : ''}"
                     ></span>
-                    <span :style="{opacity : value.lighter ? '0.5' : ''}">{{value.eventName}}</span>
+                    <span class="calendar__event-text" :style="{opacity : value.lighter ? '0.5' : ''}">{{value.eventName}}</span>
                     <times
                       :items="value.times"
                       :color="value.color"
@@ -283,7 +283,7 @@
                       class="calendar__event-background"
                       :style="{background: convertColor(value.color, 0.5), opacity : value.lighter ? '0.3' : ''}"
                     ></span>
-                    <span :style="{opacity : value.lighter ? '0.5' : ''}">{{value.eventName}}</span>
+                    <span class="calendar__event-text" :style="{opacity : value.lighter ? '0.5' : ''}">{{value.eventName}}</span>
                     <times
                       :items="value.times"
                       :color="value.color"
@@ -923,5 +923,12 @@ export default {
   .calendar__item_not-curr {
     background: inherit;
   }
+}
+
+.calendar__event-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
 }
 </style>

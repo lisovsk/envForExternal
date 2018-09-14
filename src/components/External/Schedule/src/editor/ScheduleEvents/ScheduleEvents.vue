@@ -1,4 +1,5 @@
 <template>
+<div class="schedule-events-scope">
   <div
     class="schedule-events">
     <div class="schedule-events__title">
@@ -20,11 +21,10 @@
       <template scope="item">
         <div class="schedule__wr-event-preview" @click="doEditable(item.index)">
           <!-- {{$v.schemaValidation.scheduleEvents.$each.$iter[item.index].scheduleEventData.$invalid}} -->
-          <transition name="fade">
           <schedule-event-preview
             :color="item.item.scheduleEventData.color"
             :event-name="item.item.scheduleEventData.eventName"
-            :preview-texts="item.item.previewTexts"
+            :preview-texts.sync="item.item.previewTexts"
             :is-reccuring="item.item.scheduleEventData.isReccuring"
             :startTimes="item.item.scheduleEventData.times"
             :end-date="{ noEnd: item.item.scheduleEventData.isEndTime, date: item.item.scheduleEventData.endExpression.date}"
@@ -37,7 +37,6 @@
             :readonly="readonly"
           >
           </schedule-event-preview>
-          </transition>
         </div>
       </template>
     </or-list>
@@ -102,7 +101,7 @@
                   :color="item.item.scheduleEventData.color"
                   :index="item.index"
                   :event-name="item.item.scheduleEventData.eventName"
-                  :preview-texts="item.item.previewTexts"
+                  :preview-texts.sync="item.item.previewTexts"
                   :is-reccuring="item.item.scheduleEventData.isReccuring"
                   :startTimes="item.item.scheduleEventData.times"
                   :end-date="{ noEnd: item.item.scheduleEventData.isEndTime, date: item.item.scheduleEventData.endExpression.date}"
@@ -140,10 +139,11 @@
 
         <div slot="footer">
             <or-button color="red" @click="discardSwitchToOtherEvent">Discard</or-button>
-            <or-button color="primary" type="secondary" @click="closeModal('dataNotSaveEndSwitchToOtherEvent')">Cancel</or-button>
+            <or-button color="primary" type="secondary" @click="cancelDiscard">Cancel</or-button>
         </div>
     </or-modal>
   </div>
+</div>
 </template>
 <script>
 import _ from 'lodash';
@@ -281,8 +281,8 @@ export default {
             date: '',
           },
           timeZone: {
-            label: '',
-            value: '',
+            label: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            value: Intl.DateTimeFormat().resolvedOptions().timeZone,
           },
           daily: defaultValues.daily,
           weekly: defaultValues.weekly,
@@ -378,6 +378,8 @@ export default {
       this.copyScheduleEventData = _.cloneDeep(
         this.scheduleEventsLocal[this.editableEventNum].scheduleEventData,
       );
+      this.copyScheduleEventData.startExpression.date = '';
+      this.editableEventNum = null;
     },
     changeDataState(newDataState) {
       this.dataState = newDataState;
@@ -469,6 +471,14 @@ export default {
     catchRunAtTime(newValue) {
       this.runAtTime = newValue;
     },
+    cancelDiscard() {
+      if (this.changedNumber !== -1) {
+        this.scheduleEventsLocal = this.scheduleEventsLocal.filter(
+          item => item.scheduleEventData.saved === true,
+        );
+      }
+      this.closeModal('dataNotSaveEndSwitchToOtherEvent');
+    },
   },
   watch: {
     copyScheduleEventData: {
@@ -485,92 +495,90 @@ export default {
 </script>
 
 <style lang="scss" rel="stylesheet/scss">
-.schedule__calendar {
-  padding-left: 20px;
-  margin-left: -20px;
-}
+.schedule-events-scope {
+  .schedule__calendar {
+    padding-left: 20px;
+    margin-left: -20px;
 
-.schedule__events {
-  max-width: 510px;
-}
-
-.schedule__calendar,
-.schedule__events {
-  overflow-y: auto;
-  // overflow-x: visible;
-  max-height: calc(100vh - 100px);
-}
-
-.schedule-events {
-  &__title {
-    color: #0f232e;
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 22px;
-  }
-
-  &__big-modal {
-    display: inline-block;
-    & > .ui-modal__wrapper > .ui-modal__container {
-      width: 100%;
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 
-  .ui-modal > .ui-modal__wrapper,
-  .ui-modal > .ui-modal__wrapper > .ui-modal__container > .ui-modal__body {
-    overflow: hidden;
+  .schedule__events {
+    max-width: 510px;
   }
 
-  .ui-modal > .ui-modal__wrapper > .ui-modal__container > .ui-modal__body {
-    overflow-x: auto;
+  .schedule__calendar,
+  .schedule__events {
+    overflow-y: auto;
+    // overflow-x: visible;
+    max-height: calc(100vh - 100px);
   }
 
-  .bold-text {
-    color: #0f232e;
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 21px;
-  }
-}
+  .schedule-events {
+    &__title {
+      color: #0f232e;
+      font-size: 16px;
+      font-weight: bold;
+      line-height: 22px;
+    }
 
-.schedule-events {
-  min-width: 410px;
-  // &.translate-z {
-  //   transform: translateZ(0);
-  // }
+    &__big-modal {
+      display: inline-block;
+      & > .ui-modal__wrapper > .ui-modal__container {
+        width: 100%;
+      }
+    }
 
-  // .ui-modal__mask {
-  //   width: 100%;
-  // }
-}
+    .ui-modal > .ui-modal__wrapper,
+    .ui-modal > .ui-modal__wrapper > .ui-modal__container > .ui-modal__body {
+      overflow: hidden;
+    }
 
-.schedule-event-preview {
-  margin-bottom: 20px;
-}
+    .ui-modal > .ui-modal__wrapper > .ui-modal__container > .ui-modal__body {
+      overflow-x: auto;
+    }
 
-.schedule {
-  &__wr-events-calendar {
-    display: flex;
+    .bold-text {
+      color: #0f232e;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 21px;
+    }
   }
-  &__calendar {
-    min-width: 950px;
-    width: calc(100% - 450px);
-    padding-right: 60px;
-  }
-  &__wr-event-preview {
-    width: 100%;
-  }
-  &__events {
-    min-width: 410px;
-  }
-}
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
+  .schedule-events {
+    // min-width: 305px;
+    // &.translate-z {
+    //   transform: translateZ(0);
+    // }
+
+    // .ui-modal__mask {
+    //   width: 100%;
+    // }
+  }
+
+  .schedule-event-preview {
+    margin-bottom: 20px;
+  }
+
+  .schedule {
+    &__wr-events-calendar {
+      display: flex;
+    }
+    &__calendar {
+      min-width: 950px;
+      width: calc(100% - 450px);
+      padding-right: 60px;
+    }
+    &__wr-event-preview {
+      width: 100%;
+    }
+    &__events {
+      min-width: 410px;
+      width: 100%;
+    }
+  }
 }
 </style>
