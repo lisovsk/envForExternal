@@ -1,6 +1,6 @@
 <template>
   <div 
-      class="recuring-configs__monthly-day_configs-calendar days-picker-scope"
+      class="recuring-configs__monthly-day_configs-calendar"
       v-if="months.length"
   >
       <div :class="['month-calendar', {'month-calendar-invalid' : invalid}]">
@@ -104,58 +104,58 @@ export default {
 </script>
 
 <style lang="scss">
-.recuring-configs__monthly-day_configs.days-picker-scope {
-  margin-top: 10px;
-  .config-line {
-    flex-direction: column;
-    align-items: start;
-    .recuring-configs__monthly-day_configs-calendar {
-      .month-calendar {
-        display: flex;
-        flex-wrap: wrap;
-        width: 177px;
-        // background-color: #fafafa;
-        border-left: solid 1px #e3e3e3;
-        border-top: solid 1px #e3e3e3;
-        &-invalid {
-          border: 1px solid #f95d5d;
-        }
-        .month-calendar__day {
-          .month-calendar__day-value {
-            width: 25px;
-            height: 25px;
-            padding: 0;
-            background-color: transparent;
-            border: none;
-            border-right: 1px solid #dfdfdf;
-            border-bottom: 1px solid #dfdfdf;
-            &[disabled='disabled']:hover {
+  .recuring-configs__monthly-day_configs {
+    margin-top: 10px;
+    .config-line {
+      flex-direction: column;
+      align-items: start;
+      .recuring-configs__monthly-day_configs-calendar {
+        .month-calendar {
+          display: flex;
+          flex-wrap: wrap;
+          width: 177px;
+          // background-color: #fafafa;
+          border-left: solid 1px #e3e3e3;
+          border-top: solid 1px #e3e3e3;
+          &-invalid {
+            border: 1px solid #f95d5d;
+          }
+          .month-calendar__day {
+            .month-calendar__day-value {
+              width: 25px;
+              height: 25px;
+              padding: 0;
               background-color: transparent;
-              color: graytext;
-              cursor: default;
-            }
-            &:hover {
-              color: #000000;
-              border-radius: 1px;
-              background-color: #e1e1e1;
-              cursor: pointer;
-            }
-            &.is-active {
-              color: #ffffff !important;
-              background-color: #64b2da !important;
+              border: none;
+              border-right: 1px solid #dfdfdf;
+              border-bottom: 1px solid #dfdfdf;
+              &[disabled='disabled']:hover {
+                background-color: transparent;
+                color: graytext;
+                cursor: default;
+              }
+              &:hover {
+                color: #000000;
+                border-radius: 1px;
+                background-color: #e1e1e1;
+                cursor: pointer;
+              }
+              &.is-active {
+                color: #ffffff !important;
+                background-color: #64b2da !important;
+              }
             }
           }
         }
       }
     }
-  }
 
-  .monthly-periods {
-    display: flex;
-    align-items: center;
-    .config-line__label {
-      margin-right: 5px;
+    .monthly-periods {
+      display: flex;
+      align-items: center;
+      .config-line__label {
+        margin-right: 5px;
+      }
     }
   }
-}
 </style>

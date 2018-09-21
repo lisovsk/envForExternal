@@ -25,12 +25,19 @@
             >
               see more
             </span>
+            <span
+              v-if="moreDates && startsAt.length > 3"
+              @click.stop="seeLessDates"
+              class="schedule-event-preview__see-more"
+            >
+              see less
+            </span>
           </div>
           <div class="schedule-event-preview__times">
             <span 
               :key="time.id" 
               v-for="(time, index) in startTimes"
-              v-if="conditionalStartTimes"
+              v-if="conditionalStartTimes(index)"
             >
               <span v-html="`<span class='bold-text'>${time.start.HH}:${time.start.mm}</span>`"></span><span v-html="time.endTime ? ` to  <span class='bold-text'>${time.end.HH}:${time.end.mm}</span> every <span class='bold-text'>${time.every.val} ${time.every.units === 'mm' ? 'min' : 'h'}</span>`: ''"></span><span v-if="conditionalTimeСomma(index)">, </span></span><span v-if="conditionalEllipsisForTimes">...</span>
               <span 
@@ -39,6 +46,13 @@
                 v-if="conditionalSeeMoreTimes"
               >
                 see more
+              </span>
+              <span 
+                class="schedule-event-preview__see-more"
+                @click.stop="seeLessTimes"
+                v-if="moreTimes && startTimes.length > 3"
+              >
+                see less
               </span>
           </div>
           <div
@@ -93,7 +107,7 @@ export default {
     document.body.addEventListener('click', () => {
       console.log(1);
       this.isMenuVisible = false;
-    })
+    });
   },
   data() {
     return {
@@ -179,8 +193,14 @@ export default {
     seeMoreDates() {
       this.moreDates = true;
     },
+    seeLessDates() {
+      this.moreDates = false;
+    },
     seeMoreTimes() {
       this.moreTimes = true;
+    },
+    seeLessTimes() {
+      this.moreTimes = false;
     },
     selectOption(item) {
       switch (item.id) {
@@ -232,9 +252,9 @@ export default {
       this.isMenuVisible = true;
     },
     doMenuUnvisible() {
-      console.log('1sdffsfsdsdsfsfsdffsfsdsdsfsfsdffsfsdsdsfsf')
+      console.log('1sdffsfsdsdsfsfsdffsfsdsdsfsfsdffsfsdsdsfsf');
       this.isMenuVisible = false;
-    }
+    },
   },
   computed: {
     endDateComp() {
@@ -333,7 +353,7 @@ export default {
     position: absolute;
     right: 25px;
     &_hide {
-      display: hide;
+      display: none;
     }
   }
 

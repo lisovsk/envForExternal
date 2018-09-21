@@ -1,6 +1,6 @@
 <template>
   <div class="time-period-list">
-    <or-list 
+    <or-list
       class="list-time"
       drag-handle-right 
       v-model="times" 
@@ -8,6 +8,7 @@
       :new-item-method="listNewItemTime"
       :can-remove-last-item="false"
       :can-drag-items="false"
+      :max-items-count="$v.validationCopyScheduleEventData.times.$invalid ? times.length: 99"
     >
         <template scope="item">
             <time-period-item

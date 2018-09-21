@@ -18,13 +18,18 @@
                 <span class="configs-time__from-to" v-if="endTime">To</span>
                 <div class="configs-time" v-if="localEndTime">
                     <or-icon class="configs-time__icon" icon="query_builder"></or-icon>
-                    <or-timepicker
-                      v-model="localEnd"
-                      :class="[{ readony: readonly, 'timepicker-error': timepickerEndError()}]"
-                      format="HH:mm" 
-                      hideClearButton
-                      @close-dropdown="touchEndTime"
-                    ></or-timepicker>
+                    <div class="time-item__wr-end-time">
+                      <or-timepicker
+                        v-model="localEnd"
+                        :class="[{ readony: readonly, 'timepicker-error': timepickerEndError()}]"
+                        format="HH:mm" 
+                        hideClearButton
+                        @close-dropdown="touchEndTime"
+                      ></or-timepicker>
+                      <span @click="cancelEndTime">
+                        <or-icon class="time-item__cancel-end-time" icon="close"></or-icon>
+                      </span>
+                    </div>
                 </div>
             </div>
             <div v-if="localEndTime" class="every">
@@ -48,7 +53,7 @@
                 </or-select>
             </div>
         </div>
-        <span class="configs-time__end-time" v-if="!localEndTime" @click="localEndTime=!localEndTime">+End Time</span>
+        <span class="configs-time__end-time" v-if="!localEndTime" @click="localEndTime=!localEndTime">+ End Time</span>
     </div>
 </div>
 </template>
@@ -189,6 +194,17 @@ export default {
       );
       return item && item.$invalid && item.$dirty;
       // return !(this.localEvery.val && this.localEvery.val > 0);
+    },
+    cancelEndTime() {
+      this.$emit('update:endTime', false);
+      this.$emit('update:every', {
+        val: '10',
+        units: 'mm',
+      });
+      this.$emit('update:end', {
+        HH: '',
+        mm: '',
+      });
     },
   },
 };
@@ -377,6 +393,17 @@ export default {
 
   .timepicker-error.time-picker input.display-time {
     border: 1px #f95d5d solid;
+  }
+
+  .time-item__cancel-end-time {
+    font-size: 12px;
+    color: #e1e1e1;
+    cursor: pointer;
+  }
+
+  .time-item__wr-end-time {
+    display: flex;
+    align-items: center;
   }
 }
 </style>

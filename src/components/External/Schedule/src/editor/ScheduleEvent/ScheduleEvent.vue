@@ -92,6 +92,7 @@
       :slot-errors="errorsAccordion"
       :invalid="$v.validationCopyScheduleEventData.savedAccordionSlotName.$invalid && $v.validationCopyScheduleEventData.savedAccordionSlotName.$dirty"
       @touch="$v.validationCopyScheduleEventData.savedAccordionSlotName.$touch()"
+      :is-editable="isEditable"
     >
         <template slot="item1">
             <div 
@@ -479,6 +480,8 @@ export default {
         this.dataStateComp !== 'saved'
       ) {
         this.openModal('cancelAndDataNotSave');
+      } else {
+        this.$emit('cancel-event');
       }
     },
     formatDate(date) {

@@ -38,18 +38,23 @@
                 <span
                     @click="back"
                 >
-                    <or-icon
-                        class="nav__back"
-                        icon="arrow_back_ios"
-                    >
-                    </or-icon>
+                  <or-icon
+                      class="nav__forward"
+                      icon="keyboard_arrow_left"
+                  >
+                  </or-icon>
+                </span>
+                <span 
+                    @click="moveToCurrent"
+                >
+                    Current
                 </span>
                 <span
                     @click="forward"
                 >
                     <or-icon
                         class="nav__forward"
-                        icon="arrow_forward_ios"
+                        icon="keyboard_arrow_right"
                     >
                     </or-icon>
                 </span>
@@ -183,6 +188,10 @@ export default {
     //   event.stopPropagation();
     //   event.preventDefault();
     // },
+    moveToCurrent() {
+      this.month = new Date().getMonth() + 1;
+      this.year = new Date().getFullYear();
+    },
   },
   computed: {
     monthComp() {
@@ -204,8 +213,7 @@ export default {
 
 .nav__forward,
 .nav__back {
-  color: #979797;
-  font-size: 10px;
+
 }
 
 .nav__back {

@@ -63,6 +63,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isEditable: {
+      type: Boolean,
+      default: false
+    }
   },
   methods: {
     openModal(ref) {
@@ -81,12 +85,12 @@ export default {
       }
     },
     openItem(index) {
-      if (this.openedItemComp === index) return;
+      if (this.openedItemComp === index && this.isEditable) return;
 
       this.$emit('touch');
       this.$emit('do-editable', index);
       this.indexLocal = index;
-      if (this.openedItemComp) {
+      if (this.openedItemComp && this.openedItemComp !== index) {
         this.openModal('deleteSettingsInAccordionItemConfirmation');
         return;
       }

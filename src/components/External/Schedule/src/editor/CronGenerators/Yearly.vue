@@ -341,6 +341,7 @@ export default {
 
         .config-line__select:last-child {
           margin-right: 0;
+          width: 100%;
         }
         // .ui-checkbox {
         //   margin-bottom: 0;
@@ -355,8 +356,11 @@ export default {
 
     .ui-select .ui-select__content .ui-select__label .ui-select__display {
       min-height: 26px;
-      max-width: 120px;
-      width: 100px;
+      // max-width: 120px;
+      // width: 100%;
+      .ui-select__display-value {
+        max-width: 100%;
+      }
     }
 
     .config-line__select.ui-select

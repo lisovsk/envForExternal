@@ -8,11 +8,18 @@
     v-if="items.length"
     >
     <div
-        class="ctimes__item"
+        class="times__item"
         v-for="(time, index) in items"
         :key="`${time}${index}`"
+        v-if="index < 10"
     >
         {{time}}
+    </div>
+    <div
+        class="times__item times__item_ellipsis"
+        v-if="items.length > 10"
+    >
+        ...
     </div>
     </div>
 </div>
@@ -69,6 +76,11 @@ export default {
   }
   &__item {
     height: 20px;
+
+    &_ellipsis {
+      text-align: center;
+      line-height: 12px;
+    }
   }
 }
 </style>
