@@ -95,7 +95,6 @@ import moment from 'moment';
 import later from 'later';
 import _ from 'lodash';
 import uuid from 'uuid';
-import ClickOutside from 'vue-click-outside';
 
 export default {
   // created() {
@@ -308,9 +307,6 @@ export default {
     conditionalEllipsisForTimes() {
       return !this.moreTimes && this.startTimes.length > 3;
     },
-  },
-  directives: {
-    ClickOutside,
   },
 };
 </script>
