@@ -59,7 +59,7 @@
             class="schedule-event-preview__end-date"
             v-html="endDateComp">
           </div>
-          <div v-html="previewTexts.reccuring"></div>
+          <div v-if="isReccuring" v-html="previewTexts.reccuring"></div>
         </div>
     </template>
     <template v-else>
@@ -104,7 +104,6 @@ export default {
   // },
   created() {
     document.body.addEventListener('click', () => {
-      console.log(1);
       this.isMenuVisible = false;
     });
   },
@@ -118,72 +117,72 @@ export default {
         {
           label: 'Edit',
           icon: 'edit',
-          id: 'edit',
+          id: 'edit'
         },
         {
           label: 'Copy',
           icon: 'description',
-          id: 'copy',
+          id: 'copy'
         },
         {
           label: 'Delete',
           icon: 'delete_forever',
-          id: 'delete',
-        },
+          id: 'delete'
+        }
       ],
-      isMenuVisible: false,
+      isMenuVisible: false
     };
   },
   props: {
     index: {
-      type: Number,
+      type: Number
     },
     color: {
       type: String,
-      default: null,
+      default: null
     },
     eventName: {
       type: String,
-      default: null,
+      default: null
     },
     previewTexts: {
       type: Object,
       default: () => ({
-        reccuring: '',
-      }),
+        reccuring: ''
+      })
     },
     startTimes: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     endDate: {
       type: Object,
-      default: null,
+      default: null
     },
     startDate: {
       type: String,
-      default: '',
+      default: ''
     },
     isReccuring: {
       type: Boolean,
-      default: false,
+      default: false
     },
     expressions: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     invalid: {
       type: Boolean,
-      default: false,
+      default: false
     },
     editable: {
       type: Boolean,
-      default: false,
+      default: false
     },
     readonly: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   methods: {
     doEditable() {
@@ -207,11 +206,11 @@ export default {
           this.doEditable();
           break;
         case 'copy':
-          console.log('copy');
+          // console.log('copy');
           this.$emit('copy-event', this.index);
           break;
         case 'delete':
-          console.log('delete');
+          // console.log('delete');
           this.$emit('delete-event', this.index);
           break;
         default:
@@ -243,7 +242,7 @@ export default {
         : index !== this.startTimes.length - 1;
     },
     getRef() {
-      console.log('getRef', `menu${this.index}`);
+      // console.log('getRef', `menu${this.index}`);
       return `menu${this.index}`;
     },
     doMenuVisible() {
@@ -251,9 +250,9 @@ export default {
       this.isMenuVisible = true;
     },
     doMenuUnvisible() {
-      console.log('1sdffsfsdsdsfsfsdffsfsdsdsfsfsdffsfsdsdsfsf');
+      // console.log('1sdffsfsdsdsfsfsdffsfsdsdsfsfsdffsfsdsdsfsf');
       this.isMenuVisible = false;
-    },
+    }
   },
   computed: {
     endDateComp() {
@@ -261,7 +260,7 @@ export default {
       return _.get(this, 'endDate.noEnd')
         ? 'Reccuring <span class="bold-text">no end</span>'
         : `Reccuring till <span class="bold-text">${moment(
-            _.get(this, 'endDate.date'),
+            _.get(this, 'endDate.date')
           ).format('ll')}</span>`;
     },
     startsAt() {
@@ -277,8 +276,8 @@ export default {
             this.expressions.map(item =>
               later
                 .schedule(later.parse.cron(item))
-                .next(this.countAtDates + 1, startDate, endDate),
-            ),
+                .next(this.countAtDates + 1, startDate, endDate)
+            )
           )
           .map(item => moment(item).format('L'));
 
@@ -306,8 +305,8 @@ export default {
     },
     conditionalEllipsisForTimes() {
       return !this.moreTimes && this.startTimes.length > 3;
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -361,6 +360,7 @@ export default {
   }
 
   &__title-text {
+    word-break: break-all;
     font-weight: bold;
     padding-bottom: 15px;
   }

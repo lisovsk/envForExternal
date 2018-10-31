@@ -93,62 +93,62 @@ export default {
   props: {
     readonly: {
       type: Boolean,
-      default: false,
+      default: false
     },
     selectedMonths: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     selectedDays: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     mode: {
       type: String,
-      default: '',
+      default: ''
     },
     daysPeriod: {
       type: Object,
       default() {
         return {
           day: '',
-          period: '',
+          period: ''
         };
-      },
+      }
     },
     period: {
       type: String,
-      default: '1',
+      default: '1'
     },
     value: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     runAtTime: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     index: {
       type: Number,
-      default: -1,
+      default: -1
     },
     previewTexts: {
       type: Object,
-      default: null,
+      default: null
     },
     $v: null,
     invalid: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
@@ -159,7 +159,7 @@ export default {
         { label: 'third', value: '#3' },
         { label: 'forth', value: '#4' },
         { label: 'fifth', value: '#5' },
-        { label: 'last', value: 'L' },
+        { label: 'last', value: 'L' }
       ],
       getWeekDays: [
         { label: 'Sunday', value: 'SUN' },
@@ -168,11 +168,11 @@ export default {
         { label: 'Wednesday', value: 'WED' },
         { label: 'Thursday', value: 'THU' },
         { label: 'Friday', value: 'FRI' },
-        { label: 'Saturday', value: 'SAT' },
+        { label: 'Saturday', value: 'SAT' }
         // { label: 'Weekday', value: ['MON', 'TUE', 'WED', 'THU', 'FRI'] },
         // { label: 'Weekend', value: ['SAT', 'SUN'] },
       ],
-      modeComp: this.mode,
+      modeComp: this.mode
     };
   },
   computed: {
@@ -182,7 +182,7 @@ export default {
       },
       set(newValue) {
         this.$emit('update:selectedMonths', newValue);
-      },
+      }
     },
     selectedDaysComp: {
       get() {
@@ -190,7 +190,7 @@ export default {
       },
       set(newValue) {
         this.$emit('update:selectedDays', newValue);
-      },
+      }
     },
     daysPeriodComp: {
       get() {
@@ -198,7 +198,7 @@ export default {
       },
       set(newValue) {
         this.$emit('update:daysPeriod', newValue);
-      },
+      }
     },
     periodComp: {
       get() {
@@ -206,13 +206,13 @@ export default {
       },
       set(newValue) {
         this.$emit('update:period', newValue);
-      },
+      }
     },
     textWhenScheduled() {
       let text = `Every `;
       this.selectedMonthsComp.forEach((item, index) => {
         text += `<span class="bold-text">${moment(item, 'MM').format(
-          'MMMM',
+          'MMMM'
         )}</span>`;
         if (this.selectedMonthsComp.length - 1 !== index) {
           text += ', ';
@@ -231,13 +231,13 @@ export default {
         text += `the <span class="bold-text">${
           _.find(
             this.getDaysPeriod,
-            item => item.value === this.daysPeriodComp.period,
+            item => item.value === this.daysPeriodComp.period
           ).label
         }</span> 
         <span class="bold-text">${
           _.find(
             this.getWeekDays,
-            item => item.value === this.daysPeriodComp.day,
+            item => item.value === this.daysPeriodComp.day
           ).label
         }</span>`;
       }
@@ -249,12 +249,12 @@ export default {
       return (
         _.get(
           this.$v,
-          'validationCopyScheduleEventData.monthly.selectedMonths.$invalid',
+          'validationCopyScheduleEventData.monthly.selectedMonths.$invalid'
         ) &&
         _.get(
           this.$v,
           'validationCopyScheduleEventData.monthly.selectedMonths.$dirty',
-          false,
+          false
         )
       );
     },
@@ -262,15 +262,15 @@ export default {
       return (
         _.get(
           this.$v,
-          'validationCopyScheduleEventData.monthly.selectedDays.$invalid',
+          'validationCopyScheduleEventData.monthly.selectedDays.$invalid'
         ) &&
         _.get(
           this.$v,
           'validationCopyScheduleEventData.monthly.selectedDays.$dirty',
-          false,
+          false
         )
       );
-    },
+    }
   },
   watch: {
     modeComp(newValue) {
@@ -297,20 +297,22 @@ export default {
         this.$emit('input', this.cronExpression());
         this.$emit('change-saved-accordion-num-item', this.index);
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
 
   methods: {
     cronExpression() {
+      if (!this.selectedMonthsComp.length) return [];
       let exp = '';
       if (this.modeComp === 'each') {
+        if (!this.selectedDaysComp.length) return [];
         exp = _.map(
           this.runAtTime,
           item =>
             `${item.mm} ${item.HH} ${this.selectedDaysComp} ${
               this.selectedMonthsComp
-            } ? *`,
+            } ? *`
         );
       } else if (this.modeComp === 'onThe') {
         exp = _.map(
@@ -318,14 +320,14 @@ export default {
           item =>
             `${item.mm} ${item.HH} ? ${this.selectedMonthsComp} ${
               this.daysPeriodComp.day
-            }${this.daysPeriodComp.period} *`,
+            }${this.daysPeriodComp.period} *`
         );
       }
       return exp;
-    },
+    }
   },
   components: { MonthPicker, DaysPicker },
-  mixins: [savedState],
+  mixins: [savedState]
 };
 </script>
 

@@ -6,14 +6,15 @@
         :style="{background: copyScheduleEventData.color}"
         class="schedule-event__circle"
       ></div>
-      <or-textbox
+      <input
         placeholder="Specify event name…"
         class="textbox-without-border"
         :class="{'textbox-without-border_invalid': invalidNameOfEvent}"
         v-model="copyScheduleEventData.eventName"
         :invalid="invalidNameOfEvent"
         @blur="$v.validationCopyScheduleEventData.eventName.$touch()"
-      ></or-textbox>
+        @input="handleName()"
+      />
     </div>
     <div class="wr-tizezone-start-date">
       <div class="wr-top-start-date">
@@ -231,7 +232,7 @@ export default {
     readonly: {
       type: Boolean,
       default: false,
-      isEditable: false,
+      isEditable: false
       // isValid: false
     },
     // dataStateGlobal: {
@@ -243,35 +244,35 @@ export default {
     $v: null,
     editableEventNum: {
       type: Number,
-      default: null,
+      default: null
     },
     index: {
       type: Number,
-      default: null,
+      default: null
     },
     copyScheduleEventData: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     scheduleEventData: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     dataState: {
       type: String,
-      default: 'saved',
+      default: 'saved'
     },
     previewTexts: {
       type: Object,
-      default: null,
-    },
+      default: null
+    }
   },
   data() {
     return {
       i: 0,
       runAtTimeLocal: [],
       loadingApply: false,
-      isEditable: false,
+      isEditable: false
     };
   },
   computed: {
@@ -303,10 +304,10 @@ export default {
         if (newValue) {
           this.copyScheduleEventData.timeZone = {
             value: newValue,
-            label: newValue,
+            label: newValue
           };
         }
-      },
+      }
     },
     endDate: {
       get() {
@@ -316,10 +317,10 @@ export default {
       set(newValue) {
         const date = new Date(newValue);
         this.copyScheduleEventData.endExpression.date = moment(date).format(
-          'YYYY-MM-DD',
+          'YYYY-MM-DD'
         );
         // this.generateCronExpression(); // update crons when data changed
-      },
+      }
     },
     startDate: {
       get() {
@@ -329,10 +330,10 @@ export default {
       set(newValue) {
         const date = new Date(newValue);
         this.copyScheduleEventData.startExpression.date = moment(date).format(
-          'YYYY-MM-DD',
+          'YYYY-MM-DD'
         );
         // this.generateCronExpression(); // update crons when data changed
-      },
+      }
     },
     dataStateComp: {
       get() {
@@ -341,7 +342,7 @@ export default {
       set(newValue) {
         // console.log('here', newValue);
         this.$emit('update:dataState', newValue);
-      },
+      }
     },
     savedAccordionNumItemComp() {
       return this.copyScheduleEventData.savedAccordionSlotName
@@ -350,7 +351,7 @@ export default {
               .split('')
               .reverse()
               .join(),
-            10,
+            10
           )
         : -1;
     },
@@ -360,36 +361,36 @@ export default {
           _.get(
             this.$v,
             'validationCopyScheduleEventData.daily.$anyDirty',
-            false,
+            false
           ) &&
           _.get(
             this.$v,
             'validationCopyScheduleEventData.daily.$invalid',
-            false,
+            false
           ),
         // item1: !valdationsReccurin.daily(this.copyScheduleEventData),
         item2:
           _.get(
             this.$v,
             'validationCopyScheduleEventData.weekly.$anyDirty',
-            false,
+            false
           ) &&
           _.get(
             this.$v,
             'validationCopyScheduleEventData.weekly.$invalid',
-            false,
+            false
           ),
         // item2: !valdationsReccurin.weekly(this.copyScheduleEventData),
         item3:
           _.get(
             this.$v,
             'validationCopyScheduleEventData.monthly.$anyDirty',
-            false,
+            false
           ) &&
           _.get(
             this.$v,
             'validationCopyScheduleEventData.monthly.$invalid',
-            false,
+            false
           ),
         // item3: !valdationsReccurin.monthly(this.copyScheduleEventData),
         // item4: !valdationsReccurin.yearly(this.copyScheduleEventData),
@@ -397,13 +398,13 @@ export default {
           _.get(
             this.$v,
             'validationCopyScheduleEventData.yearly.$anyDirty',
-            false,
+            false
           ) &&
           _.get(
             this.$v,
             'validationCopyScheduleEventData.yearly.$invalid',
-            false,
-          ),
+            false
+          )
       };
     },
     validationDate() {
@@ -411,12 +412,12 @@ export default {
         _.get(
           this.$v,
           'validationCopyScheduleEventData.startExpression.date.$invalid',
-          false,
+          false
         ) &&
         _.get(
           this.$v,
           'validationCopyScheduleEventData.startExpression.date.$dirty',
-          false,
+          false
         )
       );
     },
@@ -425,12 +426,12 @@ export default {
         _.get(
           this.$v,
           'validationCopyScheduleEventData.timeZone.value.$invalid',
-          false,
+          false
         ) &&
         _.get(
           this.$v,
           'validationCopyScheduleEventData.timeZone.value.$dirty',
-          false,
+          false
         )
       );
     },
@@ -439,9 +440,18 @@ export default {
         this.$v.validationCopyScheduleEventData.eventName.$dirty &&
         this.$v.validationCopyScheduleEventData.eventName.$invalid
       );
-    },
+    }
   },
   methods: {
+    handleName() {
+      const maxLength = 140;
+      if (this.copyScheduleEventData.eventName.length > maxLength) {
+        this.copyScheduleEventData.eventName = this.copyScheduleEventData.eventName.slice(
+          0,
+          maxLength
+        );
+      }
+    },
     openModal(ref) {
       this.$refs[ref].open();
     },
@@ -470,8 +480,8 @@ export default {
         // this.$emit('saved-event');
       }
     },
-
     cancel() {
+      console.log(this.dataStateComp);
       if (this.dataStateComp === 'new') {
         this.deleteEvent();
         this.$emit('cancel-event');
@@ -481,6 +491,8 @@ export default {
       ) {
         this.openModal('cancelAndDataNotSave');
       } else {
+        this.$emit('cancel-changes');
+        this.dataStateComp = 'canceled';
         this.$emit('cancel-event');
       }
     },
@@ -496,7 +508,7 @@ export default {
         this.copyScheduleEventData.daily.cronExpressions,
         this.copyScheduleEventData.weekly.cronExpressions,
         this.copyScheduleEventData.monthly.cronExpressions,
-        this.copyScheduleEventData.yearly.cronExpressions,
+        this.copyScheduleEventData.yearly.cronExpressions
       );
       this.copyScheduleEventData.expressions = expressions;
     },
@@ -514,7 +526,7 @@ export default {
           break;
         case 'item3':
           this.copyScheduleEventData.monthly = _.cloneDeep(
-            defaultValues.monthly,
+            defaultValues.monthly
           );
           break;
         case 'item4':
@@ -555,7 +567,7 @@ export default {
     expressionsForNotRecurring() {
       const date = moment(
         this.copyScheduleEventData.startExpression.date,
-        'YYYY-MM-DD',
+        'YYYY-MM-DD'
       );
       if (!this.copyScheduleEventData.isReccuring) {
         // this.copyScheduleEventData.expressions = this.runAtTimeLocal.map(
@@ -579,11 +591,11 @@ export default {
           expressionsLocal.push(
             `-1,${secondsOfhours[keySecondsOfhours]} ${parseInt(
               keySecondsOfhours,
-              10,
+              10
             )} ${parseInt(date.format('DD'), 10)}  ${parseInt(
               date.format('MM'),
-              10,
-            )} * ${parseInt(date.format('YYYY'), 10)}`,
+              10
+            )} * ${parseInt(date.format('YYYY'), 10)}`
           );
         });
 
@@ -604,16 +616,16 @@ export default {
           const units = item.every.units === 'hh' ? 'hours' : 'minutes';
 
           let nextRunAtTime = moment(`${item.start.HH}:${item.start.mm}`, [
-            'HH:mm',
+            'HH:mm'
           ]);
           const endTimeHmmA = moment(`${item.end.HH}:${item.end.mm}`, [
-            'HH:mm',
+            'HH:mm'
           ]);
 
           do {
             runAtTimeLocal.push({
               HH: nextRunAtTime.hours(),
-              mm: nextRunAtTime.minutes(),
+              mm: nextRunAtTime.minutes()
             });
 
             nextRunAtTime = nextRunAtTime.add(evertVal, units);
@@ -625,14 +637,14 @@ export default {
         }
       });
       return _.uniqWith(runAtTimeLocal, _.isEqual);
-    },
+    }
   },
   watch: {
     'copyScheduleEventData.times': {
       handler(newVal) {
         this.runAtTimeLocal = this.getRunAtTimeLocal(newVal);
       },
-      deep: true,
+      deep: true
     },
 
     copyScheduleEventData: {
@@ -649,35 +661,35 @@ export default {
           this.dataStateComp = 'canceled';
         }
       },
-      deep: true,
+      deep: true
     },
 
     'copyScheduleEventData.daily.cronExpressions': {
       handler() {
         this.doExpressions();
       },
-      deep: true,
+      deep: true
     },
 
     'copyScheduleEventData.weekly.cronExpressions': {
       handler() {
         this.doExpressions();
       },
-      deep: true,
+      deep: true
     },
 
     'copyScheduleEventData.monthly.cronExpressions': {
       handler() {
         this.doExpressions();
       },
-      deep: true,
+      deep: true
     },
 
     'copyScheduleEventData.yearly.cronExpressions': {
       handler() {
         this.doExpressions();
       },
-      deep: true,
+      deep: true
     },
     // dataState(newValue) {
     //   this.$emit('data-state', newValue);
@@ -692,8 +704,8 @@ export default {
       handler(newValue) {
         this.$emit('run-at-time', newValue);
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   components: {
     Accordion,
@@ -701,8 +713,8 @@ export default {
     CronGeneratorsDaily,
     CronGeneratorsWeekly,
     CronGeneratorsMonthly,
-    CronGeneratorsYearly,
-  },
+    CronGeneratorsYearly
+  }
 };
 </script>
 
@@ -767,6 +779,21 @@ export default {
     }
 
     .textbox-without-border {
+      margin-bottom: 25px;
+      height: 32px;
+      outline: none;
+      border: none;
+      width: 100%;
+      background: #fff;
+      color: #0f232e;
+      font-size: 17px;
+      font-weight: bold;
+      &::placeholder {
+        font-size: 17px;
+        color: rgba(15, 35, 46, 0.55);
+        font-weight: bold;
+      }
+
       &_invalid {
         border-bottom: 1.2px solid #f95d5d;
       }

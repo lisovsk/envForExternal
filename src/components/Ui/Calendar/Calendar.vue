@@ -106,34 +106,34 @@ export default {
       interval: {},
       state: 'month',
       year: parseInt(this.startYear, 10),
-      month: parseInt(this.startMonth, 10),
+      month: parseInt(this.startMonth, 10)
       // selectedDate: { day: null, month: null, year: null },
     };
   },
   props: {
     startYear: {
       type: Number,
-      default: new Date().getFullYear(),
+      default: new Date().getFullYear()
     },
     startMonth: {
       type: Number,
-      default: new Date().getMonth() + 1,
+      default: new Date().getMonth() + 1
     },
     selectedDays: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     editable: {
       default: true,
-      type: Boolean,
-    },
+      type: Boolean
+    }
   },
   components: { OneMonthCalendar, OneYearCalendar },
   methods: {
     forward() {
-      console.log(this.month);
+      // console.log(this.month);
       switch (this.state) {
         case 'year':
           this.year += 1;
@@ -154,7 +154,7 @@ export default {
       }
     },
     back() {
-      console.log(this.month);
+      // console.log(this.month);
       switch (this.state) {
         case 'year':
           this.year -= 1;
@@ -191,15 +191,15 @@ export default {
     moveToCurrent() {
       this.month = new Date().getMonth() + 1;
       this.year = new Date().getFullYear();
-    },
+    }
   },
   computed: {
     monthComp() {
       return moment(this.month, 'MM').format('MMMM');
-    },
+    }
   },
 
-  mixins: [getScheduledDays],
+  mixins: [getScheduledDays]
 };
 </script>
 
@@ -213,7 +213,6 @@ export default {
 
 .nav__forward,
 .nav__back {
-
 }
 
 .nav__back {

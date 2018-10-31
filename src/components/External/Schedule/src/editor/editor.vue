@@ -54,7 +54,7 @@ export const validator = template => {
 };
 
 export const data = template => ({
-  scheduleEvents: _.get(this, 'schema.scheduleEvents', null) || [],
+  scheduleEvents: _.get(this, 'schema.scheduleEvents', null) || []
   // scheduleEventsValidation: _.get(this, 'schema.scheduleEvents', null) || [];
   // validationCopyScheduleEventData: {},
 });
@@ -64,15 +64,15 @@ export default {
     template: null,
     schema: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     step: null,
     stepId: null,
     steps: null,
     readonly: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   computed: {
     scheduleEventsComp: {
@@ -88,8 +88,8 @@ export default {
           //   this.scheduleEventsValidation.scheduleEvents = this.schema.scheduleEvents;
           // }
         }
-      },
-    },
+      }
+    }
     // this.validationCopyScheduleEventDataComp() {
     //   return validationCopyScheduleEventData
     // }
@@ -109,8 +109,8 @@ export default {
       handler(newValue) {
         this.$emit('step-validation', newValue);
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   methods: {
     newCopyScheduleEventData(newValue) {
@@ -121,7 +121,7 @@ export default {
       if (this.validationCopyScheduleEventData) {
         this.validationCopyScheduleEventData = newValue;
       }
-    },
+    }
   },
   components: { ScheduleEvents },
   validations: {
@@ -165,8 +165,8 @@ export default {
       startExpression: {
         required,
         date: {
-          required,
-        },
+          required
+        }
       },
       endExpression: {
         required,
@@ -180,23 +180,23 @@ export default {
               valid =
                 !!value &&
                 moment(
-                  this.validationCopyScheduleEventData.startExpression.date,
+                  this.validationCopyScheduleEventData.startExpression.date
                 ).isSameOrBefore(moment(value));
             }
             return valid;
-          },
-        },
+          }
+        }
       },
       timeZone: {
         value: {
-          required,
-        },
+          required
+        }
       },
       times: {
         $each: {
           start: {
             custom(value, state) {
-              console.log('__valueStart__', value);
+              // console.log('__valueStart__', value);
               let valid = true;
               if (state) {
                 valid =
@@ -205,7 +205,7 @@ export default {
                 return true;
               }
               return valid;
-            },
+            }
           },
           end: {
             custom(value, state) {
@@ -220,12 +220,12 @@ export default {
                 return true;
               }
               return valid;
-            },
+            }
           },
           endTime: {},
           every: {
             custom(value, state) {
-              console.log('__valueEvery__', value);
+              // console.log('__valueEvery__', value);
               let valid = true;
               if (state) {
                 valid =
@@ -235,9 +235,9 @@ export default {
                 return true;
               }
               return valid;
-            },
-          },
-        },
+            }
+          }
+        }
         // custom(value) {
         //   // console.log('valuevalue', value);
         //   if (!value) {
@@ -264,7 +264,7 @@ export default {
           if (_.get(this, 'validationCopyScheduleEventData.isReccuring'))
             valid = !!value;
           return valid;
-        },
+        }
       },
       daily: {
         period: {
@@ -274,7 +274,7 @@ export default {
               _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName',
+                'validationCopyScheduleEventData.savedAccordionSlotName'
               ) === 'item1'
             ) {
               valid =
@@ -283,8 +283,8 @@ export default {
                   : stateCurr && stateCurr > 0;
             }
             return valid;
-          },
-        },
+          }
+        }
       },
       weekly: {
         period: {
@@ -295,14 +295,14 @@ export default {
               _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName',
+                'validationCopyScheduleEventData.savedAccordionSlotName'
               ) === 'item2' &&
               (!value || value < 1)
             ) {
               valid = false;
             }
             return valid;
-          },
+          }
         },
         weekDays: {
           custom(value) {
@@ -311,15 +311,15 @@ export default {
               _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName',
+                'validationCopyScheduleEventData.savedAccordionSlotName'
               ) === 'item2' &&
               !value.length
             ) {
               valid = false;
             }
             return valid;
-          },
-        },
+          }
+        }
       },
 
       monthly: {
@@ -330,14 +330,14 @@ export default {
               _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName',
+                'validationCopyScheduleEventData.savedAccordionSlotName'
               ) === 'item3' &&
               !value.length
             ) {
               valid = false;
             }
             return valid;
-          },
+          }
         },
         selectedDays: {
           custom(value) {
@@ -346,7 +346,7 @@ export default {
               _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName',
+                'validationCopyScheduleEventData.savedAccordionSlotName'
               ) === 'item3' &&
               (_.get(this, 'validationCopyScheduleEventData.monthly.mode') ===
                 'each' &&
@@ -355,8 +355,8 @@ export default {
               valid = false;
             }
             return valid;
-          },
-        },
+          }
+        }
       },
       yearly: {
         period: {
@@ -366,14 +366,14 @@ export default {
               _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName',
+                'validationCopyScheduleEventData.savedAccordionSlotName'
               ) === 'item4' &&
               (!value || value < 1)
             ) {
               valid = false;
             }
             return valid;
-          },
+          }
         },
         selectedMonths: {
           custom(value) {
@@ -382,17 +382,17 @@ export default {
               _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName',
+                'validationCopyScheduleEventData.savedAccordionSlotName'
               ) === 'item4' &&
               !value.length
             ) {
               valid = false;
             }
             return valid;
-          },
-        },
-      },
-    },
+          }
+        }
+      }
+    }
   },
   // validations() {
   //   return validator(this.template);
@@ -405,15 +405,15 @@ export default {
   },
   data() {
     return {
-      validationCopyScheduleEventData: {},
+      validationCopyScheduleEventData: {}
     };
-  },
+  }
 };
 
 export const meta = {
   name: 'schedule-component',
   type: 'onereach-studio-form-editor',
-  version: '0.5.0',
+  version: '0.5.0'
 };
 </script>
 

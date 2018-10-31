@@ -65,41 +65,41 @@ export default {
   props: {
     readonly: {
       type: Boolean,
-      default: false,
+      default: false
     },
     period: {
       type: String,
-      default: '1',
+      default: '1'
     },
     periodMode: {
       type: String,
-      default: 'everyDay',
+      default: 'everyDay'
     },
     runAtTime: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     value: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     index: {
       type: Number,
-      default: -1,
+      default: -1
     },
     previewTexts: {
       type: Object,
-      default: null,
+      default: null
     },
     $v: null,
     invalid: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   computed: {
     periodLocal: {
@@ -108,7 +108,7 @@ export default {
       },
       set(newValue) {
         this.$emit('update:period', newValue);
-      },
+      }
     },
     periodModeLocal: {
       get() {
@@ -116,7 +116,7 @@ export default {
       },
       set(newValue) {
         this.$emit('update:periodMode', newValue);
-      },
+      }
     },
     dailyValue() {
       switch (this.periodModeLocal) {
@@ -153,17 +153,17 @@ export default {
       return _.get(
         this.$v,
         'validationCopyScheduleEventData.daily.period.$invalid',
-        false,
+        false
       );
-    },
+    }
   },
   methods: {
     cronExpression() {
       return _.map(
         this.runAtTime,
-        item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`,
+        item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
       );
-    },
+    }
   },
   watch: {
     runAtTime() {
@@ -172,9 +172,9 @@ export default {
     dailyValue() {
       this.$emit('input', this.cronExpression());
       this.$emit('change-saved-accordion-num-item', this.index);
-    },
+    }
   },
-  mixins: [savedState],
+  mixins: [savedState]
 };
 </script>
 

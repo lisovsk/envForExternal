@@ -27,7 +27,7 @@ storiesOf('Schedule', module)
     <div>
         <month-picker v-model="monthlySelectedMonths" :disabled="readonly"></month-picker>
     </div>
-  `,
+  `
   }))
   .add('ScheduleEvent', () => ({
     data() {
@@ -47,7 +47,7 @@ storiesOf('Schedule', module)
         // $v: null,
         readonly: false,
         stepId: {},
-        steps: {},
+        steps: {}
       };
     },
     methods: {},
@@ -72,26 +72,26 @@ storiesOf('Schedule', module)
                 :steps="steps"
             ></schedule-event>
         </div>
-      `,
+      `
   }))
   .add('Schedule', () => ({
     data() {
       return {
         schema: JSON.parse(Vue.localStorage.get('schema')) || schemaData(),
-        invalid: false,
+        invalid: false
       };
     },
     created() {
-      console.log('this.schema', this.schema);
+      // console.log('this.schema', this.schema);
     },
     watch: {
       schema: {
         handler(newSchema) {
           Vue.localStorage.set('schema', JSON.stringify(newSchema));
-          console.log('newSchema', newSchema);
+          // console.log('newSchema', newSchema);
         },
-        deep: true,
-      },
+        deep: true
+      }
     },
     methods: {
       stepValidation(newValue) {
@@ -111,5 +111,5 @@ storiesOf('Schedule', module)
       ></schedule-editor>
     </validation-step>
     </div>
-  `,
+  `
   }));

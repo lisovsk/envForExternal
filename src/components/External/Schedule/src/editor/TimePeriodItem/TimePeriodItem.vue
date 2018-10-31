@@ -68,9 +68,9 @@ export default {
       default() {
         return {
           HH: '',
-          mm: '',
+          mm: ''
         };
-      },
+      }
     },
 
     end: {
@@ -78,14 +78,14 @@ export default {
       default() {
         return {
           HH: '',
-          mm: '',
+          mm: ''
         };
-      },
+      }
     },
 
     endTime: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     every: {
@@ -93,16 +93,16 @@ export default {
       default() {
         return {
           val: '',
-          units: '',
+          units: ''
         };
-      },
+      }
     },
     readonly: {
       type: Boolean,
-      default: false,
+      default: false
     },
     $v: null,
-    index: null,
+    index: null
   },
   data() {
     return {};
@@ -114,7 +114,7 @@ export default {
       },
       set(newStart) {
         this.$emit('update:start', newStart);
-      },
+      }
     },
     localEnd: {
       get() {
@@ -122,7 +122,7 @@ export default {
       },
       set(newEnd) {
         this.$emit('update:end', newEnd);
-      },
+      }
     },
     localEvery: {
       get() {
@@ -130,7 +130,7 @@ export default {
       },
       set(newEvery) {
         this.$emit('update:every', newEvery);
-      },
+      }
     },
     localEndTime: {
       get() {
@@ -138,35 +138,35 @@ export default {
       },
       set(newEndTime) {
         this.$emit('update:endTime', newEndTime);
-      },
-    },
+      }
+    }
   },
   methods: {
     touchStartTime() {
-      console.log('touchStartTime');
+      // console.log('touchStartTime');
       const touch = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each[${this.index}].start`,
+        `validationCopyScheduleEventData.times.$each[${this.index}].start`
       );
       if (touch) {
         touch.$touch();
       }
     },
     touchEndTime() {
-      console.log('touchEndTime');
+      // console.log('touchEndTime');
       const touch = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each[${this.index}].end`,
+        `validationCopyScheduleEventData.times.$each[${this.index}].end`
       );
       if (touch) {
         touch.$touch();
       }
     },
     touchEveryTime() {
-      console.log('touchEveryTime');
+      // console.log('touchEveryTime');
       const touch = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each[${this.index}].every`,
+        `validationCopyScheduleEventData.times.$each[${this.index}].every`
       );
       if (touch) {
         touch.$touch();
@@ -175,14 +175,14 @@ export default {
     timepickerStartError() {
       const item = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each[${this.index}].start`,
+        `validationCopyScheduleEventData.times.$each[${this.index}].start`
       );
       return item && item.$invalid && item.$dirty;
     },
     timepickerEndError() {
       const item = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each[${this.index}].end`,
+        `validationCopyScheduleEventData.times.$each[${this.index}].end`
       );
 
       return item && item.$invalid && item.$dirty;
@@ -190,7 +190,7 @@ export default {
     timepickerEveryValError() {
       const item = _.get(
         this.$v,
-        `validationCopyScheduleEventData.times.$each[${this.index}].every`,
+        `validationCopyScheduleEventData.times.$each[${this.index}].every`
       );
       return item && item.$invalid && item.$dirty;
       // return !(this.localEvery.val && this.localEvery.val > 0);
@@ -199,14 +199,14 @@ export default {
       this.$emit('update:endTime', false);
       this.$emit('update:every', {
         val: '10',
-        units: 'mm',
+        units: 'mm'
       });
       this.$emit('update:end', {
         HH: '',
-        mm: '',
+        mm: ''
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

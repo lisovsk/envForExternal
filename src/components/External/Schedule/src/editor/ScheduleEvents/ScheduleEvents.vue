@@ -92,7 +92,6 @@
                   @cancel-changes="cancelChanges"
                   @data-state="/*changeDataState*/"
                   @delete-event="deleteEvent"
-                  @cancel-event="cancelEvent"
                   @run-at-time="catchRunAtTime"
                 >
                 </schedule-event>
@@ -168,7 +167,7 @@ import Calendar from '../../../../../Ui/Calendar/Calendar.vue';
 const randomColor = _.get(
   randomMC,
   'module.exports.getColor',
-  randomMC.getColor,
+  randomMC.getColor
 );
 
 export default {
@@ -181,12 +180,12 @@ export default {
     'step',
     'stepId',
     'steps',
-    'readonly',
+    'readonly'
   ],
   components: {
     ScheduleEvent,
     Calendar,
-    ScheduleEventPreview,
+    ScheduleEventPreview
   },
 
   data() {
@@ -197,7 +196,7 @@ export default {
       copyScheduleEventData: null,
       dataStates: [],
       numOfTryEdit: null,
-      runAtTime: null,
+      runAtTime: null
     };
   },
   beforeCreate() {
@@ -213,7 +212,7 @@ export default {
       const dates = this.scheduleEventsLocal
         .map(item => {
           const dateSplice = item.scheduleEventData.startExpression.date.split(
-            '-',
+            '-'
           );
 
           return {
@@ -228,15 +227,15 @@ export default {
             date: {
               day: parseInt(dateSplice[2], 10),
               month: parseInt(dateSplice[1], 10),
-              year: parseInt(dateSplice[0], 10),
-            },
+              year: parseInt(dateSplice[0], 10)
+            }
           };
         })
         .filter((item, index) => index !== this.editableEventNum);
 
       if (this.copyScheduleEventData) {
         const copyScheduleEventDataSplice = this.copyScheduleEventData.startExpression.date.split(
-          '-',
+          '-'
         );
         dates.push({
           color: this.copyScheduleEventData.color,
@@ -250,15 +249,15 @@ export default {
           date: {
             day: parseInt(copyScheduleEventDataSplice[2], 10),
             month: parseInt(copyScheduleEventDataSplice[1], 10),
-            year: parseInt(copyScheduleEventDataSplice[0], 10),
-          },
+            year: parseInt(copyScheduleEventDataSplice[0], 10)
+          }
         });
       }
       return dates;
     },
     changedNumber() {
       return this.dataStates.indexOf('changed');
-    },
+    }
   },
 
   methods: {
@@ -268,7 +267,7 @@ export default {
           id: uuid.v4(),
           startExpression: {
             time: '00:00',
-            date: '',
+            date: ''
           },
           deactivateAfterLastRun: false,
           includeEndTime: false,
@@ -278,11 +277,11 @@ export default {
           eventName: '',
           endExpression: {
             time: '00:00',
-            date: '',
+            date: ''
           },
           timeZone: {
             label: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            value: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            value: Intl.DateTimeFormat().resolvedOptions().timeZone
           },
           daily: defaultValues.daily,
           weekly: defaultValues.weekly,
@@ -292,26 +291,26 @@ export default {
             {
               start: {
                 HH: '',
-                mm: '',
+                mm: ''
               },
               end: {
                 HH: '',
-                mm: '',
+                mm: ''
               },
               every: {
                 val: 10,
-                units: 'mm',
+                units: 'mm'
               },
               endTime: false,
-              vforkey: uuid.v4(),
-            },
+              vforkey: uuid.v4()
+            }
           ],
           color: randomColor(),
-          savedAccordionSlotName: null,
+          savedAccordionSlotName: null
         },
         previewTexts: {
-          reccuring: '',
-        },
+          reccuring: ''
+        }
       };
     },
     openModal(ref) {
@@ -331,7 +330,7 @@ export default {
     changeSelectedDate(day, month, year) {
       this.copyScheduleEventData.startExpression.date = moment(
         `${year}-${month}-${day}`,
-        'YYYY-MM-DD',
+        'YYYY-MM-DD'
       ).format('YYYY-MM-DD');
       // this.copyScheduleEventData.startExpression.date = new Date(`${year}-${month}-${day}`);
       // this.selectedDateLocal = `${year}-${month}-${day}`;
@@ -350,7 +349,7 @@ export default {
         this.$set(
           this,
           'copyScheduleEventData',
-          _.cloneDeep(this.scheduleEventsLocal[index].scheduleEventData),
+          _.cloneDeep(this.scheduleEventsLocal[index].scheduleEventData)
         );
         this.deleteNotSaved(true, isNewItem);
 
@@ -376,7 +375,7 @@ export default {
     },
     cancelChanges() {
       this.copyScheduleEventData = _.cloneDeep(
-        this.scheduleEventsLocal[this.editableEventNum].scheduleEventData,
+        this.scheduleEventsLocal[this.editableEventNum].scheduleEventData
       );
       this.copyScheduleEventData.startExpression.date = '';
       this.editableEventNum = null;
@@ -442,12 +441,12 @@ export default {
             res = _.get(item, 'scheduleEventData.saved');
           }
           return res;
-        },
+        }
       );
       if (!isNewItem) {
         this.$emit(
           'update:scheduleEvents',
-          _.cloneDeep(this.scheduleEventsLocal),
+          _.cloneDeep(this.scheduleEventsLocal)
         );
       } else {
         this.editableEventNum = this.scheduleEventsLocal.length - 1;
@@ -474,23 +473,23 @@ export default {
     cancelDiscard() {
       if (this.changedNumber !== -1) {
         this.scheduleEventsLocal = this.scheduleEventsLocal.filter(
-          item => item.scheduleEventData.saved === true,
+          item => item.scheduleEventData.saved === true
         );
       }
       this.closeModal('dataNotSaveEndSwitchToOtherEvent');
-    },
+    }
   },
   watch: {
     copyScheduleEventData: {
       handler(newValue) {
         this.$emit('new-copy-schedule-event-data', newValue);
       },
-      deep: true,
+      deep: true
     },
     scheduleEventsLocal(newValue) {
       console.log('newValuenewValue', newValue);
-    },
-  },
+    }
+  }
 };
 </script>
 
