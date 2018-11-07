@@ -276,7 +276,7 @@ export default {
           isEndTime: false,
           eventName: '',
           endExpression: {
-            time: '00:00',
+            time: '23:59',
             date: ''
           },
           timeZone: {

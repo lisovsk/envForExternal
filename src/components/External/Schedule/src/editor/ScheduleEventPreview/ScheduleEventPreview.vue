@@ -268,8 +268,8 @@ export default {
         const startDate = new Date(moment(this.startDate).format('YYYY-MM-DD'));
         const endDate = this.endDate.noEnd
           ? undefined
-          : new Date(moment(this.endDate.date).format('YYYY-MM-DD'));
-
+          : new Date(`${moment(this.endDate.date).format('YYYY-MM-DD')} 23:59`);
+        console.log('endDate', endDate);
         const result = [].concat // eslint-disable-line
           .apply(
             [],

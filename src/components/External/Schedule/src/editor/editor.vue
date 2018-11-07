@@ -3,6 +3,7 @@
     <!-- {{$v}}
     33sdfdsssdsfs
     {{schema}} -->
+    <!-- {{schema}} -->
     <!-- {{scheduleEventsComp[0].scheduleEventData.times}} -->
       <schedule-events
         :schedule-events.sync="scheduleEventsComp"
