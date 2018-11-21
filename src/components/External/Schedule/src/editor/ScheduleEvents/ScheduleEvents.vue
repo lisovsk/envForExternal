@@ -1,5 +1,6 @@
 <template>
 <div class="schedule-events-scope">
+ 
   <!-- {{startDays}} -->
   <!-- {{scheduleEventsLocal}} -->
   <div
@@ -371,6 +372,10 @@ export default {
           'copyScheduleEventData',
           _.cloneDeep(this.scheduleEventsLocal[index].scheduleEventData)
         );
+        // console.log(
+        //   'this.scheduleEventsLocal[index].scheduleEventData.expressions',
+        //   this.scheduleEventsLocal[index].scheduleEventData.expressions
+        // );
         this.deleteNotSaved(true, isNewItem);
 
         // this.copyScheduleEventData = Object.assign({}, this.scheduleEventsLocal[index].scheduleEventData, {id: uuidv4()});

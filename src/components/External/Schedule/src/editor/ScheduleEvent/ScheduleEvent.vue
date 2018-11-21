@@ -513,13 +513,15 @@ export default {
     },
 
     doExpressions() {
-      const expressions = [].concat(
-        this.copyScheduleEventData.daily.cronExpressions,
-        this.copyScheduleEventData.weekly.cronExpressions,
-        this.copyScheduleEventData.monthly.cronExpressions,
-        this.copyScheduleEventData.yearly.cronExpressions
-      );
-      this.copyScheduleEventData.expressions = expressions;
+      if (this.copyScheduleEventData.isReccuring) {
+        const expressions = [].concat(
+          this.copyScheduleEventData.daily.cronExpressions,
+          this.copyScheduleEventData.weekly.cronExpressions,
+          this.copyScheduleEventData.monthly.cronExpressions,
+          this.copyScheduleEventData.yearly.cronExpressions
+        );
+        this.copyScheduleEventData.expressions = expressions;
+      }
     },
     changeSavedAccordionSlotName(number) {
       // console.log(number);
@@ -574,6 +576,7 @@ export default {
       this.$emit('cancel-event');
     },
     expressionsForNotRecurring() {
+      console.log(121212);
       const date = moment(
         this.copyScheduleEventData.startExpression.date,
         'YYYY-MM-DD'
@@ -663,6 +666,12 @@ export default {
           !_.isEqual(newValue, this.scheduleEventData) &&
           newValue.id === oldValue.id
         ) {
+          console.log('newValue11', JSON.stringify(newValue));
+          console.log(
+            'scheduleEventData11',
+            JSON.stringify(this.scheduleEventData)
+          );
+
           this.dataStateComp = 'changed';
           // console.log(JSON.stringify(newValue));
           // console.log(JSON.stringify(this.scheduleEventData));
@@ -717,6 +726,7 @@ export default {
       deep: true
     }
   },
+
   components: {
     Accordion,
     TimePeriodList,
