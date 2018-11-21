@@ -356,22 +356,22 @@ export default {
         'September',
         'October',
         'November',
-        'December',
-      ],
+        'December'
+      ]
     };
   },
   props: {
     year: {
       type: Number,
-      default: new Date().getFullYear(),
+      default: new Date().getFullYear()
     },
     month: {
       type: Number,
-      default: new Date().getMonth() + 1,
+      default: new Date().getMonth() + 1
     },
     yearsCalendar: {
       type: Boolean,
-      default: false,
+      default: false
     },
     // selectedDays: {
     //   type: Array,
@@ -383,16 +383,16 @@ export default {
       type: Object,
       default() {
         return {};
-      },
+      }
     },
     notShowSelectedOnPrevNextDays: {
       type: Boolean,
-      default: false,
+      default: false
     },
     editable: {
       default: true,
-      type: Boolean,
-    },
+      type: Boolean
+    }
   },
   computed: {
     dPrevDays() {
@@ -449,12 +449,12 @@ export default {
       this.$emit('input', {
         start,
         end,
-        year: this.year,
+        year: this.year
       });
       return {
         start,
         end,
-        year: this.year,
+        year: this.year
       };
     },
     highlightedPreviousMonthDays() {
@@ -463,7 +463,7 @@ export default {
           const resLocal = accumulator;
           resLocal[currentValue] = this.isHighlightedItem(
             { day: currentValue, month: this.month, year: this.year },
-            'prevMonth',
+            'prevMonth'
           );
           return resLocal;
         }, {});
@@ -478,10 +478,10 @@ export default {
             resLocal[currentValue] = this.isHighlightedItem({
               day: currentValue,
               month: this.month,
-              year: this.year,
+              year: this.year
             });
             return resLocal;
-          }, {}),
+          }, {})
         );
       }
       return null;
@@ -492,13 +492,13 @@ export default {
           const resLocal = accumulator;
           resLocal[currentValue] = this.isHighlightedItem(
             { day: currentValue, month: this.month, year: this.year },
-            'nextMonth',
+            'nextMonth'
           );
           return resLocal;
         }, {});
       }
       return null;
-    },
+    }
   },
   methods: {
     getDay(date) {
@@ -636,32 +636,36 @@ export default {
     },
     convertColor(color, transparency) {
       return hex2rgb(color, transparency);
-    },
+    }
   },
   components: {
-    Times,
+    Times
   },
   watch: {
     interval: {
       handler(newInterval) {
         this.$emit('input', newInterval);
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
-  // created() {
-  //   window.addEventListener('resize', () => {
-  //     const windowW =
-  //       window.innerWidth ||
-  //       document.documentElement.clientWidth ||
-  //       document.body.clientWidth;
-  //     if (windowW < 1380) {
-  //       this.radius = 12;
-  //     } else {
-  //       this.radius = 15;
-  //     }
-  //   });
-  // },
+  created() {
+    console.log(
+      'this.highlightedPreviousMonthDays',
+      this.highlightedPreviousMonthDays
+    );
+    // window.addEventListener('resize', () => {
+    //   const windowW =
+    //     window.innerWidth ||
+    //     document.documentElement.clientWidth ||
+    //     document.body.clientWidth;
+    //   if (windowW < 1380) {
+    //     this.radius = 12;
+    //   } else {
+    //     this.radius = 15;
+    //   }
+    // });
+  }
 };
 </script>
 

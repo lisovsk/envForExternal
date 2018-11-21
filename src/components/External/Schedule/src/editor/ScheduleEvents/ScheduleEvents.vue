@@ -1,5 +1,7 @@
 <template>
 <div class="schedule-events-scope">
+  <!-- {{startDays}} -->
+  <!-- {{scheduleEventsLocal}} -->
   <div
     class="schedule-events">
     <div class="schedule-events__title">
@@ -22,6 +24,7 @@
         <div class="schedule__wr-event-preview" @click="doEditable(item.index)">
           <!-- {{$v.schemaValidation.scheduleEvents.$each.$iter[item.index].scheduleEventData.$invalid}} -->
           <schedule-event-preview
+            v-if="item.item.scheduleEventData.saved"
             :color="item.item.scheduleEventData.color"
             :event-name="item.item.scheduleEventData.eventName"
             :preview-texts.sync="item.item.previewTexts"
@@ -30,6 +33,7 @@
             :end-date="{ noEnd: item.item.scheduleEventData.isEndTime, date: item.item.scheduleEventData.endExpression.date}"
             :start-date="item.item.scheduleEventData.startExpression.date"
             :expressions="item.item.scheduleEventData.expressions"
+            :time-zone="item.item.scheduleEventData.timeZone.value"
             :index="item.index"
             @do-editable="doEditable"
             @copy-event="copyEvent"
@@ -55,7 +59,7 @@
               @selected-date="changeSelectedDate"
               :selected-days="startDays"
               :editable="editable"
-              :run-at-time="runAtTime"
+              @changed-calendar-time-zone="getChangedCalendarTimeZone"
             >
             </calendar>
           </div>
@@ -86,17 +90,17 @@
                   :data-state.sync="dataStates[item.index]"
                   :preview-texts="item.item.previewTexts"
                   :editable-event-num.sync="editableEventNum"
+                  :saved="item.item.scheduleEventData.saved"
                   @save-copy="/*saveCopy*/"
                   @return-state="/*returnState*/"
                   @apply-changes="applyChanges"
                   @cancel-changes="cancelChanges"
                   @data-state="/*changeDataState*/"
                   @delete-event="deleteEvent"
-                  @run-at-time="catchRunAtTime"
                 >
                 </schedule-event>
                 <schedule-event-preview
-                  v-if="editableEventNum !== item.index"
+                  v-if="editableEventNum !== item.index && item.item.scheduleEventData.saved"
                   :color="item.item.scheduleEventData.color"
                   :index="item.index"
                   :event-name="item.item.scheduleEventData.eventName"
@@ -106,6 +110,7 @@
                   :end-date="{ noEnd: item.item.scheduleEventData.isEndTime, date: item.item.scheduleEventData.endExpression.date}"
                   :start-date="item.item.scheduleEventData.startExpression.date"
                   :expressions="item.item.scheduleEventData.expressions"
+                  :time-zone="item.item.scheduleEventData.timeZone.value"
                   :editable="editable"
                   @do-editable="doEditable"
                   @copy-event="copyEvent"
@@ -133,7 +138,12 @@
             <or-button color="primary" type="secondary" @click="closeModal('dataNotSave')">Cancel</or-button>
         </div>
     </or-modal>
-    <or-modal  :contain-focus="false" ref="dataNotSaveEndSwitchToOtherEvent" title="Discard unsaved changes">
+    <or-modal  
+      :contain-focus="false" 
+      ref="dataNotSaveEndSwitchToOtherEvent" 
+      title="Discard unsaved changes"
+      @close="cancelDiscard"
+    >
         You have unsaved changes. Are you sure you want to discard them?
 
         <div slot="footer">
@@ -196,7 +206,8 @@ export default {
       copyScheduleEventData: null,
       dataStates: [],
       numOfTryEdit: null,
-      runAtTime: null
+      runAtTime: null,
+      calendarTimeZone: ''
     };
   },
   beforeCreate() {
@@ -224,6 +235,8 @@ export default {
             isEndTime: item.scheduleEventData.isEndTime,
             eventName: item.scheduleEventData.eventName,
             times: item.scheduleEventData.times,
+            runAtTime: item.scheduleEventData.runAtTime,
+            timeZone: item.scheduleEventData.timeZone,
             date: {
               day: parseInt(dateSplice[2], 10),
               month: parseInt(dateSplice[1], 10),
@@ -246,6 +259,8 @@ export default {
           isEndTime: this.copyScheduleEventData.isEndTime,
           eventName: this.copyScheduleEventData.eventName,
           times: this.copyScheduleEventData.times,
+          runAtTime: this.copyScheduleEventData.runAtTime,
+          timeZone: this.copyScheduleEventData.timeZone,
           date: {
             day: parseInt(copyScheduleEventDataSplice[2], 10),
             month: parseInt(copyScheduleEventDataSplice[1], 10),
@@ -261,6 +276,10 @@ export default {
   },
 
   methods: {
+    getChangedCalendarTimeZone(newCalendarTimeZone) {
+      this.calendarTimeZone = newCalendarTimeZone;
+    },
+
     listNewItemMethod() {
       return {
         scheduleEventData: {
@@ -336,6 +355,7 @@ export default {
       // this.selectedDateLocal = `${year}-${month}-${day}`;
     },
     doEditable(index, isNewItem) {
+      // console.log(index)
       this.numOfTryEdit = index;
 
       if (this.changedNumber !== -1) {
@@ -371,6 +391,7 @@ export default {
       ].scheduleEventData = _.cloneDeep(this.copyScheduleEventData);
       this.$emit('update:scheduleEvents', this.scheduleEventsLocal);
       this.copyScheduleEventData.startExpression.date = '';
+      this.copyScheduleEventData.expressions = [];
       this.editableEventNum = null;
     },
     cancelChanges() {
@@ -391,6 +412,7 @@ export default {
     discardSwitchToOtherEvent() {
       this.$set(this.dataStates, this.changedNumber, 'canceled');
       this.closeModal('dataNotSaveEndSwitchToOtherEvent');
+      // this.doEditable(this.scheduleEventsLocal.length);
       this.doEditable(this.numOfTryEdit);
     },
     copyEvent(index) {
@@ -408,8 +430,11 @@ export default {
       this.openModal('deleteEvent');
     },
     eventAdded() {
-      // this.$set(this.dataStates, this.scheduleEventsLocal.length - 1, 'new');
+      setTimeout(() => {
+        this.$set(this.dataStates, this.scheduleEventsLocal.length - 1, 'new');
+      }, 0);
       this.doEditable(this.scheduleEventsLocal.length - 1, true);
+      this.numOfTryEdit = this.scheduleEventsLocal.length - 2;
     },
     // validdationScheduleEventData(index) {
     //   console.log(
@@ -458,7 +483,7 @@ export default {
       this.deleteNotSaved();
     },
     deleteСonfirmation() {
-      this.copyScheduleEventData.startExpression.date = '';
+      _.set(this.copyScheduleEventData, 'startExpression.date', '');
       this.editableEventNum = null;
       this.editableEventNum = null;
       this.dataStates[this.itemIndexForDelete] = 'canceled';
@@ -467,13 +492,15 @@ export default {
       this.closeModal('deleteEvent');
       this.$v.validationCopyScheduleEventData.$reset();
     },
-    catchRunAtTime(newValue) {
+    catchRunAtTime(newValue, index) {
       this.runAtTime = newValue;
     },
     cancelDiscard() {
       if (this.changedNumber !== -1) {
         this.scheduleEventsLocal = this.scheduleEventsLocal.filter(
-          item => item.scheduleEventData.saved === true
+          (item, index) =>
+            item.scheduleEventData.saved === true ||
+            this.dataStates[index] == 'changed'
         );
       }
       this.closeModal('dataNotSaveEndSwitchToOtherEvent');

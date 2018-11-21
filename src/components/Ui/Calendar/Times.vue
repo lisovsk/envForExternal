@@ -34,26 +34,26 @@ export default {
   props: {
     lighter: {
       type: Boolean,
-      default: false,
+      default: false
     },
     color: {
       type: String,
-      default: '',
+      default: ''
     },
     items: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     opacity: {
       type: Number,
-      default: 1,
-    },
+      default: 1
+    }
   },
   methods: {
     convertColor(color, transparency) {
       return hex2rgb(color, transparency);
-    },
-  },
+    }
+  }
 };
 </script>
 

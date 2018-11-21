@@ -360,6 +360,7 @@ export default {
       .ui-select__display
       .ui-select__display-value {
       max-width: 60px;
+      line-height: 26px;
       overflow: hidden;
       text-overflow: ellipsis;
     }

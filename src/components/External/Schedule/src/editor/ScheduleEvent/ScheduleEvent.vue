@@ -1,5 +1,6 @@
 <template>
 <div class="schedule-event-scope">
+  <!-- {{}} -->
   <div class="schedule-event">
     <div class="schedule-event__title">
       <div 
@@ -265,6 +266,10 @@ export default {
     previewTexts: {
       type: Object,
       default: null
+    },
+    saved: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -329,6 +334,7 @@ export default {
       },
       set(newValue) {
         const date = new Date(newValue);
+        console.log('datedatedatedate', date);
         this.copyScheduleEventData.startExpression.date = moment(date).format(
           'YYYY-MM-DD'
         );
@@ -481,7 +487,6 @@ export default {
       }
     },
     cancel() {
-      console.log(this.dataStateComp);
       if (this.dataStateComp === 'new') {
         this.deleteEvent();
         this.$emit('cancel-event');
@@ -489,7 +494,11 @@ export default {
         this.dataStateComp !== 'canceled' &&
         this.dataStateComp !== 'saved'
       ) {
-        this.openModal('cancelAndDataNotSave');
+        if (this.$v.validationCopyScheduleEventData.$invalid && !this.saved) {
+          this.deleteEvent();
+        } else {
+          this.openModal('cancelAndDataNotSave');
+        }
       } else {
         this.$emit('cancel-changes');
         this.dataStateComp = 'canceled';
@@ -702,7 +711,8 @@ export default {
     // }
     runAtTimeLocal: {
       handler(newValue) {
-        this.$emit('run-at-time', newValue);
+        // this.$emit('run-at-time', newValue);
+        this.copyScheduleEventData.runAtTime = newValue;
       },
       deep: true
     }

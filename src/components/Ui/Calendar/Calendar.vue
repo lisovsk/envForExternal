@@ -1,6 +1,9 @@
 
 <template>
-  <div>
+  <div class="Calendar">
+    <!-- {{startDays}} -->
+    <!-- {{highlightedDates}} -->
+    <!-- {{runAtTime}} -->
     <!-- {{highlightedDates}} -->
     <!-- highlightedDates
     {{highlightedDates}} -->
@@ -18,6 +21,17 @@
                 <!-- {{state === 'month' ?  `${interval.start} - ${interval.end}, ${interval.year}` : year}} -->
                 {{state === 'month' ?  `${monthComp}, ${interval.year}` : year}}
             </span>
+            <label class="select__wr">
+                <span class="select__label">Timezone</span>
+                <or-select
+                  placeholder="Select a time zone" 
+                  class="select"
+                  :has-search="true"
+                  v-model="timeZoneCalendar"
+                  :options="getRegions"
+                >
+                </or-select>
+            </label>
         </div>
         <div class="nav__wr-right">
             <span 
@@ -106,7 +120,8 @@ export default {
       interval: {},
       state: 'month',
       year: parseInt(this.startYear, 10),
-      month: parseInt(this.startMonth, 10)
+      month: parseInt(this.startMonth, 10),
+      timeZoneCalendar: moment.tz.guess()
       // selectedDate: { day: null, month: null, year: null },
     };
   },
@@ -131,6 +146,11 @@ export default {
     }
   },
   components: { OneMonthCalendar, OneYearCalendar },
+  watch: {
+    timeZoneCalendar(newTineZone) {
+      this.$emit('changed-calendar-time-zone', newTineZone);
+    }
+  },
   methods: {
     forward() {
       // console.log(this.month);
@@ -196,6 +216,23 @@ export default {
   computed: {
     monthComp() {
       return moment(this.month, 'MM').format('MMMM');
+    },
+    getRegions() {
+      // return only canonical zones
+      const timeZones = moment.tz._zones; // eslint-disable-line no-underscore-dangle
+
+      return _.chain(timeZones)
+        .keys()
+        .map(key => {
+          // due to mutation in moment we need check if it's object
+          // mutation is caused when invoke moment.tz()
+          const zone = timeZones[key];
+          return _.isObject(zone) ? zone.name : zone.split('|')[0];
+        })
+        .filter(zone => zone.indexOf('/') >= 0)
+        .sort()
+        .map(value => ({ label: value, value }))
+        .value();
     }
   },
 
@@ -203,7 +240,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .nav {
   display: flex;
   justify-content: space-between;
@@ -259,7 +296,28 @@ export default {
   line-height: 23px;
 }
 
-/* .disabled-calendar {
-  pointer-events: none;
-} */
+.select {
+  min-width: 180px;
+  &__label {
+    color: #91969d;
+    font-size: 12px;
+    line-height: 16px;
+  }
+  &.ui-select.ui-select--type-basic.ui-select--icon-position-left {
+    display: inherit;
+  }
+  &__wr {
+    height: 22px;
+    padding-left: 16px;
+  }
+}
 </style>
+
+<style lang="scss">
+.Calendar {
+  .ui-select .ui-select__content .ui-select__label .ui-select__display {
+    min-height: 32px;
+  }
+}
+</style>
+

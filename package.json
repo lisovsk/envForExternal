@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "keen-ui": "^1.0.1",
+    "later": "git+ssh://git@github.com/mansami/later.git",
     "lodash": "^4.17.5",
     "material-design-icons": "^3.0.1",
     "moment": "^2.22.1",
@@ -71,7 +72,6 @@
     "html-webpack-plugin": "^2.30.1",
     "jest": "^22.0.4",
     "jest-serializer-vue": "^0.3.0",
-    "later": "RickCarlino/later",
     "nightwatch": "^0.9.12",
     "node-notifier": "^5.1.2",
     "node-sass": "^4.9.0",

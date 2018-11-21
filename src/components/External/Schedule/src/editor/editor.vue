@@ -188,6 +188,7 @@ export default {
           }
         }
       },
+
       timeZone: {
         value: {
           required
@@ -210,12 +211,18 @@ export default {
           },
           end: {
             custom(value, state) {
-              console.log('__valueEnd__', value);
               let valid = true;
               if (state) {
+                console.log('__this__', state.start);
                 if (_.get(state, 'endTime', false)) {
                   valid =
-                    !!_.get(value, 'HH', false) && !!_.get(value, 'mm', false);
+                    !!_.get(value, 'HH', false) &&
+                    !!_.get(value, 'mm', false) &&
+                    new Date(`1970/01/01 ${value.HH}:${value.mm}`) -
+                      new Date(
+                        `1970/01/01 ${state.start.HH}:${state.start.mm}`
+                      ) >
+                      0;
                 }
               } else {
                 return true;

@@ -85,7 +85,7 @@ export default {
         { label: 'third', value: '#3' },
         { label: 'forth', value: '#4' },
         { label: 'fifth', value: '#5' },
-        { label: 'last', value: 'L' },
+        { label: 'last', value: 'L' }
       ],
       getWeekDays: [
         { label: 'day', value: '*' },
@@ -95,51 +95,51 @@ export default {
         { label: 'Wednesday', value: 'WED' },
         { label: 'Thursday', value: 'THU' },
         { label: 'Friday', value: 'FRI' },
-        { label: 'Saturday', value: 'SAT' },
+        { label: 'Saturday', value: 'SAT' }
         // { label: 'Weekday', value: ['MON', 'TUE', 'WED', 'THU', 'FRI'] },
         // { label: 'Weekend', value: ['SAT', 'SUN'] },
-      ],
+      ]
     };
   },
   props: {
     readonly: {
       type: Boolean,
-      default: false,
+      default: false
     },
     period: {
       type: String,
-      default: '1',
+      default: '1'
     },
     value: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     runAtTime: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     selectedMonths: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     daysPeriod: {
       type: Object,
       default() {
         return {
           day: '',
-          period: '',
+          period: ''
         };
-      },
+      }
     },
     startYear: {
       type: Number,
-      default: new Date().getFullYear(),
+      default: new Date().getFullYear()
     },
     // onThe: {
     //   type: Boolean,
@@ -147,17 +147,17 @@ export default {
     // },
     index: {
       type: Number,
-      default: -1,
+      default: -1
     },
     previewTexts: {
       type: Object,
-      default: null,
+      default: null
     },
     $v: null,
     invalid: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   computed: {
     periodComp: {
@@ -166,7 +166,7 @@ export default {
       },
       set(newPeriod) {
         this.$emit('update:period', newPeriod);
-      },
+      }
     },
     selectedMonthsComp: {
       get() {
@@ -174,7 +174,7 @@ export default {
       },
       set(newValue) {
         this.$emit('update:selectedMonths', newValue);
-      },
+      }
     },
     daysPeriodComp: {
       get() {
@@ -182,7 +182,7 @@ export default {
       },
       set(newValue) {
         this.$emit('update:daysPeriod', newValue);
-      },
+      }
     },
     // onTheComp: {
     //   get() {
@@ -206,13 +206,13 @@ export default {
       text += ` <br/>on the <span class="bold-text">${
         _.find(
           this.getDaysPeriod,
-          item => item.value === this.daysPeriodComp.period,
+          item => item.value === this.daysPeriodComp.period
         ).label
       }</span> 
         <span class="bold-text">${
           _.find(
             this.getWeekDays,
-            item => item.value === this.daysPeriodComp.day,
+            item => item.value === this.daysPeriodComp.day
           ).label
         }</span>`;
       // }
@@ -223,7 +223,7 @@ export default {
       return _.get(
         this.$v,
         'validationCopyScheduleEventData.yearly.period.$invalid',
-        false,
+        false
       );
     },
     validdationSelectedMonths() {
@@ -231,15 +231,15 @@ export default {
         _.get(
           this.$v,
           'validationCopyScheduleEventData.yearly.selectedMonths.$invalid',
-          false,
+          false
         ) &&
         _.get(
           this.$v,
           'validationCopyScheduleEventData.yearly.selectedMonths.$dirty',
-          false,
+          false
         )
       );
-    },
+    }
   },
   watch: {
     runAtTime() {
@@ -262,8 +262,8 @@ export default {
         this.$emit('input', this.cronExpression());
         this.$emit('change-saved-accordion-num-item', this.index);
       },
-      deep: true,
-    },
+      deep: true
+    }
   },
   methods: {
     cronExpression() {
@@ -282,14 +282,14 @@ export default {
         item =>
           `${item.mm} ${item.HH} ? ${this.selectedMonthsComp} ${
             this.daysPeriodComp.day
-          }${this.daysPeriodComp.period} ${this.startYear}/${this.periodComp}`,
+          }${this.daysPeriodComp.period} ${this.startYear}/${this.periodComp}`
       );
       // }
       return exp;
-    },
+    }
   },
   components: { MonthPicker },
-  mixins: [savedState],
+  mixins: [savedState]
 };
 </script>
 
@@ -360,6 +360,7 @@ export default {
       // width: 100%;
       .ui-select__display-value {
         max-width: 100%;
+        line-height: 26px;
       }
     }
 

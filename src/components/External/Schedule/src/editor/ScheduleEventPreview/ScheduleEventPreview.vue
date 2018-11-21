@@ -32,7 +32,11 @@
             >
               see less
             </span>
+            (Current day {{currentDay}})
           </div>
+          <span class="bold-text">
+            {{timeZone}}
+          </span>
           <div class="schedule-event-preview__times">
             <span 
               :key="time.id" 
@@ -109,6 +113,7 @@ export default {
   },
   data() {
     return {
+      currentDay: moment().format('YYYY-MM-DD'),
       countAtDates: 16,
       moreDates: false,
       moreTimes: false,
@@ -182,6 +187,10 @@ export default {
     readonly: {
       type: Boolean,
       default: false
+    },
+    timeZone: {
+      type: String,
+      default: ''
     }
   },
   methods: {
@@ -210,7 +219,6 @@ export default {
           this.$emit('copy-event', this.index);
           break;
         case 'delete':
-          // console.log('delete');
           this.$emit('delete-event', this.index);
           break;
         default:
@@ -265,11 +273,13 @@ export default {
     },
     startsAt() {
       try {
-        const startDate = new Date(moment(this.startDate).format('YYYY-MM-DD'));
+        const startDate = new Date(
+          `${moment(this.startDate).format('YYYY-MM-DD')} 00:00`
+        );
         const endDate = this.endDate.noEnd
           ? undefined
           : new Date(`${moment(this.endDate.date).format('YYYY-MM-DD')} 23:59`);
-        console.log('endDate', endDate);
+        // console.log('endDate', endDate);
         const result = [].concat // eslint-disable-line
           .apply(
             [],
