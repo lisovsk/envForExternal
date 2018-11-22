@@ -223,11 +223,11 @@ export default {
               }, {});
               // console.log('reduceDatesreduceDates', reduceDates);
 
-              let flagLiter = false;
+              // let flagLiter = false;
               _.forOwn(reduceDates, (timesValue, dateKey) => {
                 console.log('timesValue', timesValue);
                 const date = moment(dateKey, 'YYYY-MM-DD');
-                flagLiter = true;
+                // flagLiter = true;
                 allItemSelectedDays.push({
                   dates: [
                     {
@@ -242,7 +242,7 @@ export default {
                   times: timesValue,
                   eventName: itemSelectedDays.eventName,
                   recurring: false,
-                  lighter: flagLiter,
+                  lighter: false,
                   startDate: this.startDate
                 });
               });
@@ -275,7 +275,10 @@ export default {
             const lighter = !_.get(item, 'lighter', true)
               ? false
               : moment(date, 'YYYY-MM-DD').format('YYYY-MM-DD') !==
-                item.startDate;
+                moment(item.startDate, 'YYYY-MM-DD HH:mm:ss').format(
+                  'YYYY-MM-DD'
+                );
+            console.log('lighter', item);
             resultArr[date].push({
               color: item.color,
               eventName: item.eventName,
