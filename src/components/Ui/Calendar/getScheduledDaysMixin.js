@@ -218,7 +218,6 @@ export default {
                 obj[currentDate.format('YYYY-MM-DD')].push(
                   currentDate.format('HH:mm')
                 );
-
                 return obj;
               }, {});
               // console.log('reduceDatesreduceDates', reduceDates);

@@ -429,6 +429,7 @@ export default {
       }`;
       copyOfEvent.scheduleEventData.color = randomColor();
       this.scheduleEventsLocal.push(copyOfEvent);
+      this.$emit('update:scheduleEvents', this.scheduleEventsLocal);
     },
     deleteEvent(index) {
       this.itemIndexForDelete = index;
