@@ -364,7 +364,9 @@ export default {
           this.$set(
             this,
             "copyScheduleEventData",
-            _.cloneDeep(this.scheduleEventsLocal[index].scheduleEventData)
+            _.cloneDeep(
+              _.get(this.scheduleEventsLocal, `[${index}].scheduleEventData`)
+            )
           );
           this.deleteNotSaved(true, isNewItem);
 
