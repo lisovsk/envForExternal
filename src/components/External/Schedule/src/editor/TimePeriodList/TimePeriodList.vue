@@ -2,34 +2,34 @@
   <div class="time-period-list">
     <or-list
       class="list-time"
-      drag-handle-right 
-      v-model="times" 
-      add-button-label="Add Time" 
+      drag-handle-right
+      v-model="times"
+      add-button-label="Add Time"
       :new-item-method="listNewItemTime"
       :can-remove-last-item="false"
       :can-drag-items="false"
       :max-items-count="$v.validationCopyScheduleEventData.times.$invalid ? times.length: 99"
     >
-        <template scope="item">
-            <time-period-item
-                :$v="$v"
-                :index="item.index"
-                :readonly="readonly"
-                :start.sync="item.item.start"
-                :endTime.sync="item.item.endTime"
-                :every.sync="item.item.every"
-                :end.sync="item.item.end"
-            ></time-period-item>
-        </template>
+      <template scope="item">
+        <time-period-item
+          :$v="$v"
+          :index="item.index"
+          :readonly="readonly"
+          :start.sync="item.item.start"
+          :endTime.sync="item.item.endTime"
+          :every.sync="item.item.every"
+          :end.sync="item.item.end"
+        ></time-period-item>
+      </template>
     </or-list>
   </div>
 </template>
 
 <script>
-import uuid from 'uuid';
+import uuid from "uuid";
 
 /* eslint-disable */
-import TimePeriodItem from '../TimePeriodItem/TimePeriodItem.vue';
+import TimePeriodItem from "../TimePeriodItem/TimePeriodItem.vue";
 /* eslint-enable */
 
 export default {
@@ -38,37 +38,46 @@ export default {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     readonly: {
       type: Boolean,
-      default: false,
+      default: false
     },
-    $v: null,
+    $v: null
   },
   methods: {
     listNewItemTime() {
       return {
         start: {
-          HH: '',
-          mm: '',
+          HH: "",
+          mm: ""
         },
         end: {
-          HH: '',
-          mm: '',
+          HH: "",
+          mm: ""
         },
         every: {
           val: 10,
-          units: 'mm',
+          units: "mm"
         },
         endTime: false,
-        vforkey: uuid.v4(),
+        vforkey: uuid.v4()
       };
-    },
+    }
+  },
+  watch: {
+    times: {
+      handler(newTimes) {
+        console.log("sdfdsfds", newTimes);
+        this.$emit("update:times", newTimes);
+      },
+      deep: true
+    }
   },
   components: {
-    TimePeriodItem,
-  },
+    TimePeriodItem
+  }
 };
 </script>
 
