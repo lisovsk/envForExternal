@@ -3,7 +3,7 @@
     <or-list
       class="list-time"
       drag-handle-right
-      v-model="times"
+      v-model="timesLocal"
       add-button-label="Add Time"
       :new-item-method="listNewItemTime"
       :can-remove-last-item="false"
@@ -33,6 +33,9 @@ import TimePeriodItem from "../TimePeriodItem/TimePeriodItem.vue";
 /* eslint-enable */
 
 export default {
+  data() {
+    return { timesLocal: this.times };
+  },
   props: {
     times: {
       type: Array,
@@ -67,10 +70,10 @@ export default {
     }
   },
   watch: {
-    times: {
-      handler(newTimes) {
-        console.log("sdfdsfds", newTimes);
-        this.$emit("update:times", newTimes);
+    timesLocal: {
+      handler(newTimesLocal) {
+        console.log("sdfdsfds", newTimesLocal);
+        this.$emit("update:times", newTimesLocal);
       },
       deep: true
     }
