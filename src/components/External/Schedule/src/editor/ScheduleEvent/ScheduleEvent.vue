@@ -1,6 +1,5 @@
 <template>
 <div class="schedule-event-scope">
-  <!-- {{}} -->
   <div class="schedule-event">
     <div class="schedule-event__title">
       <div 
@@ -215,7 +214,6 @@
 <script>
 import _ from 'lodash';
 import moment from 'moment-timezone';
-// import later from 'later';
 
 /* eslint-disable */
 import TimePeriodList from '../TimePeriodList/TimePeriodList.vue';
@@ -234,12 +232,7 @@ export default {
       type: Boolean,
       default: false,
       isEditable: false
-      // isValid: false
     },
-    // dataStateGlobal: {
-    //   type: Object,
-    //   default: () => ({}),
-    // },
     steps: null,
     stepId: null,
     $v: null,
@@ -324,7 +317,6 @@ export default {
         this.copyScheduleEventData.endExpression.date = moment(date).format(
           'YYYY-MM-DD'
         );
-        // this.generateCronExpression(); // update crons when data changed
       }
     },
     startDate: {
@@ -338,7 +330,6 @@ export default {
         this.copyScheduleEventData.startExpression.date = moment(date).format(
           'YYYY-MM-DD'
         );
-        // this.generateCronExpression(); // update crons when data changed
       }
     },
     dataStateComp: {
@@ -346,7 +337,6 @@ export default {
         return this.dataState || 'saved';
       },
       set(newValue) {
-        // console.log('here', newValue);
         this.$emit('update:dataState', newValue);
       }
     },
@@ -661,7 +651,6 @@ export default {
 
     copyScheduleEventData: {
       handler(newValue, oldValue) {
-        // console.log(newValue.id)
         if (
           !_.isEqual(newValue, this.scheduleEventData) &&
           newValue.id === oldValue.id
@@ -673,8 +662,7 @@ export default {
           );
 
           this.dataStateComp = 'changed';
-          // console.log(JSON.stringify(newValue));
-          // console.log(JSON.stringify(this.scheduleEventData));
+
         } else if (this.dataStateComp !== 'new') {
           this.dataStateComp = 'canceled';
         }

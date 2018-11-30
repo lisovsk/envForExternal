@@ -1,24 +1,19 @@
 <template>
   <div>
-    <!-- {{$v}}
-    33sdfdsssdsfs
-    {{schema}} -->
-    <!-- {{schema}} -->
-    <!-- {{scheduleEventsComp[0].scheduleEventData.times}} -->
-      <schedule-events
-        :schedule-events.sync="scheduleEventsComp"
-        :step="step"
-        :stepId="stepId"
-        :$v="$v"
-        :readonly="readonly"
-        @new-copy-schedule-event-data="newCopyScheduleEventData"
-        :class="{disabled: readonly}"
-      ></schedule-events>
+    <schedule-events
+      :schedule-events.sync="scheduleEventsComp"
+      :step="step"
+      :stepId="stepId"
+      :$v="$v"
+      :readonly="readonly"
+      @new-copy-schedule-event-data="newCopyScheduleEventData"
+      :class="{disabled: readonly}"
+    ></schedule-events>
   </div>
 </template>
 <script>
-import * as _ from 'lodash';
-import moment from 'moment';
+import * as _ from "lodash";
+import moment from "moment";
 
 /* eslint-disable */
 // if (process.env.NODE_ENV === 'development') {
@@ -27,17 +22,16 @@ import moment from 'moment';
 // import { validators } from '_validators';
 // }
 
-import ScheduleEvents from './ScheduleEvents/ScheduleEvents.vue';
+import ScheduleEvents from "./ScheduleEvents/ScheduleEvents.vue";
 
-import valdationsReccurin from './validation/validationReccuring.js';
+import valdationsReccurin from "./validation/validationReccuring.js";
 
-import defaultValues from './Constants/DefaultValues.js';
+import defaultValues from "./Constants/DefaultValues.js";
 
 /* eslint-enable */
 
 // const { required, generateValidators, minValue } = validators;
-import { required } from 'vuelidate/lib/validators';
-// const schemaValidation = ;
+import { required } from "vuelidate/lib/validators";
 
 export const validator = template => {
   return { scheduleEvents: { required } };
@@ -55,7 +49,7 @@ export const validator = template => {
 };
 
 export const data = template => ({
-  scheduleEvents: _.get(this, 'schema.scheduleEvents', null) || []
+  scheduleEvents: _.get(this, "schema.scheduleEvents", null) || []
   // scheduleEventsValidation: _.get(this, 'schema.scheduleEvents', null) || [];
   // validationCopyScheduleEventData: {},
 });
@@ -78,10 +72,10 @@ export default {
   computed: {
     scheduleEventsComp: {
       get() {
-        return _.get(this, 'schema.scheduleEvents', null) || [];
+        return _.get(this, "schema.scheduleEvents", null) || [];
       },
       set(newValue) {
-        if (_.get(this, 'schema.scheduleEvents', null)) {
+        if (_.get(this, "schema.scheduleEvents", null)) {
           this.schema.scheduleEvents = newValue;
           // this.scheduleEventsValidation = newValue;
           // this.$set(this.scheduleEventsValidation, 'scheduleEvents', newValue);
@@ -108,7 +102,7 @@ export default {
     // },
     $v: {
       handler(newValue) {
-        this.$emit('step-validation', newValue);
+        this.$emit("step-validation", newValue);
       },
       deep: true
     }
@@ -175,8 +169,8 @@ export default {
           custom(value) {
             let valid = true;
             if (
-              _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
-              !_.get(this, 'validationCopyScheduleEventData.isEndTime')
+              _.get(this, "validationCopyScheduleEventData.isReccuring") &&
+              !_.get(this, "validationCopyScheduleEventData.isEndTime")
             ) {
               valid =
                 !!value &&
@@ -202,7 +196,7 @@ export default {
               let valid = true;
               if (state) {
                 valid =
-                  !!_.get(value, 'HH', false) && !!_.get(value, 'mm', false);
+                  !!_.get(value, "HH", false) && !!_.get(value, "mm", false);
               } else {
                 return true;
               }
@@ -213,11 +207,11 @@ export default {
             custom(value, state) {
               let valid = true;
               if (state) {
-                console.log('__this__', state.start);
-                if (_.get(state, 'endTime', false)) {
+                console.log("__this__", state.start);
+                if (_.get(state, "endTime", false)) {
                   valid =
-                    !!_.get(value, 'HH', false) &&
-                    !!_.get(value, 'mm', false) &&
+                    !!_.get(value, "HH", false) &&
+                    !!_.get(value, "mm", false) &&
                     new Date(`1970/01/01 ${value.HH}:${value.mm}`) -
                       new Date(
                         `1970/01/01 ${state.start.HH}:${state.start.mm}`
@@ -237,8 +231,8 @@ export default {
               let valid = true;
               if (state) {
                 valid =
-                  _.get(value, 'val', false) &&
-                  parseInt(_.get(value, 'val', 0), 10) > 0;
+                  _.get(value, "val", false) &&
+                  parseInt(_.get(value, "val", 0), 10) > 0;
               } else {
                 return true;
               }
@@ -269,7 +263,7 @@ export default {
       savedAccordionSlotName: {
         custom(value) {
           let valid = true;
-          if (_.get(this, 'validationCopyScheduleEventData.isReccuring'))
+          if (_.get(this, "validationCopyScheduleEventData.isReccuring"))
             valid = !!value;
           return valid;
         }
@@ -279,14 +273,14 @@ export default {
           custom(stateCurr, stateAbove) {
             let valid = true;
             if (
-              _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
+              _.get(this, "validationCopyScheduleEventData.isReccuring") &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName'
-              ) === 'item1'
+                "validationCopyScheduleEventData.savedAccordionSlotName"
+              ) === "item1"
             ) {
               valid =
-                _.get(stateAbove, 'periodMode') !== 'everyDay'
+                _.get(stateAbove, "periodMode") !== "everyDay"
                   ? true
                   : stateCurr && stateCurr > 0;
             }
@@ -297,14 +291,14 @@ export default {
       weekly: {
         period: {
           custom(value) {
-            console.log('validationCopyScheduleEventData3', this);
+            console.log("validationCopyScheduleEventData3", this);
             let valid = true;
             if (
-              _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
+              _.get(this, "validationCopyScheduleEventData.isReccuring") &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName'
-              ) === 'item2' &&
+                "validationCopyScheduleEventData.savedAccordionSlotName"
+              ) === "item2" &&
               (!value || value < 1)
             ) {
               valid = false;
@@ -316,11 +310,11 @@ export default {
           custom(value) {
             let valid = true;
             if (
-              _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
+              _.get(this, "validationCopyScheduleEventData.isReccuring") &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName'
-              ) === 'item2' &&
+                "validationCopyScheduleEventData.savedAccordionSlotName"
+              ) === "item2" &&
               !value.length
             ) {
               valid = false;
@@ -335,11 +329,11 @@ export default {
           custom(value) {
             let valid = true;
             if (
-              _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
+              _.get(this, "validationCopyScheduleEventData.isReccuring") &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName'
-              ) === 'item3' &&
+                "validationCopyScheduleEventData.savedAccordionSlotName"
+              ) === "item3" &&
               !value.length
             ) {
               valid = false;
@@ -351,13 +345,13 @@ export default {
           custom(value) {
             let valid = true;
             if (
-              _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
+              _.get(this, "validationCopyScheduleEventData.isReccuring") &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName'
-              ) === 'item3' &&
-              (_.get(this, 'validationCopyScheduleEventData.monthly.mode') ===
-                'each' &&
+                "validationCopyScheduleEventData.savedAccordionSlotName"
+              ) === "item3" &&
+              (_.get(this, "validationCopyScheduleEventData.monthly.mode") ===
+                "each" &&
                 !value.length)
             ) {
               valid = false;
@@ -371,11 +365,11 @@ export default {
           custom(value) {
             let valid = true;
             if (
-              _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
+              _.get(this, "validationCopyScheduleEventData.isReccuring") &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName'
-              ) === 'item4' &&
+                "validationCopyScheduleEventData.savedAccordionSlotName"
+              ) === "item4" &&
               (!value || value < 1)
             ) {
               valid = false;
@@ -387,11 +381,11 @@ export default {
           custom(value) {
             let valid = true;
             if (
-              _.get(this, 'validationCopyScheduleEventData.isReccuring') &&
+              _.get(this, "validationCopyScheduleEventData.isReccuring") &&
               _.get(
                 this,
-                'validationCopyScheduleEventData.savedAccordionSlotName'
-              ) === 'item4' &&
+                "validationCopyScheduleEventData.savedAccordionSlotName"
+              ) === "item4" &&
               !value.length
             ) {
               valid = false;
@@ -419,9 +413,9 @@ export default {
 };
 
 export const meta = {
-  name: 'schedule-component',
-  type: 'onereach-studio-form-editor',
-  version: '0.5.0'
+  name: "schedule-component",
+  type: "onereach-studio-form-editor",
+  version: "0.5.0"
 };
 </script>
 

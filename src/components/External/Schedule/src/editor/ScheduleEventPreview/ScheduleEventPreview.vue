@@ -1,104 +1,94 @@
 <template>
-  <div :class="['schedule-event-preview', {'schedule-event-preview_invalid': invalid}]" @click="doEditable">
+  <div
+    :class="['schedule-event-preview', {'schedule-event-preview_invalid': invalid}]"
+    @click="doEditable"
+  >
     <template v-if="!invalid">
-      <span 
-          class="schedule-event-preview__circle"
-          :style="{background: color}"
-        ></span>
-        <div class="schedule-event-preview__content">
-          <div class="schedule-event-preview__title-text">{{eventName}}</div>
-          <div class="schedule-event-preview__dates" v-if="startsAt.length">
-            <span
-              :key="index"
-              v-for="(date, index) in startsAt || []"
-              :class="{
+      <span class="schedule-event-preview__circle" :style="{background: color}"></span>
+      <div class="schedule-event-preview__content">
+        <div class="schedule-event-preview__title-text">{{eventName}}</div>
+        <div class="schedule-event-preview__dates" v-if="startsAt.length">
+          <span
+            :key="index"
+            v-for="(date, index) in startsAt || []"
+            :class="{
                 'bold-text': !!(index === 0)
               }"
-              v-if="conditionalStartsAt(index)"
-            >
-            {{date}}<span v-if="startsAt && index !== startsAt.length - 1 && !conditionalEllipsisForDate(index)">,</span><span v-if="conditionalEllipsisForDate(index)">...</span>
-            </span>
+            v-if="conditionalStartsAt(index)"
+          >
+            {{date}}
             <span
-              class="schedule-event-preview__see-more"
-              @click.stop="seeMoreDates"
-              v-if="conditionalSeeMoreDates"
-            >
-              see more
-            </span>
-            <span
-              v-if="moreDates && startsAt.length > 3"
-              @click.stop="seeLessDates"
-              class="schedule-event-preview__see-more"
-            >
-              see less
-            </span>
-            (Current day {{currentDay}})
-          </div>
-          <span class="bold-text">
-            {{timeZone}}
+              v-if="startsAt && index !== startsAt.length - 1 && !conditionalEllipsisForDate(index)"
+            >,</span>
+            <span v-if="conditionalEllipsisForDate(index)">...</span>
           </span>
-          <div class="schedule-event-preview__times">
-            <span 
-              :key="time.id" 
-              v-for="(time, index) in startTimes"
-              v-if="conditionalStartTimes(index)"
-            >
-              <span v-html="`<span class='bold-text'>${time.start.HH}:${time.start.mm}</span>`"></span><span v-html="time.endTime ? ` to  <span class='bold-text'>${time.end.HH}:${time.end.mm}</span> every <span class='bold-text'>${time.every.val} ${time.every.units === 'mm' ? 'min' : 'h'}</span>`: ''"></span><span v-if="conditionalTimeСomma(index)">, </span></span><span v-if="conditionalEllipsisForTimes">...</span>
-              <span 
-                class="schedule-event-preview__see-more"
-                @click.stop="seeMoreTimes"
-                v-if="conditionalSeeMoreTimes"
-              >
-                see more
-              </span>
-              <span 
-                class="schedule-event-preview__see-more"
-                @click.stop="seeLessTimes"
-                v-if="moreTimes && startTimes.length > 3"
-              >
-                see less
-              </span>
-          </div>
-          <div
-            class="schedule-event-preview__end-date"
-            v-html="endDateComp">
-          </div>
-          <div v-if="isReccuring" v-html="previewTexts.reccuring"></div>
+          <span
+            class="schedule-event-preview__see-more"
+            @click.stop="seeMoreDates"
+            v-if="conditionalSeeMoreDates"
+          >see more</span>
+          <span
+            v-if="moreDates && startsAt.length > 3"
+            @click.stop="seeLessDates"
+            class="schedule-event-preview__see-more"
+          >see less</span>
         </div>
+        <span class="bold-text">{{timeZone}}</span>
+        <div class="schedule-event-preview__times">
+          <span
+            :key="time.id"
+            v-for="(time, index) in startTimes"
+            v-if="conditionalStartTimes(index)"
+          >
+            <span v-html="`<span class='bold-text'>${time.start.HH}:${time.start.mm}</span>`"></span>
+            <span
+              v-html="time.endTime ? ` to  <span class='bold-text'>${time.end.HH}:${time.end.mm}</span> every <span class='bold-text'>${time.every.val} ${time.every.units === 'mm' ? 'min' : 'h'}</span>`: ''"
+            ></span>
+            <span v-if="conditionalTimeСomma(index)">,</span>
+          </span>
+          <span v-if="conditionalEllipsisForTimes">...</span>
+          <span
+            class="schedule-event-preview__see-more"
+            @click.stop="seeMoreTimes"
+            v-if="conditionalSeeMoreTimes"
+          >see more</span>
+          <span
+            class="schedule-event-preview__see-more"
+            @click.stop="seeLessTimes"
+            v-if="moreTimes && startTimes.length > 3"
+          >see less</span>
+        </div>
+        <div class="schedule-event-preview__end-date" v-html="endDateComp"></div>
+        <div v-if="isReccuring" v-html="previewTexts.reccuring"></div>
+      </div>
     </template>
-    <template v-else>
-      The event was created with an error.
-    </template>
-    <div
-      @click.stop="/**/"
-    >
-    <or-icon-button
-      icon="more_vert" 
-      size="normal"
-      :class="{'schedule-event-preview__settings_hide': editable}"
-      class="schedule-event-preview__settings"
-      @click="doMenuVisible"
-      :id="index"
-    >
-    </or-icon-button>
-     <or-menu
+    <template v-else>The event was created with an error.</template>
+    <div @click.stop="/**/">
+      <or-icon-button
+        icon="more_vert"
+        size="normal"
+        :class="{'schedule-event-preview__settings_hide': editable}"
+        class="schedule-event-preview__settings"
+        @click="doMenuVisible"
+        :id="index"
+      ></or-icon-button>
+      <or-menu
         contain-focus
         has-icons
         :options="menuOptions"
         @select="selectOption"
         class="schedule-event-preview__menu"
         :class="{'schedule-event-preview__is-visible': !isMenuVisible}"
-      >
-      </or-menu>
+      ></or-menu>
     </div>
   </div>
 </template>
 
 <script>
-import moment from 'moment';
-import later from 'later';
-import _ from 'lodash';
-import uuid from 'uuid';
+import moment from "moment";
+import later from "later";
+import _ from "lodash";
+import uuid from "uuid";
 
 export default {
   // created() {
@@ -107,32 +97,32 @@ export default {
   // this.ref = uuid.v4()
   // },
   created() {
-    document.body.addEventListener('click', () => {
+    document.body.addEventListener("click", () => {
       this.isMenuVisible = false;
     });
   },
   data() {
     return {
-      currentDay: moment().format('YYYY-MM-DD'),
+      currentDay: moment().format("YYYY-MM-DD"),
       countAtDates: 16,
       moreDates: false,
       moreTimes: false,
       ref: uuid.v4(),
       menuOptions: [
         {
-          label: 'Edit',
-          icon: 'edit',
-          id: 'edit'
+          label: "Edit",
+          icon: "edit",
+          id: "edit"
         },
         {
-          label: 'Copy',
-          icon: 'description',
-          id: 'copy'
+          label: "Copy",
+          icon: "description",
+          id: "copy"
         },
         {
-          label: 'Delete',
-          icon: 'delete_forever',
-          id: 'delete'
+          label: "Delete",
+          icon: "delete_forever",
+          id: "delete"
         }
       ],
       isMenuVisible: false
@@ -153,7 +143,7 @@ export default {
     previewTexts: {
       type: Object,
       default: () => ({
-        reccuring: ''
+        reccuring: ""
       })
     },
     startTimes: {
@@ -166,7 +156,7 @@ export default {
     },
     startDate: {
       type: String,
-      default: ''
+      default: ""
     },
     isReccuring: {
       type: Boolean,
@@ -190,12 +180,12 @@ export default {
     },
     timeZone: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   methods: {
     doEditable() {
-      this.$emit('do-editable', this.index);
+      this.$emit("do-editable", this.index);
     },
     seeMoreDates() {
       this.moreDates = true;
@@ -211,20 +201,20 @@ export default {
     },
     selectOption(item) {
       switch (item.id) {
-        case 'edit':
+        case "edit":
           this.doEditable();
           break;
-        case 'copy':
+        case "copy":
           // console.log('copy');
-          this.$emit('copy-event', this.index);
+          this.$emit("copy-event", this.index);
           break;
-        case 'delete':
-          this.$emit('delete-event', this.index);
+        case "delete":
+          this.$emit("delete-event", this.index);
           break;
         default:
           throw new function UserException() {
             this.message = `Unexpected item.id(${item.id}) in selectOption`;
-            this.name = 'UnexpectedId';
+            this.name = "UnexpectedId";
           }();
       }
       document.body.click();
@@ -264,21 +254,21 @@ export default {
   },
   computed: {
     endDateComp() {
-      if (!this.isReccuring) return '';
-      return _.get(this, 'endDate.noEnd')
+      if (!this.isReccuring) return "";
+      return _.get(this, "endDate.noEnd")
         ? 'Reccuring <span class="bold-text">no end</span>'
         : `Reccuring till <span class="bold-text">${moment(
-            _.get(this, 'endDate.date')
-          ).format('ll')}</span>`;
+            _.get(this, "endDate.date")
+          ).format("ll")}</span>`;
     },
     startsAt() {
       try {
         const startDate = new Date(
-          `${moment(this.startDate).format('YYYY-MM-DD')} 00:00`
+          `${moment(this.startDate).format("YYYY-MM-DD")} 00:00`
         );
         const endDate = this.endDate.noEnd
           ? undefined
-          : new Date(`${moment(this.endDate.date).format('YYYY-MM-DD')} 23:59`);
+          : new Date(`${moment(this.endDate.date).format("YYYY-MM-DD")} 23:59`);
         // console.log('endDate', endDate);
         const result = [].concat // eslint-disable-line
           .apply(
@@ -289,7 +279,7 @@ export default {
                 .next(this.countAtDates + 1, startDate, endDate)
             )
           )
-          .map(item => moment(item).format('L'));
+          .map(item => moment(item).format("L"));
 
         // console.log('startsAt', result);
 
@@ -376,7 +366,7 @@ export default {
   }
 
   &__circle {
-    content: '';
+    content: "";
     width: 20px;
     min-width: 20px;
     height: 20px;

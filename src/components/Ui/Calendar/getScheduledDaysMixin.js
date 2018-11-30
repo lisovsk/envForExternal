@@ -110,8 +110,8 @@ export default {
               console.log('start', start.replace(' ', 'T'));
               console.log('end', end.replace(' ', 'T'));
               if (item.isReccuring && item.expressions.length > 0) {
-                atDates = item.expressions.map(expItem =>
-                  later
+                atDates = item.expressions.map(expItem => {
+                  const next = later
                     .schedule(later.parse.cron(expItem))
                     // .schedule(
                     //   later.parse.cron(expItem, false, item.timeZone.value)
@@ -120,18 +120,20 @@ export default {
                       Infinity,
                       new Date(start.replace(' ', 'T')),
                       new Date(end.replace(' ', 'T'))
-                    )
-                    .map(itemConvertTimeZone =>
-                      moment
-                        .tz(
-                          moment(itemConvertTimeZone).format(
-                            'YYYY-MM-DD HH:mm:ss'
-                          ),
-                          item.timeZone.value
-                        )
-                        .tz(this.timeZoneCalendar)
-                    )
-                );
+                    );
+                  if (!next || !next.length) return [];
+
+                  return next.map(itemConvertTimeZone =>
+                    moment
+                      .tz(
+                        moment(itemConvertTimeZone).format(
+                          'YYYY-MM-DD HH:mm:ss'
+                        ),
+                        item.timeZone.value
+                      )
+                      .tz(this.timeZoneCalendar)
+                  );
+                });
                 // console.log('expItemexpItem', item.expressions);
                 // console.log('endendendendend', end);
                 // console.log('startstartstart', start);

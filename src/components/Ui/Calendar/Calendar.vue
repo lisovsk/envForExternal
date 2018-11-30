@@ -1,111 +1,64 @@
 
 <template>
   <div class="Calendar">
-    <!-- {{startDays}} -->
-    <!-- {{highlightedDates}} -->
-    <!-- {{runAtTime}} -->
-    <!-- {{highlightedDates}} -->
-    <!-- highlightedDates
-    {{highlightedDates}} -->
-    <!-- {{selectedDays}} -->
-    <!-- {{highlightedDates}} -->
-    <!-- {{highlightedDates}}
-    <br>
-    <br>
-    <br>
-    {{selectedDays}} -->
-    <!-- {{interval}} -->
     <div class="nav">
-        <div>
-            <span class="nav__interval">
-                <!-- {{state === 'month' ?  `${interval.start} - ${interval.end}, ${interval.year}` : year}} -->
-                {{state === 'month' ?  `${monthComp}, ${interval.year}` : year}}
-            </span>
-            <label class="select__wr">
-                <span class="select__label">Timezone</span>
-                <or-select
-                  placeholder="Select a time zone" 
-                  class="select"
-                  :has-search="true"
-                  v-model="timeZoneCalendar"
-                  :options="getRegions"
-                >
-                </or-select>
-            </label>
+      <div>
+        <span class="nav__interval">
+          <!-- {{state === 'month' ?  `${interval.start} - ${interval.end}, ${interval.year}` : year}} -->
+          {{state === 'month' ? `${monthComp}, ${interval.year}` : year}}
+        </span>
+        <label class="select__wr" v-if="!hideTimeZone">
+          <span class="select__label">Timezone</span>
+          <or-select
+            placeholder="Select a time zone"
+            class="select"
+            :has-search="true"
+            v-model="timeZoneCalendar"
+            :options="getRegions"
+          ></or-select>
+        </label>
+      </div>
+      <div class="nav__wr-right">
+        <span class="nav__month" :class="{active: state === 'month'}" @click="doStateMonth">Month</span>
+        <span class="nav__year" :class="{active: state === 'year'}" @click="doStateYear">Year</span>
+        <div class="nav__wr-arrows">
+          <span @click="back">
+            <or-icon class="nav__forward" icon="keyboard_arrow_left"></or-icon>
+          </span>
+          <span @click="moveToCurrent">Current</span>
+          <span @click="forward">
+            <or-icon class="nav__forward" icon="keyboard_arrow_right"></or-icon>
+          </span>
         </div>
-        <div class="nav__wr-right">
-            <span 
-                class="nav__month"
-                :class="{active: state === 'month'}"
-                @click="doStateMonth"
-            >
-                Month
-            </span>
-            <span 
-                class="nav__year"
-                :class="{active: state === 'year'}"
-                 @click="doStateYear"
-            >
-                Year
-            </span>
-            <div class="nav__wr-arrows">
-                <span
-                    @click="back"
-                >
-                  <or-icon
-                      class="nav__forward"
-                      icon="keyboard_arrow_left"
-                  >
-                  </or-icon>
-                </span>
-                <span 
-                    @click="moveToCurrent"
-                >
-                    Current
-                </span>
-                <span
-                    @click="forward"
-                >
-                    <or-icon
-                        class="nav__forward"
-                        icon="keyboard_arrow_right"
-                    >
-                    </or-icon>
-                </span>
-
-            </div>
-
-        </div>
+      </div>
     </div>
     <div :class="{'disabled-calendar': !editable}">
       <one-month-calendar
-          :year="year"
-          :month="month"
-          v-model="interval"
-          v-show="state === 'month'"
-          @selected-date="selectDateHandler"
-          :highlighted-dates="highlightedDates"
-          :editable="editable"
-      >
-      </one-month-calendar>
+        :year="year"
+        :month="month"
+        v-model="interval"
+        v-show="state === 'month'"
+        @selected-date="selectDateHandler"
+        :highlighted-dates="highlightedDates"
+        :editable="editable"
+      ></one-month-calendar>
       <one-year-calendar
-          :year="year"
-          v-show="state === 'year'"
-          @selected-date="selectDateHandler"
-          :highlighted-dates="highlightedDates"
-          :editable="editable"
-      >
-      </one-year-calendar>
+        :year="year"
+        v-show="state === 'year'"
+        @selected-date="selectDateHandler"
+        :highlighted-dates="highlightedDates"
+        :editable="editable"
+      ></one-year-calendar>
     </div>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
-import moment from 'moment';
-import OneMonthCalendar from './OneMonthCalendar.vue';
-import OneYearCalendar from './OneYearCalendar.vue';
-import getScheduledDays from './getScheduledDaysMixin.js';
+import moment from "moment";
+import OneMonthCalendar from "./OneMonthCalendar.vue";
+import OneYearCalendar from "./OneYearCalendar.vue";
+import getScheduledDays from "./getScheduledDaysMixin.js";
 /* eslint-enable */
 
 export default {
@@ -118,7 +71,7 @@ export default {
   data() {
     return {
       interval: {},
-      state: 'month',
+      state: "month",
       year: parseInt(this.startYear, 10),
       month: parseInt(this.startMonth, 10),
       timeZoneCalendar: moment.tz.guess()
@@ -126,6 +79,10 @@ export default {
     };
   },
   props: {
+    hideTimeZone: {
+      default: false,
+      type: Boolean
+    },
     startYear: {
       type: Number,
       default: new Date().getFullYear()
@@ -148,18 +105,17 @@ export default {
   components: { OneMonthCalendar, OneYearCalendar },
   watch: {
     timeZoneCalendar(newTineZone) {
-      this.$emit('changed-calendar-time-zone', newTineZone);
+      this.$emit("changed-calendar-time-zone", newTineZone);
     }
   },
   methods: {
     forward() {
-      // console.log(this.month);
       switch (this.state) {
-        case 'year':
+        case "year":
           this.year += 1;
           this.month = 1;
           break;
-        case 'month':
+        case "month":
           if (this.month === 12) {
             this.month = 1;
             this.year += 1;
@@ -174,13 +130,12 @@ export default {
       }
     },
     back() {
-      // console.log(this.month);
       switch (this.state) {
-        case 'year':
+        case "year":
           this.year -= 1;
           this.month = 1;
           break;
-        case 'month':
+        case "month":
           if (this.month === 1) {
             this.month = 12;
             this.year -= 1;
@@ -195,14 +150,14 @@ export default {
       }
     },
     doStateMonth() {
-      this.state = 'month';
+      this.state = "month";
     },
     doStateYear() {
-      this.state = 'year';
+      this.state = "year";
     },
     selectDateHandler(day, month, year) {
       // this.selectedDate = { day, month, year };
-      this.$emit('selected-date', day, month, year);
+      this.$emit("selected-date", day, month, year);
     },
     // preventClickOnCalendar(event) {
     //   event.stopPropagation();
@@ -215,7 +170,7 @@ export default {
   },
   computed: {
     monthComp() {
-      return moment(this.month, 'MM').format('MMMM');
+      return moment(this.month, "MM").format("MMMM");
     },
     getRegions() {
       // return only canonical zones
@@ -227,9 +182,9 @@ export default {
           // due to mutation in moment we need check if it's object
           // mutation is caused when invoke moment.tz()
           const zone = timeZones[key];
-          return _.isObject(zone) ? zone.name : zone.split('|')[0];
+          return _.isObject(zone) ? zone.name : zone.split("|")[0];
         })
-        .filter(zone => zone.indexOf('/') >= 0)
+        .filter(zone => zone.indexOf("/") >= 0)
         .sort()
         .map(value => ({ label: value, value }))
         .value();
