@@ -361,6 +361,8 @@ export default {
           }
           this.editableEventNum = index;
           // this.copyScheduleEventData = _.cloneDeep(this.scheduleEventsLocal[index].scheduleEventData);
+          console.log("this.scheduleEventsLocal", this.scheduleEventsLocal);
+          console.log("this.scheduleEventsLocalindexindex", index);
           this.$set(
             this,
             "copyScheduleEventData",
