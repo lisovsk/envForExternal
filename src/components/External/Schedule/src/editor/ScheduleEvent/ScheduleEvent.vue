@@ -1,229 +1,232 @@
 <template>
-<div class="schedule-event-scope">
-  <div class="schedule-event">
-    <div class="schedule-event__title">
-      <div 
-        :style="{background: copyScheduleEventData.color}"
-        class="schedule-event__circle"
-      ></div>
-      <input
-        placeholder="Specify event name…"
-        class="textbox-without-border"
-        :class="{'textbox-without-border_invalid': invalidNameOfEvent}"
-        v-model="copyScheduleEventData.eventName"
-        :invalid="invalidNameOfEvent"
-        @blur="$v.validationCopyScheduleEventData.eventName.$touch()"
-        @input="handleName()"
-      />
-    </div>
-    <div class="wr-tizezone-start-date">
-      <div class="wr-top-start-date">
-        <div class="schedule-event__label">Date</div>
-        <div class="recurring-controls__date">
-          <or-icon class="recurring-controls__custom-icon-date" icon="view_comfy"></or-icon>
+  <div class="schedule-event-scope">
+    <div class="schedule-event">
+      <div class="schedule-event__title">
+        <div :style="{background: copyScheduleEventData.color}" class="schedule-event__circle"></div>
+        <input
+          placeholder="Specify event name…"
+          class="textbox-without-border"
+          :class="{'textbox-without-border_invalid': invalidNameOfEvent}"
+          v-model="copyScheduleEventData.eventName"
+          :invalid="invalidNameOfEvent"
+          @blur="$v.validationCopyScheduleEventData.eventName.$touch()"
+          @input="handleName()"
+        >
+      </div>
+      <div class="wr-tizezone-start-date">
+        <div class="wr-top-start-date">
+          <div class="schedule-event__label">Date</div>
+          <div class="recurring-controls__date">
+            <or-icon class="recurring-controls__custom-icon-date" icon="view_comfy"></or-icon>
             <ui-datepicker
-              :disabled="readonly" 
-              class="recurring-controls__calendar-picker-custom" iconPosition="right" placeholder="Select date"
-              :custom-formatter="formatDate" v-model="startDate"
+              :disabled="readonly"
+              class="recurring-controls__calendar-picker-custom"
+              iconPosition="right"
+              placeholder="Select date"
+              :custom-formatter="formatDate"
+              v-model="startDate"
               :invalid="validationDate"
               @touch="$v.validationCopyScheduleEventData.startExpression.date.$touch()"
-            >
-            </ui-datepicker>
+            ></ui-datepicker>
+          </div>
         </div>
-      </div>
-      <label class="timezone timezone_top">
+        <label class="timezone timezone_top">
           <span class="schedule-event__label">Timezone</span>
-          <or-select 
-            :disabled="readonly" 
-            placeholder="Select a time zone" 
-            class="config-line__select" 
-            :has-search="true" 
+          <or-select
+            :disabled="readonly"
+            placeholder="Select a time zone"
+            class="config-line__select"
+            :has-search="true"
             :options="getRegions"
             v-model="timeZoneComp"
             :invalid="validationTimeZone"
             @dropdown-close="$v.validationCopyScheduleEventData.timeZone.value.$touch()"
-          >
-          </or-select>
-      </label>
-    </div>
-    <div class="wr-time-period-list">
-      <div class="schedule-event__label">Time</div>
-      <time-period-list
-        :times.sync="copyScheduleEventData.times"
-        :readonly="readonly"
-        :$v="$v"
-      >
-      </time-period-list>
-    </div>
-    <div class="recurring-controls">
-        <or-checkbox class="recurring-controls__checkbox" v-model="copyScheduleEventData.isReccuring" :disabled="readonly">Recurring</or-checkbox>
-        <span v-if="!copyScheduleEventData.isEndTime && copyScheduleEventData.isReccuring" class="recurring-controls__recuring-till">till</span>
+          ></or-select>
+        </label>
+      </div>
+      <div class="wr-time-period-list">
+        <div class="schedule-event__label">Time</div>
+        {{copyScheduleEventData.times}}
+        <time-period-list :times.sync="copyScheduleEventData.times" :readonly="readonly" :$v="$v"></time-period-list>
+      </div>
+      <div class="recurring-controls">
+        <or-checkbox
+          class="recurring-controls__checkbox"
+          v-model="copyScheduleEventData.isReccuring"
+          :disabled="readonly"
+        >Recurring</or-checkbox>
+        <span
+          v-if="!copyScheduleEventData.isEndTime && copyScheduleEventData.isReccuring"
+          class="recurring-controls__recuring-till"
+        >till</span>
         <div class="recurring-controls__wr-configs-time">
-            <div class="" v-if="!copyScheduleEventData.isEndTime && copyScheduleEventData.isReccuring">
-                <div class="">
-                    <div class="">
-                      <div class="recurring-controls__date">
-                        <or-icon class="recurring-controls__custom-icon-date" icon="view_comfy"></or-icon>
-                          <ui-datepicker 
-                            :disabled="readonly"
-                            class="recurring-controls__calendar-picker-custom"
-                            iconPosition="right" placeholder="Select date"
-                            :custom-formatter="formatDate" 
-                            v-model="endDate"
-                            :invalid="$v.validationCopyScheduleEventData.endExpression.date.$invalid && $v.validationCopyScheduleEventData.endExpression.date.$dirty"
-                            @touch="$v.validationCopyScheduleEventData.endExpression.date.$touch()"
-                          >
-                          </ui-datepicker>
-                      </div>
-                    </div>
+          <div class v-if="!copyScheduleEventData.isEndTime && copyScheduleEventData.isReccuring">
+            <div class>
+              <div class>
+                <div class="recurring-controls__date">
+                  <or-icon class="recurring-controls__custom-icon-date" icon="view_comfy"></or-icon>
+                  <ui-datepicker
+                    :disabled="readonly"
+                    class="recurring-controls__calendar-picker-custom"
+                    iconPosition="right"
+                    placeholder="Select date"
+                    :custom-formatter="formatDate"
+                    v-model="endDate"
+                    :invalid="$v.validationCopyScheduleEventData.endExpression.date.$invalid && $v.validationCopyScheduleEventData.endExpression.date.$dirty"
+                    @touch="$v.validationCopyScheduleEventData.endExpression.date.$touch()"
+                  ></ui-datepicker>
                 </div>
+              </div>
             </div>
-            <div v-if="copyScheduleEventData.isReccuring" class="recurring-controls__wr-is-end">
-                <or-checkbox class="recurring-controls__checkbox" v-model="copyScheduleEventData.isEndTime" :disabled="readonly">No end</or-checkbox>
-            </div>
+          </div>
+          <div v-if="copyScheduleEventData.isReccuring" class="recurring-controls__wr-is-end">
+            <or-checkbox
+              class="recurring-controls__checkbox"
+              v-model="copyScheduleEventData.isEndTime"
+              :disabled="readonly"
+            >No end</or-checkbox>
+          </div>
         </div>
-    </div>
-    <accordion
-      :opened-item.sync="copyScheduleEventData.savedAccordionSlotName"
-      v-if="copyScheduleEventData.isReccuring"
-      :saved-accordion-num-item="scheduleEventData.savedAccordionSlotName"
-      @close-item="closeAccordionItem"
-      @opened-item="openedAccordionItem"
-      @do-editable="doEditable"
-      :slot-errors="errorsAccordion"
-      :invalid="$v.validationCopyScheduleEventData.savedAccordionSlotName.$invalid && $v.validationCopyScheduleEventData.savedAccordionSlotName.$dirty"
-      @touch="$v.validationCopyScheduleEventData.savedAccordionSlotName.$touch()"
-      :is-editable="isEditable"
-    >
+      </div>
+      <accordion
+        :opened-item.sync="copyScheduleEventData.savedAccordionSlotName"
+        v-if="copyScheduleEventData.isReccuring"
+        :saved-accordion-num-item="scheduleEventData.savedAccordionSlotName"
+        @close-item="closeAccordionItem"
+        @opened-item="openedAccordionItem"
+        @do-editable="doEditable"
+        :slot-errors="errorsAccordion"
+        :invalid="$v.validationCopyScheduleEventData.savedAccordionSlotName.$invalid && $v.validationCopyScheduleEventData.savedAccordionSlotName.$dirty"
+        @touch="$v.validationCopyScheduleEventData.savedAccordionSlotName.$touch()"
+        :is-editable="isEditable"
+      >
         <template slot="item1">
-            <div 
-              placeholderItem="Set recurring daily"
-               titleItem="Daily">
-              <cron-generators-daily
-                :period.sync="copyScheduleEventData.daily.period"
-                :period-mode.sync="copyScheduleEventData.daily.periodMode"
-                :runAtTime="runAtTimeLocal"
-                :readonly="readonly"
-                v-model="copyScheduleEventData.daily.cronExpressions"
-                :index="0"
-                :data-state="dataStateComp"
-                :is-editable.sync="isEditable"
-                :preview-texts.sync="previewTexts"
-                @text-when-scheduled="/*textWhenScheduled*/"
-                :$v="$v"
-                :invalid="errorsAccordion.item1"
-              ></cron-generators-daily>
-            </div>
+          <div placeholderItem="Set recurring daily" titleItem="Daily">
+            <cron-generators-daily
+              :period.sync="copyScheduleEventData.daily.period"
+              :period-mode.sync="copyScheduleEventData.daily.periodMode"
+              :runAtTime="runAtTimeLocal"
+              :readonly="readonly"
+              v-model="copyScheduleEventData.daily.cronExpressions"
+              :index="0"
+              :data-state="dataStateComp"
+              :is-editable.sync="isEditable"
+              :preview-texts.sync="previewTexts"
+              @text-when-scheduled="/*textWhenScheduled*/"
+              :$v="$v"
+              :invalid="errorsAccordion.item1"
+            ></cron-generators-daily>
+          </div>
         </template>
-        <template  slot="item2">
-            <div placeholderItem="Set recurring weekly"  titleItem="Weekly">
-              <cron-generators-weekly
-                :week-days.sync="copyScheduleEventData.weekly.weekDays"
-                :period.sync="copyScheduleEventData.weekly.period"
-                :runAtTime="runAtTimeLocal"
-                :readonly="readonly"
-                v-model="copyScheduleEventData.weekly.cronExpressions"
-                :index="1"
-                :data-state="dataStateComp"
-                :is-editable.sync="isEditable"
-                :preview-texts.sync="previewTexts"
-                :$v="$v"
-                :invalid="errorsAccordion.item2"
-              ></cron-generators-weekly>
-            </div>
+        <template slot="item2">
+          <div placeholderItem="Set recurring weekly" titleItem="Weekly">
+            <cron-generators-weekly
+              :week-days.sync="copyScheduleEventData.weekly.weekDays"
+              :period.sync="copyScheduleEventData.weekly.period"
+              :runAtTime="runAtTimeLocal"
+              :readonly="readonly"
+              v-model="copyScheduleEventData.weekly.cronExpressions"
+              :index="1"
+              :data-state="dataStateComp"
+              :is-editable.sync="isEditable"
+              :preview-texts.sync="previewTexts"
+              :$v="$v"
+              :invalid="errorsAccordion.item2"
+            ></cron-generators-weekly>
+          </div>
         </template>
-        <template  slot="item3">
-            <div placeholderItem="Set recurring monthly"  titleItem="Monthly">
-              <cron-generators-monthly
-                :runAtTime="runAtTimeLocal"
-                :readonly="readonly"
-                :selected-months.sync="copyScheduleEventData.monthly.selectedMonths"
-                :selected-days.sync="copyScheduleEventData.monthly.selectedDays"
-                :days-period.sync="copyScheduleEventData.monthly.daysPeriod"
-                :mode.sync="copyScheduleEventData.monthly.mode"
-                :period.sync="copyScheduleEventData.monthly.period"
-                v-model="copyScheduleEventData.monthly.cronExpressions"
-                :index="2"
-                :data-state="dataStateComp"
-                :is-editable.sync="isEditable"
-                :preview-texts.sync="previewTexts"
-                :$v="$v"
-                :invalid="errorsAccordion.item3"
-              ></cron-generators-monthly>
-            </div>
-        </template> 
-        <template  slot="item4">
-            <div placeholderItem="Set recurring yearly"  titleItem="Yearly">
-              <cron-generators-yearly
-                :runAtTime="runAtTimeLocal"
-                :readonly="readonly"
-                v-model="copyScheduleEventData.yearly.cronExpressions"
-                :period.sync="copyScheduleEventData.yearly.period"
-                :start-year.sync="copyScheduleEventData.yearly.startYear"
-                :selected-months.sync="copyScheduleEventData.yearly.selectedMonths"
-                :days-period.sync="copyScheduleEventData.yearly.daysPeriod"
-                :index="3"
-                :data-state="dataStateComp"
-                :is-editable.sync="isEditable"
-                :preview-texts.sync="previewTexts"
-                :$v="$v"
-                :invalid="errorsAccordion.item4"
-              ></cron-generators-yearly>
-            </div>
+        <template slot="item3">
+          <div placeholderItem="Set recurring monthly" titleItem="Monthly">
+            <cron-generators-monthly
+              :runAtTime="runAtTimeLocal"
+              :readonly="readonly"
+              :selected-months.sync="copyScheduleEventData.monthly.selectedMonths"
+              :selected-days.sync="copyScheduleEventData.monthly.selectedDays"
+              :days-period.sync="copyScheduleEventData.monthly.daysPeriod"
+              :mode.sync="copyScheduleEventData.monthly.mode"
+              :period.sync="copyScheduleEventData.monthly.period"
+              v-model="copyScheduleEventData.monthly.cronExpressions"
+              :index="2"
+              :data-state="dataStateComp"
+              :is-editable.sync="isEditable"
+              :preview-texts.sync="previewTexts"
+              :$v="$v"
+              :invalid="errorsAccordion.item3"
+            ></cron-generators-monthly>
+          </div>
         </template>
-    </accordion>
-    <div class="schedule-event__wr-buttons">
-      <or-button 
-        @click="deleteEvent" 
-        class="schedule-event__bottom-button_delete" 
-        color="red" 
-        type="secondary"
-      >
-        Delete
-      </or-button>
-      <or-button 
-        @click="cancel" 
-        class="schedule-event__bottom-button" 
-        color="primary" 
-        type="secondary"
-      >
-        Cancel
-      </or-button>
-      <or-button 
-        :loading="loadingApply"
-        :disabled="(dataStateComp === 'saved' || dataStateComp === 'canceled') || ($v.validationCopyScheduleEventData.$invalid && $v.validationCopyScheduleEventData.$dirty)"
-        @click="apply"
-        class="schedule-event__bottom-button" 
-        color="primary"
-      >
-        Apply
-      </or-button>
-    </div>
-    <or-modal  :contain-focus="false" ref="cancelAndDataNotSave" title="Discard unsaved changes">
-        You have unsaved changes. Are you sure you want to discard them?
-
+        <template slot="item4">
+          <div placeholderItem="Set recurring yearly" titleItem="Yearly">
+            <cron-generators-yearly
+              :runAtTime="runAtTimeLocal"
+              :readonly="readonly"
+              v-model="copyScheduleEventData.yearly.cronExpressions"
+              :period.sync="copyScheduleEventData.yearly.period"
+              :start-year.sync="copyScheduleEventData.yearly.startYear"
+              :selected-months.sync="copyScheduleEventData.yearly.selectedMonths"
+              :days-period.sync="copyScheduleEventData.yearly.daysPeriod"
+              :index="3"
+              :data-state="dataStateComp"
+              :is-editable.sync="isEditable"
+              :preview-texts.sync="previewTexts"
+              :$v="$v"
+              :invalid="errorsAccordion.item4"
+            ></cron-generators-yearly>
+          </div>
+        </template>
+      </accordion>
+      <div class="schedule-event__wr-buttons">
+        <or-button
+          @click="deleteEvent"
+          class="schedule-event__bottom-button_delete"
+          color="red"
+          type="secondary"
+        >Delete</or-button>
+        <or-button
+          @click="cancel"
+          class="schedule-event__bottom-button"
+          color="primary"
+          type="secondary"
+        >Cancel</or-button>
+        <or-button
+          :loading="loadingApply"
+          :disabled="(dataStateComp === 'saved' || dataStateComp === 'canceled') || ($v.validationCopyScheduleEventData.$invalid && $v.validationCopyScheduleEventData.$dirty)"
+          @click="apply"
+          class="schedule-event__bottom-button"
+          color="primary"
+        >Apply</or-button>
+      </div>
+      <or-modal
+        :contain-focus="false"
+        ref="cancelAndDataNotSave"
+        title="Discard unsaved changes"
+      >You have unsaved changes. Are you sure you want to discard them?
         <div slot="footer">
-            <or-button color="red" @click="discardNotSaved">Discard</or-button>
-            <or-button color="primary" type="secondary" @click="closeModal('cancelAndDataNotSave')">Cancel</or-button>
+          <or-button color="red" @click="discardNotSaved">Discard</or-button>
+          <or-button
+            color="primary"
+            type="secondary"
+            @click="closeModal('cancelAndDataNotSave')"
+          >Cancel</or-button>
         </div>
-    </or-modal>
+      </or-modal>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
-import _ from 'lodash';
-import moment from 'moment-timezone';
+import _ from "lodash";
+import moment from "moment-timezone";
 
 /* eslint-disable */
-import TimePeriodList from '../TimePeriodList/TimePeriodList.vue';
-import Accordion from '../../../../../Ui/Accordion/Accordion.vue';
-import CronGeneratorsDaily from '../CronGenerators/Daily.vue';
-import CronGeneratorsWeekly from '../CronGenerators/Weekly.vue';
-import CronGeneratorsMonthly from '../CronGenerators/Monthly.vue';
-import CronGeneratorsYearly from '../CronGenerators/Yearly.vue';
-import defaultValues from '../Constants/DefaultValues.js';
-import valdationsReccurin from '../validation/validationReccuring.js';
+import TimePeriodList from "../TimePeriodList/TimePeriodList.vue";
+import Accordion from "../../../../../Ui/Accordion/Accordion.vue";
+import CronGeneratorsDaily from "../CronGenerators/Daily.vue";
+import CronGeneratorsWeekly from "../CronGenerators/Weekly.vue";
+import CronGeneratorsMonthly from "../CronGenerators/Monthly.vue";
+import CronGeneratorsYearly from "../CronGenerators/Yearly.vue";
+import defaultValues from "../Constants/DefaultValues.js";
+import valdationsReccurin from "../validation/validationReccuring.js";
 /* eslint-enable */
 
 export default {
@@ -254,7 +257,7 @@ export default {
     },
     dataState: {
       type: String,
-      default: 'saved'
+      default: "saved"
     },
     previewTexts: {
       type: Object,
@@ -284,9 +287,9 @@ export default {
           // due to mutation in moment we need check if it's object
           // mutation is caused when invoke moment.tz()
           const zone = timeZones[key];
-          return _.isObject(zone) ? zone.name : zone.split('|')[0];
+          return _.isObject(zone) ? zone.name : zone.split("|")[0];
         })
-        .filter(zone => zone.indexOf('/') >= 0)
+        .filter(zone => zone.indexOf("/") >= 0)
         .sort()
         .map(value => ({ label: value, value }))
         .value();
@@ -296,7 +299,7 @@ export default {
         const timeZone = moment.tz.guess();
         return _.isEmpty(this.copyScheduleEventData.timeZone)
           ? timeZone
-          : _.get(this.copyScheduleEventData.timeZone, 'value', '');
+          : _.get(this.copyScheduleEventData.timeZone, "value", "");
       },
       set(newValue) {
         if (newValue) {
@@ -309,42 +312,42 @@ export default {
     },
     endDate: {
       get() {
-        const date = _.get(this.copyScheduleEventData.endExpression, 'date');
+        const date = _.get(this.copyScheduleEventData.endExpression, "date");
         return date ? new Date(date) : null;
       },
       set(newValue) {
         const date = new Date(newValue);
         this.copyScheduleEventData.endExpression.date = moment(date).format(
-          'YYYY-MM-DD'
+          "YYYY-MM-DD"
         );
       }
     },
     startDate: {
       get() {
-        const date = _.get(this.copyScheduleEventData, 'startExpression.date');
+        const date = _.get(this.copyScheduleEventData, "startExpression.date");
         return date ? new Date(date) : null;
       },
       set(newValue) {
         const date = new Date(newValue);
-        console.log('datedatedatedate', date);
+        console.log("datedatedatedate", date);
         this.copyScheduleEventData.startExpression.date = moment(date).format(
-          'YYYY-MM-DD'
+          "YYYY-MM-DD"
         );
       }
     },
     dataStateComp: {
       get() {
-        return this.dataState || 'saved';
+        return this.dataState || "saved";
       },
       set(newValue) {
-        this.$emit('update:dataState', newValue);
+        this.$emit("update:dataState", newValue);
       }
     },
     savedAccordionNumItemComp() {
       return this.copyScheduleEventData.savedAccordionSlotName
         ? parseInt(
             this.copyScheduleEventData.savedAccordionSlotName
-              .split('')
+              .split("")
               .reverse()
               .join(),
             10
@@ -356,36 +359,36 @@ export default {
         item1:
           _.get(
             this.$v,
-            'validationCopyScheduleEventData.daily.$anyDirty',
+            "validationCopyScheduleEventData.daily.$anyDirty",
             false
           ) &&
           _.get(
             this.$v,
-            'validationCopyScheduleEventData.daily.$invalid',
+            "validationCopyScheduleEventData.daily.$invalid",
             false
           ),
         // item1: !valdationsReccurin.daily(this.copyScheduleEventData),
         item2:
           _.get(
             this.$v,
-            'validationCopyScheduleEventData.weekly.$anyDirty',
+            "validationCopyScheduleEventData.weekly.$anyDirty",
             false
           ) &&
           _.get(
             this.$v,
-            'validationCopyScheduleEventData.weekly.$invalid',
+            "validationCopyScheduleEventData.weekly.$invalid",
             false
           ),
         // item2: !valdationsReccurin.weekly(this.copyScheduleEventData),
         item3:
           _.get(
             this.$v,
-            'validationCopyScheduleEventData.monthly.$anyDirty',
+            "validationCopyScheduleEventData.monthly.$anyDirty",
             false
           ) &&
           _.get(
             this.$v,
-            'validationCopyScheduleEventData.monthly.$invalid',
+            "validationCopyScheduleEventData.monthly.$invalid",
             false
           ),
         // item3: !valdationsReccurin.monthly(this.copyScheduleEventData),
@@ -393,12 +396,12 @@ export default {
         item4:
           _.get(
             this.$v,
-            'validationCopyScheduleEventData.yearly.$anyDirty',
+            "validationCopyScheduleEventData.yearly.$anyDirty",
             false
           ) &&
           _.get(
             this.$v,
-            'validationCopyScheduleEventData.yearly.$invalid',
+            "validationCopyScheduleEventData.yearly.$invalid",
             false
           )
       };
@@ -407,12 +410,12 @@ export default {
       return (
         _.get(
           this.$v,
-          'validationCopyScheduleEventData.startExpression.date.$invalid',
+          "validationCopyScheduleEventData.startExpression.date.$invalid",
           false
         ) &&
         _.get(
           this.$v,
-          'validationCopyScheduleEventData.startExpression.date.$dirty',
+          "validationCopyScheduleEventData.startExpression.date.$dirty",
           false
         )
       );
@@ -421,12 +424,12 @@ export default {
       return (
         _.get(
           this.$v,
-          'validationCopyScheduleEventData.timeZone.value.$invalid',
+          "validationCopyScheduleEventData.timeZone.value.$invalid",
           false
         ) &&
         _.get(
           this.$v,
-          'validationCopyScheduleEventData.timeZone.value.$dirty',
+          "validationCopyScheduleEventData.timeZone.value.$dirty",
           false
         )
       );
@@ -458,48 +461,48 @@ export default {
       if (this.$v.validationCopyScheduleEventData.$invalid) {
         this.$v.validationCopyScheduleEventData.$touch();
       } else if (
-        this.dataStateComp !== 'canceled' &&
-        this.dataStateComp !== 'saved'
+        this.dataStateComp !== "canceled" &&
+        this.dataStateComp !== "saved"
       ) {
         this.expressionsForNotRecurring();
         this.copyScheduleEventData.saved = true;
-        this.$emit('apply-changes');
+        this.$emit("apply-changes");
 
         this.loadingApply = true;
         setTimeout(() => {
           this.loadingApply = false;
         }, 200);
 
-        this.dataStateComp = 'saved';
-        this.$emit('update:editableEventNum', null);
+        this.dataStateComp = "saved";
+        this.$emit("update:editableEventNum", null);
         // this.$emit('update:copyScheduleEventData.startExpression.date', '');
         // this.$emit('saved-event');
       }
     },
     cancel() {
-      if (this.dataStateComp === 'new') {
+      if (this.dataStateComp === "new") {
         this.deleteEvent();
-        this.$emit('cancel-event');
+        this.$emit("cancel-event");
       } else if (
-        this.dataStateComp !== 'canceled' &&
-        this.dataStateComp !== 'saved'
+        this.dataStateComp !== "canceled" &&
+        this.dataStateComp !== "saved"
       ) {
         if (this.$v.validationCopyScheduleEventData.$invalid && !this.saved) {
           this.deleteEvent();
         } else {
-          this.openModal('cancelAndDataNotSave');
+          this.openModal("cancelAndDataNotSave");
         }
       } else {
-        this.$emit('cancel-changes');
-        this.dataStateComp = 'canceled';
-        this.$emit('cancel-event');
+        this.$emit("cancel-changes");
+        this.dataStateComp = "canceled";
+        this.$emit("cancel-event");
       }
     },
     formatDate(date) {
       const timeZone = moment.tz.guess();
       return moment(date)
         .tz(timeZone)
-        .format('YYYY-MM-DD');
+        .format("YYYY-MM-DD");
     },
 
     doExpressions() {
@@ -519,28 +522,28 @@ export default {
     },
     closeAccordionItem(item) {
       switch (item) {
-        case 'item1':
+        case "item1":
           this.copyScheduleEventData.daily = _.cloneDeep(defaultValues.daily);
           break;
-        case 'item2':
+        case "item2":
           this.copyScheduleEventData.weekly = _.cloneDeep(defaultValues.weekly);
           break;
-        case 'item3':
+        case "item3":
           this.copyScheduleEventData.monthly = _.cloneDeep(
             defaultValues.monthly
           );
           break;
-        case 'item4':
+        case "item4":
           this.copyScheduleEventData.yearly = _.cloneDeep(defaultValues.yearly);
           break;
         default:
-          throw new Error('incorrect number of accordion item');
+          throw new Error("incorrect number of accordion item");
       }
       console.log(item);
       // this.copyScheduleEventData.savedAccordionSlotName = null;
     },
     openedAccordionItem(itemNum) {
-      console.log('itemNum', itemNum);
+      console.log("itemNum", itemNum);
       // this.copyScheduleEventData.savedAccordionSlotName = itemNum;
     },
     doEditable() {
@@ -553,7 +556,7 @@ export default {
       // }
     },
     deleteEvent() {
-      this.$emit('delete-event', this.index);
+      this.$emit("delete-event", this.index);
     },
     //TODO
     // textWhenScheduled(text) {
@@ -561,15 +564,15 @@ export default {
     //   this.copyScheduleEventData.previewTexts.reccuring = text;
     // }
     discardNotSaved() {
-      this.$emit('cancel-changes');
-      this.dataStateComp = 'canceled';
-      this.$emit('cancel-event');
+      this.$emit("cancel-changes");
+      this.dataStateComp = "canceled";
+      this.$emit("cancel-event");
     },
     expressionsForNotRecurring() {
       console.log(121212);
       const date = moment(
         this.copyScheduleEventData.startExpression.date,
-        'YYYY-MM-DD'
+        "YYYY-MM-DD"
       );
       if (!this.copyScheduleEventData.isReccuring) {
         // this.copyScheduleEventData.expressions = this.runAtTimeLocal.map(
@@ -594,10 +597,10 @@ export default {
             `-1,${secondsOfhours[keySecondsOfhours]} ${parseInt(
               keySecondsOfhours,
               10
-            )} ${parseInt(date.format('DD'), 10)}  ${parseInt(
-              date.format('MM'),
+            )} ${parseInt(date.format("DD"), 10)}  ${parseInt(
+              date.format("MM"),
               10
-            )} * ${parseInt(date.format('YYYY'), 10)}`
+            )} * ${parseInt(date.format("YYYY"), 10)}`
           );
         });
 
@@ -615,13 +618,13 @@ export default {
       _.forEach(newVal, item => {
         const evertVal = item.every.val ? item.every.val : 1;
         if (item.start.HH && item.start.mm && parseInt(evertVal, 10)) {
-          const units = item.every.units === 'hh' ? 'hours' : 'minutes';
+          const units = item.every.units === "hh" ? "hours" : "minutes";
 
           let nextRunAtTime = moment(`${item.start.HH}:${item.start.mm}`, [
-            'HH:mm'
+            "HH:mm"
           ]);
           const endTimeHmmA = moment(`${item.end.HH}:${item.end.mm}`, [
-            'HH:mm'
+            "HH:mm"
           ]);
 
           do {
@@ -642,7 +645,7 @@ export default {
     }
   },
   watch: {
-    'copyScheduleEventData.times': {
+    "copyScheduleEventData.times": {
       handler(newVal) {
         this.runAtTimeLocal = this.getRunAtTimeLocal(newVal);
       },
@@ -655,43 +658,42 @@ export default {
           !_.isEqual(newValue, this.scheduleEventData) &&
           newValue.id === oldValue.id
         ) {
-          console.log('newValue11', JSON.stringify(newValue));
+          console.log("newValue11", JSON.stringify(newValue));
           console.log(
-            'scheduleEventData11',
+            "scheduleEventData11",
             JSON.stringify(this.scheduleEventData)
           );
 
-          this.dataStateComp = 'changed';
-
-        } else if (this.dataStateComp !== 'new') {
-          this.dataStateComp = 'canceled';
+          this.dataStateComp = "changed";
+        } else if (this.dataStateComp !== "new") {
+          this.dataStateComp = "canceled";
         }
       },
       deep: true
     },
 
-    'copyScheduleEventData.daily.cronExpressions': {
+    "copyScheduleEventData.daily.cronExpressions": {
       handler() {
         this.doExpressions();
       },
       deep: true
     },
 
-    'copyScheduleEventData.weekly.cronExpressions': {
+    "copyScheduleEventData.weekly.cronExpressions": {
       handler() {
         this.doExpressions();
       },
       deep: true
     },
 
-    'copyScheduleEventData.monthly.cronExpressions': {
+    "copyScheduleEventData.monthly.cronExpressions": {
       handler() {
         this.doExpressions();
       },
       deep: true
     },
 
-    'copyScheduleEventData.yearly.cronExpressions': {
+    "copyScheduleEventData.yearly.cronExpressions": {
       handler() {
         this.doExpressions();
       },
