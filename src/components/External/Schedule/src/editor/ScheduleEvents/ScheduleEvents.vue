@@ -432,9 +432,9 @@ export default {
     eventAdded() {
       setTimeout(() => {
         this.$set(this.dataStates, this.scheduleEventsLocal.length - 1, "new");
+        this.doEditable(this.scheduleEventsLocal.length - 1, true);
+        this.numOfTryEdit = this.scheduleEventsLocal.length - 2;
       }, 0);
-      this.doEditable(this.scheduleEventsLocal.length - 1, true);
-      this.numOfTryEdit = this.scheduleEventsLocal.length - 2;
     },
     // validdationScheduleEventData(index) {
     //   console.log(
