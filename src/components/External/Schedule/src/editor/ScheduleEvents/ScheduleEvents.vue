@@ -554,6 +554,10 @@ export default {
       display: inline-block;
       & > .ui-modal__wrapper > .ui-modal__container {
         width: 100%;
+        height: 100vh;
+        & .ui-modal__body {
+          max-height: none;
+        }
       }
     }
 
@@ -572,17 +576,6 @@ export default {
       font-weight: bold;
       line-height: 21px;
     }
-  }
-
-  .schedule-events {
-    // min-width: 305px;
-    // &.translate-z {
-    //   transform: translateZ(0);
-    // }
-
-    // .ui-modal__mask {
-    //   width: 100%;
-    // }
   }
 
   .schedule-event-preview {
