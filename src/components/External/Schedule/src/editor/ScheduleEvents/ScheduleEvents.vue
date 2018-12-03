@@ -398,6 +398,7 @@ export default {
         this.scheduleEventsLocal[this.editableEventNum].scheduleEventData
       );
       this.copyScheduleEventData.startExpression.date = "";
+      this.copyScheduleEventData.expressions = [];
       this.editableEventNum = null;
     },
     changeDataState(newDataState) {
