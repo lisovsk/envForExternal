@@ -538,7 +538,6 @@ export default {
   .schedule__calendar,
   .schedule__events {
     overflow-y: auto;
-    // overflow-x: visible;
     max-height: calc(100vh - 100px);
   }
 
@@ -555,6 +554,7 @@ export default {
       & > .ui-modal__wrapper > .ui-modal__container {
         width: 100%;
         height: 100vh;
+        max-height: none;
         & .ui-modal__body {
           max-height: none;
         }
