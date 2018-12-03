@@ -72,7 +72,6 @@ export default {
   watch: {
     timesLocal: {
       handler(newTimesLocal) {
-        console.log("sdfdsfds", newTimesLocal);
         this.$emit("update:times", newTimesLocal);
       },
       deep: true

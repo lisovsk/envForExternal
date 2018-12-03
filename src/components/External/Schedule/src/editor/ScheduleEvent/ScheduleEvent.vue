@@ -46,7 +46,6 @@
       </div>
       <div class="wr-time-period-list">
         <div class="schedule-event__label">Time</div>
-        {{copyScheduleEventData.times}}
         <time-period-list :times.sync="copyScheduleEventData.times" :readonly="readonly" :$v="$v"></time-period-list>
       </div>
       <div class="recurring-controls">
