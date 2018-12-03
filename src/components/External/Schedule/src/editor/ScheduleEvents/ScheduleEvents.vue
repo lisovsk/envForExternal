@@ -427,7 +427,11 @@ export default {
     },
     deleteEvent(index) {
       this.itemIndexForDelete = index;
-      this.openModal("deleteEvent");
+      if (this.dataStates[this.itemIndexForDelete] !== "new") {
+        this.openModal("deleteEvent");
+      } else {
+        this.deleteСonfirmation();
+      }
     },
     eventAdded() {
       setTimeout(() => {
