@@ -635,7 +635,8 @@ export default {
       handler(newVal) {
         this.runAtTimeLocal = this.getRunAtTimeLocal(newVal);
       },
-      deep: true
+      deep: true,
+      immediate: true
     },
 
     copyScheduleEventData: {
