@@ -1,5 +1,6 @@
 <template>
   <div class="schedule-event-scope">
+    {{copyScheduleEventData.daily.cronExpressions}}
     <div class="schedule-event">
       <div class="schedule-event__title">
         <div :style="{background: copyScheduleEventData.color}" class="schedule-event__circle"></div>
