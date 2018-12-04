@@ -505,15 +505,17 @@ export default {
     },
 
     doExpressions() {
-      if (this.copyScheduleEventData.isReccuring) {
-        const expressions = [].concat(
-          this.copyScheduleEventData.daily.cronExpressions,
-          this.copyScheduleEventData.weekly.cronExpressions,
-          this.copyScheduleEventData.monthly.cronExpressions,
-          this.copyScheduleEventData.yearly.cronExpressions
-        );
-        this.copyScheduleEventData.expressions = expressions;
-      }
+      setTimeout(() => {
+        if (this.copyScheduleEventData.isReccuring) {
+          const expressions = [].concat(
+            this.copyScheduleEventData.daily.cronExpressions,
+            this.copyScheduleEventData.weekly.cronExpressions,
+            this.copyScheduleEventData.monthly.cronExpressions,
+            this.copyScheduleEventData.yearly.cronExpressions
+          );
+          this.copyScheduleEventData.expressions = expressions;
+        }
+      }, 0);
     },
     changeSavedAccordionSlotName(number) {
       // console.log(number);
@@ -636,22 +638,22 @@ export default {
 
     copyScheduleEventData: {
       handler(newValue, oldValue) {
-        setTimeout(() => {
-          if (
-            !_.isEqual(newValue, this.scheduleEventData) &&
-            newValue.id === oldValue.id
-          ) {
-            console.log("newValue11", JSON.stringify(newValue));
-            console.log(
-              "scheduleEventData11",
-              JSON.stringify(this.scheduleEventData)
-            );
+        // setTimeout(() => {
+        if (
+          !_.isEqual(newValue, this.scheduleEventData) &&
+          newValue.id === oldValue.id
+        ) {
+          console.log("newValue11", JSON.stringify(newValue));
+          console.log(
+            "scheduleEventData11",
+            JSON.stringify(this.scheduleEventData)
+          );
 
-            this.dataStateComp = "changed";
-          } else if (this.dataStateComp !== "new") {
-            this.dataStateComp = "canceled";
-          }
-        }, 0);
+          this.dataStateComp = "changed";
+        } else if (this.dataStateComp !== "new") {
+          this.dataStateComp = "canceled";
+        }
+        // }, 0);
       },
       deep: true
     },

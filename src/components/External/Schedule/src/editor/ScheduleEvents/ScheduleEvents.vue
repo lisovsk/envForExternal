@@ -347,7 +347,6 @@ export default {
     doEditable(index, isNewItem) {
       setTimeout(() => {
         this.numOfTryEdit = index;
-
         if (this.changedNumber !== -1) {
           this.openModal("dataNotSaveEndSwitchToOtherEvent");
         } else {
