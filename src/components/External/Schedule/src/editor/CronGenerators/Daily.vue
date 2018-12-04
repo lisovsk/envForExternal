@@ -168,11 +168,15 @@ export default {
   },
   watch: {
     runAtTime() {
-      this.$emit("input", this.cronExpression());
+      setTimeout(() => {
+        this.$emit("input", this.cronExpression());
+      }, 0);
     },
     dailyValue() {
-      this.$emit("input", this.cronExpression());
-      this.$emit("change-saved-accordion-num-item", this.index);
+      setTimeout(() => {
+        this.$emit("input", this.cronExpression());
+        this.$emit("change-saved-accordion-num-item", this.index);
+      }, 0);
     }
   },
   mixins: [savedState]
