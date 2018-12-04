@@ -47,7 +47,9 @@ import savedState from "./savedState.js";
 
 export default {
   created() {
-    this.$emit("input", this.cronExpression());
+    setTimeout(() => {
+      this.$emit("input", this.cronExpression());
+    }, 0);
   },
   data() {
     return {};
