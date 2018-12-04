@@ -1,6 +1,5 @@
 <template>
   <div class="schedule-event-scope">
-    {{copyScheduleEventData.daily.cronExpressions}}
     <div class="schedule-event">
       <div class="schedule-event__title">
         <div :style="{background: copyScheduleEventData.color}" class="schedule-event__circle"></div>
@@ -465,7 +464,6 @@ export default {
         this.dataStateComp !== "saved"
       ) {
         this.expressionsForNotRecurring();
-        this.doExpressions();
         this.copyScheduleEventData.saved = true;
         this.$emit("apply-changes");
 
@@ -507,7 +505,6 @@ export default {
     },
 
     doExpressions() {
-      // setTimeout(() => {
       if (this.copyScheduleEventData.isReccuring) {
         const expressions = [].concat(
           this.copyScheduleEventData.daily.cronExpressions,
@@ -517,7 +514,6 @@ export default {
         );
         this.copyScheduleEventData.expressions = expressions;
       }
-      // }, 0);
     },
     changeSavedAccordionSlotName(number) {
       // console.log(number);
@@ -635,8 +631,7 @@ export default {
       handler(newVal) {
         this.runAtTimeLocal = this.getRunAtTimeLocal(newVal);
       },
-      deep: true,
-      immediate: true
+      deep: true
     },
 
     copyScheduleEventData: {

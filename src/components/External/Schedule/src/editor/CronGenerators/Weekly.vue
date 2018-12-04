@@ -1,82 +1,74 @@
 <template>
-<div class="weekly-scope">
-<div class="weekly">
-    <div v-show="isEditable">
-      <div class="radio-custom__wr">
+  <div class="weekly-scope">
+    <div class="weekly">
+      <div v-show="isEditable">
+        <div class="radio-custom__wr">
           <!-- <or-radio v-model="periodMode" true-value="everyWeek" :disabled="readonly">
               Every:
-          </or-radio> -->
+          </or-radio>-->
           <or-textbox
             :disabled="readonly"
             :class="['xs-input', /*{'text-box-error': !dailySchedule.isDailyDaysValid}*/]"
-              label=""
-              v-model="periodLocal"
-              placeholder=""
-              mask="##########"
-              :invalid="validdationPeriod"
-            >
-          </or-textbox>
-          <div class="">week(s) on:</div>
-      </div>
-      <div 
-        :class="[
+            label
+            v-model="periodLocal"
+            placeholder
+            mask="##########"
+            :invalid="validdationPeriod"
+          ></or-textbox>
+          <div class>week(s) on:</div>
+        </div>
+        <div
+          :class="[
           'weekly-days',
           {'weekly-days_error': validdationWeekDays}
         ]"
-      >
-          <button 
-              :class="[
+        >
+          <button
+            :class="[
               'btn-group',
               {
                 'is-active': isWeekBtnActive(day),
                 'is-disabled': readonly,
-              }]" 
-              v-for="day in getWeekDays"
-              :key="day.value"
-              :disabled="readonly" 
-              @click="toggleWeeklyDays(day)">
-              {{day.label}}
-          </button>
+              }]"
+            v-for="day in getWeekDays"
+            :key="day.value"
+            :disabled="readonly"
+            @click="toggleWeeklyDays(day)"
+          >{{day.label}}</button>
+        </div>
+      </div>
+      <div v-show="!isEditable">
+        <div v-html="textWhenScheduled" v-show="!invalid"></div>
+        <div v-show="invalid" class="cron-gen__error">Please correct errors</div>
       </div>
     </div>
-    <div v-show="!isEditable">
-        <div 
-          v-html="textWhenScheduled"
-          v-show="!invalid"
-        ></div>
-        <div
-          v-show="invalid"
-          class="cron-gen__error"
-        >
-          Please correct errors
-        </div>
-    </div>
-</div>
-</div>
+  </div>
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from "lodash";
 /* eslint-disable */
-import savedState from './savedState.js';
+import savedState from "./savedState.js";
 /* eslint-enable */
 
 export default {
   created() {
-    this.$emit('input', this.cronExpression());
+    Vue.nextTick(() => {
+      this.$emit("input", this.cronExpression());
+    });
   },
   data() {
     return {
-      periodMode: 'everyWeek',
+      periodMode: "everyWeek",
       getWeekDays: [
-        { label: 'Mon', value: '1' },
-        { label: 'Tue', value: '2' },
-        { label: 'Wed', value: '3' },
-        { label: 'Thu', value: '4' },
-        { label: 'Fri', value: '5' },
-        { label: 'Sat', value: '6' },
-        { label: 'Sun', value: '0' },
-      ],
+        { label: "Mon", value: "1" },
+        { label: "Tue", value: "2" },
+        { label: "Wed", value: "3" },
+        { label: "Thu", value: "4" },
+        { label: "Fri", value: "5" },
+        { label: "Sat", value: "6" },
+        { label: "Sun", value: "0" }
+      ]
       //   weekDaysLocal: this.weekDays,
       //   periodLocal: this.period,
     };
@@ -84,43 +76,43 @@ export default {
   props: {
     readonly: {
       type: Boolean,
-      default: false,
+      default: false
     },
     weekDays: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     period: {
       type: String,
-      default: '',
+      default: ""
     },
     runAtTime: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     value: {
       type: Array,
       default() {
         return [];
-      },
+      }
     },
     index: {
       type: Number,
-      default: -1,
+      default: -1
     },
     previewTexts: {
       type: Object,
-      default: null,
+      default: null
     },
     $v: null,
     invalid: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   methods: {
     isWeekBtnActive(day) {
@@ -130,7 +122,7 @@ export default {
       this.$v.validationCopyScheduleEventData.weekly.weekDays.$touch();
       if (_.some(this.weekDaysLocal, day)) {
         this.weekDaysLocal = this.weekDaysLocal.filter(
-          item => item.value !== day.value,
+          item => item.value !== day.value
         );
       } else {
         this.weekDaysLocal.push(day);
@@ -139,20 +131,20 @@ export default {
     cronExpression() {
       return _.map(this.runAtTime, item => {
         if (
-          this.periodLocal === '0' ||
-          this.periodLocal === '' ||
+          this.periodLocal === "0" ||
+          this.periodLocal === "" ||
           !this.weekDaysLocal.length
         )
-          return '';
+          return "";
         return `${item.mm} ${item.HH} ${_.map(
           this.weekDaysLocal,
           weekDay =>
             `${weekDay.label.toUpperCase()}${
-              this.periodLocal ? `#${this.periodLocal}` : ''
-            }`,
+              this.periodLocal ? `#${this.periodLocal}` : ""
+            }`
         )}  * ? *`;
       });
-    },
+    }
   },
   computed: {
     dataLocal: {
@@ -160,24 +152,24 @@ export default {
         return this.weeklyData;
       },
       set(newWeeklyData) {
-        this.$emit('update:weeklyData', newWeeklyData);
-      },
+        this.$emit("update:weeklyData", newWeeklyData);
+      }
     },
     weekDaysLocal: {
       get() {
         return this.weekDays;
       },
       set(newWeekDays) {
-        this.$emit('update:weekDays', newWeekDays);
-      },
+        this.$emit("update:weekDays", newWeekDays);
+      }
     },
     periodLocal: {
       get() {
         return this.period;
       },
       set(newPeriod) {
-        this.$emit('update:period', newPeriod);
-      },
+        this.$emit("update:period", newPeriod);
+      }
     },
     textWhenScheduled() {
       let text = `Every <span class="bold-text">${
@@ -186,7 +178,7 @@ export default {
       this.weekDaysLocal.forEach((item, index) => {
         text += `<span class="bold-text">${item.label}</span>`;
         if (this.weekDaysLocal.length - 1 !== index) {
-          text += ', ';
+          text += ", ";
         }
       });
       this.previewTexts.reccuring = text;
@@ -195,39 +187,45 @@ export default {
     validdationPeriod() {
       return _.get(
         this.$v,
-        'validationCopyScheduleEventData.weekly.period.$invalid',
-        false,
+        "validationCopyScheduleEventData.weekly.period.$invalid",
+        false
       );
     },
     validdationWeekDays() {
       return (
         _.get(
           this.$v,
-          'validationCopyScheduleEventData.weekly.weekDays.$invalid',
-          false,
+          "validationCopyScheduleEventData.weekly.weekDays.$invalid",
+          false
         ) &&
         _.get(
           this.$v,
-          'validationCopyScheduleEventData.weekly.weekDays.$dirty',
-          false,
+          "validationCopyScheduleEventData.weekly.weekDays.$dirty",
+          false
         )
       );
-    },
+    }
   },
   watch: {
     runAtTime() {
-      this.$emit('input', this.cronExpression());
+      Vue.nextTick(() => {
+        this.$emit("input", this.cronExpression());
+      });
     },
     weekDaysLocal() {
-      this.$emit('input', this.cronExpression());
-      this.$emit('change-saved-accordion-num-item', this.index);
+      Vue.nextTick(() => {
+        this.$emit("input", this.cronExpression());
+        this.$emit("change-saved-accordion-num-item", this.index);
+      });
     },
     periodLocal() {
-      this.$emit('input', this.cronExpression());
-      this.$emit('change-saved-accordion-num-item', this.index);
-    },
+      Vue.nextTick(() => {
+        this.$emit("input", this.cronExpression());
+        this.$emit("change-saved-accordion-num-item", this.index);
+      });
+    }
   },
-  mixins: [savedState],
+  mixins: [savedState]
 };
 </script>
 

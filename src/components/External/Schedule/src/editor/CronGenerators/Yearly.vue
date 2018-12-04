@@ -1,101 +1,93 @@
 <template>
-<div class="yearly-scope">
-<div class="recuring-configs__monthly-day_configs yearly">
-    <!-- {{value}} -->
-    <div v-show="isEditable">
-      <div class="radio-custom__wr">
-          Every
+  <div class="yearly-scope">
+    <div class="recuring-configs__monthly-day_configs yearly">
+      <!-- {{value}} -->
+      <div v-show="isEditable">
+        <div class="radio-custom__wr">Every
           <or-textbox
             :disabled="readonly"
             :class="['xs-input', /*{'text-box-error': !dailySchedule.isDailyDaysValid}*/]"
-              label=""
-              v-model="periodComp" 
-              placeholder=""
-              mask="##########"
-              :invalid="validdationPeriod"
-            >
-          </or-textbox>
-          <div class="">year(s) in:</div>
-      </div>
-      <div class="yearly__month-picker">
+            label
+            v-model="periodComp"
+            placeholder
+            mask="##########"
+            :invalid="validdationPeriod"
+          ></or-textbox>
+          <div class>year(s) in:</div>
+        </div>
+        <div class="yearly__month-picker">
           <month-picker
             v-model="selectedMonthsComp"
             :disabled="readonly"
             :invalid="validdationSelectedMonths"
             @touch="$v.validationCopyScheduleEventData.yearly.selectedMonths.$touch()"
           ></month-picker>
-      </div>
-      <div class="monthly-periods monthly-periods__yearly">
-        <!-- <or-checkbox class="yearly__onThe" v-model="onTheComp">on the</or-checkbox> -->
-        <or-select
-            :disabled="readonly" 
+        </div>
+        <div class="monthly-periods monthly-periods__yearly">
+          <!-- <or-checkbox class="yearly__onThe" v-model="onTheComp">on the</or-checkbox> -->
+          <or-select
+            :disabled="readonly"
             :class="['config-line__select', {/*'select-box-error': !daysPeriodComp.period*/}]"
-            label="" placeholder="" 
+            label
+            placeholder
             @change="/*monthlyDaysPeriodChange*/"
             v-model="daysPeriodComp.period"
-            :options="getDaysPeriod">
-        </or-select>
-        <or-select
-            :disabled="readonly" 
-            :class="['config-line__select', {/*'select-box-error': !daysPeriodComp.day*/}]" 
-            label=""
-            placeholder="" 
+            :options="getDaysPeriod"
+          ></or-select>
+          <or-select
+            :disabled="readonly"
+            :class="['config-line__select', {/*'select-box-error': !daysPeriodComp.day*/}]"
+            label
+            placeholder
             @change="/*monthlyDaysPeriodChange*/"
             v-model="daysPeriodComp.day"
             :options="getWeekDays"
-          >
-        </or-select>
+          ></or-select>
+        </div>
+      </div>
+      <div v-show="!isEditable">
+        <div v-html="textWhenScheduled" v-show="!invalid"></div>
+        <div v-show="invalid" class="cron-gen__error">Please correct errors</div>
       </div>
     </div>
-    <div v-show="!isEditable">
-        <div 
-          v-html="textWhenScheduled"
-          v-show="!invalid"
-        ></div>
-        <div
-          v-show="invalid"
-          class="cron-gen__error"
-        >
-          Please correct errors
-        </div>
-    </div>
-  </div>
   </div>
 </template>
 
 <script>
-import _ from 'lodash';
-import moment from 'moment-timezone';
+import _ from "lodash";
+import moment from "moment-timezone";
 
 /* eslint-disable */
-import MonthPicker from '../MonthPicker/MonthPicker.vue';
-import savedState from './savedState.js';
+import MonthPicker from "../MonthPicker/MonthPicker.vue";
+import savedState from "./savedState.js";
 /* eslint-enable */
 
 export default {
   created() {
-    this.$emit('input', this.cronExpression());
+    Vue.nextTick(() => {
+      this.$emit("input", this.cronExpression());
+    });
   },
   data() {
     return {
       getDaysPeriod: [
-        { label: 'every', value: '' },
-        { label: 'first', value: '#1' },
-        { label: 'second', value: '#2' },
-        { label: 'third', value: '#3' },
-        { label: 'forth', value: '#4' },
-        { label: 'fifth', value: '#5' },
-        { label: 'last', value: 'L' }
+        { label: "every", value: "" },
+        { label: "first", value: "#1" },
+        { label: "second", value: "#2" },
+        { label: "third", value: "#3" },
+        { label: "forth", value: "#4" },
+        { label: "fifth", value: "#5" },
+        { label: "last", value: "L" }
       ],
       getWeekDays: [
-        { label: 'day', value: '*' },
-        { label: 'Sunday', value: 'SUN' },
-        { label: 'Monday', value: 'MON' },
-        { label: 'Tuesday', value: 'TUE' },
-        { label: 'Wednesday', value: 'WED' },
-        { label: 'Thursday', value: 'THU' },
-        { label: 'Friday', value: 'FRI' },
-        { label: 'Saturday', value: 'SAT' }
+        { label: "day", value: "*" },
+        { label: "Sunday", value: "SUN" },
+        { label: "Monday", value: "MON" },
+        { label: "Tuesday", value: "TUE" },
+        { label: "Wednesday", value: "WED" },
+        { label: "Thursday", value: "THU" },
+        { label: "Friday", value: "FRI" },
+        { label: "Saturday", value: "SAT" }
         // { label: 'Weekday', value: ['MON', 'TUE', 'WED', 'THU', 'FRI'] },
         // { label: 'Weekend', value: ['SAT', 'SUN'] },
       ]
@@ -108,7 +100,7 @@ export default {
     },
     period: {
       type: String,
-      default: '1'
+      default: "1"
     },
     value: {
       type: Array,
@@ -132,8 +124,8 @@ export default {
       type: Object,
       default() {
         return {
-          day: '',
-          period: ''
+          day: "",
+          period: ""
         };
       }
     },
@@ -165,7 +157,7 @@ export default {
         return this.period;
       },
       set(newPeriod) {
-        this.$emit('update:period', newPeriod);
+        this.$emit("update:period", newPeriod);
       }
     },
     selectedMonthsComp: {
@@ -173,7 +165,7 @@ export default {
         return this.selectedMonths;
       },
       set(newValue) {
-        this.$emit('update:selectedMonths', newValue);
+        this.$emit("update:selectedMonths", newValue);
       }
     },
     daysPeriodComp: {
@@ -181,7 +173,7 @@ export default {
         return this.daysPeriod;
       },
       set(newValue) {
-        this.$emit('update:daysPeriod', newValue);
+        this.$emit("update:daysPeriod", newValue);
       }
     },
     // onTheComp: {
@@ -195,11 +187,11 @@ export default {
     textWhenScheduled() {
       let text = `Every <span class="bold-text">${this.period}</span> year on `;
       this.selectedMonthsComp.forEach((item, index) => {
-        text += `<span class="bold-text">${moment(item, 'MM')
-          .format('MMMM')
+        text += `<span class="bold-text">${moment(item, "MM")
+          .format("MMMM")
           .slice(0, 3)}</span>`;
         if (this.selectedMonthsComp.length - 1 !== index) {
-          text += ', ';
+          text += ", ";
         }
       });
       // if (this.onTheComp) {
@@ -222,7 +214,7 @@ export default {
     validdationPeriod() {
       return _.get(
         this.$v,
-        'validationCopyScheduleEventData.yearly.period.$invalid',
+        "validationCopyScheduleEventData.yearly.period.$invalid",
         false
       );
     },
@@ -230,12 +222,12 @@ export default {
       return (
         _.get(
           this.$v,
-          'validationCopyScheduleEventData.yearly.selectedMonths.$invalid',
+          "validationCopyScheduleEventData.yearly.selectedMonths.$invalid",
           false
         ) &&
         _.get(
           this.$v,
-          'validationCopyScheduleEventData.yearly.selectedMonths.$dirty',
+          "validationCopyScheduleEventData.yearly.selectedMonths.$dirty",
           false
         )
       );
@@ -243,15 +235,21 @@ export default {
   },
   watch: {
     runAtTime() {
-      this.$emit('input', this.cronExpression());
+      Vue.nextTick(() => {
+        this.$emit("input", this.cronExpression());
+      });
     },
     periodComp() {
-      this.$emit('input', this.cronExpression());
-      this.$emit('change-saved-accordion-num-item', this.index);
+      Vue.nextTick(() => {
+        this.$emit("input", this.cronExpression());
+        this.$emit("change-saved-accordion-num-item", this.index);
+      });
     },
     selectedMonths() {
-      this.$emit('input', this.cronExpression());
-      this.$emit('change-saved-accordion-num-item', this.index);
+      Vue.nextTick(() => {
+        this.$emit("input", this.cronExpression());
+        this.$emit("change-saved-accordion-num-item", this.index);
+      });
     },
     // onThe() {
     //   this.$emit('input', this.cronExpression());
@@ -259,15 +257,17 @@ export default {
     // },
     daysPeriodComp: {
       handler() {
-        this.$emit('input', this.cronExpression());
-        this.$emit('change-saved-accordion-num-item', this.index);
+        Vue.nextTick(() => {
+          this.$emit("input", this.cronExpression());
+          this.$emit("change-saved-accordion-num-item", this.index);
+        });
       },
       deep: true
     }
   },
   methods: {
     cronExpression() {
-      let exp = '';
+      let exp = "";
       // if (!this.onThe) {
       //   exp = _.map(
       //     this.runAtTime,
