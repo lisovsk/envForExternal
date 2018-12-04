@@ -149,6 +149,13 @@ export default {
   },
   methods: {
     cronExpression() {
+      console.log(
+        "cronExpressionsdsdsdsd",
+        _.map(
+          this.runAtTime,
+          item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
+        )
+      );
       return _.map(
         this.runAtTime,
         item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
