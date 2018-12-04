@@ -463,7 +463,7 @@ export default {
         this.dataStateComp !== "canceled" &&
         this.dataStateComp !== "saved"
       ) {
-        this.expressionsForNotRecurring();
+        // this.expressionsForNotRecurring();
         this.copyScheduleEventData.saved = true;
         this.$emit("apply-changes");
 
