@@ -287,7 +287,7 @@ export default {
           isEndTime: false,
           eventName: "",
           endExpression: {
-            time: "23:59",
+            time: "23:59:59",
             date: ""
           },
           timeZone: {
@@ -345,26 +345,26 @@ export default {
       ).format("YYYY-MM-DD");
     },
     doEditable(index, isNewItem) {
-      setTimeout(() => {
-        this.numOfTryEdit = index;
+      // setTimeout(() => {
+      this.numOfTryEdit = index;
 
-        if (this.changedNumber !== -1) {
-          this.openModal("dataNotSaveEndSwitchToOtherEvent");
-        } else {
-          if (!this.$refs.modal.isOpen) {
-            this.openModal("modal");
-          }
-          this.editableEventNum = index;
-          this.$set(
-            this,
-            "copyScheduleEventData",
-            _.cloneDeep(
-              _.get(this.scheduleEventsLocal, `[${index}].scheduleEventData`)
-            )
-          );
-          this.deleteNotSaved(true, isNewItem);
+      if (this.changedNumber !== -1) {
+        this.openModal("dataNotSaveEndSwitchToOtherEvent");
+      } else {
+        if (!this.$refs.modal.isOpen) {
+          this.openModal("modal");
         }
-      }, 0);
+        this.editableEventNum = index;
+        this.$set(
+          this,
+          "copyScheduleEventData",
+          _.cloneDeep(
+            _.get(this.scheduleEventsLocal, `[${index}].scheduleEventData`)
+          )
+        );
+        this.deleteNotSaved(true, isNewItem);
+      }
+      // }, 0);
     },
     applyChanges() {
       this.scheduleEventsLocal[
