@@ -636,20 +636,22 @@ export default {
 
     copyScheduleEventData: {
       handler(newValue, oldValue) {
-        if (
-          !_.isEqual(newValue, this.scheduleEventData) &&
-          newValue.id === oldValue.id
-        ) {
-          console.log("newValue11", JSON.stringify(newValue));
-          console.log(
-            "scheduleEventData11",
-            JSON.stringify(this.scheduleEventData)
-          );
+        setTimeout(() => {
+          if (
+            !_.isEqual(newValue, this.scheduleEventData) &&
+            newValue.id === oldValue.id
+          ) {
+            console.log("newValue11", JSON.stringify(newValue));
+            console.log(
+              "scheduleEventData11",
+              JSON.stringify(this.scheduleEventData)
+            );
 
-          this.dataStateComp = "changed";
-        } else if (this.dataStateComp !== "new") {
-          this.dataStateComp = "canceled";
-        }
+            this.dataStateComp = "changed";
+          } else if (this.dataStateComp !== "new") {
+            this.dataStateComp = "canceled";
+          }
+        }, 0);
       },
       deep: true
     },

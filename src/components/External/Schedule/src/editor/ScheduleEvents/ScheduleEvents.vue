@@ -345,26 +345,26 @@ export default {
       ).format("YYYY-MM-DD");
     },
     doEditable(index, isNewItem) {
-      // setTimeout(() => {
-      this.numOfTryEdit = index;
+      setTimeout(() => {
+        this.numOfTryEdit = index;
 
-      if (this.changedNumber !== -1) {
-        this.openModal("dataNotSaveEndSwitchToOtherEvent");
-      } else {
-        if (!this.$refs.modal.isOpen) {
-          this.openModal("modal");
+        if (this.changedNumber !== -1) {
+          this.openModal("dataNotSaveEndSwitchToOtherEvent");
+        } else {
+          if (!this.$refs.modal.isOpen) {
+            this.openModal("modal");
+          }
+          this.editableEventNum = index;
+          this.$set(
+            this,
+            "copyScheduleEventData",
+            _.cloneDeep(
+              _.get(this.scheduleEventsLocal, `[${index}].scheduleEventData`)
+            )
+          );
+          this.deleteNotSaved(true, isNewItem);
         }
-        this.editableEventNum = index;
-        this.$set(
-          this,
-          "copyScheduleEventData",
-          _.cloneDeep(
-            _.get(this.scheduleEventsLocal, `[${index}].scheduleEventData`)
-          )
-        );
-        this.deleteNotSaved(true, isNewItem);
-      }
-      // }, 0);
+      }, 0);
     },
     applyChanges() {
       this.scheduleEventsLocal[
