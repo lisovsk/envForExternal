@@ -159,6 +159,7 @@ export default {
           item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
         )
       );
+      console.log("this.runAtTime", this.runAtTime);
       return _.map(
         this.runAtTime,
         item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
