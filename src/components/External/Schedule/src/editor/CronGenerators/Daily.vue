@@ -48,7 +48,9 @@ import savedState from "./savedState.js";
 export default {
   created() {
     setTimeout(() => {
-      this.$emit("input", this.cronExpression());
+      Vue.nextTick(() => {
+        this.$emit("input", this.cronExpression());
+      });
     }, 0);
   },
   data() {
@@ -170,13 +172,17 @@ export default {
   watch: {
     runAtTime() {
       setTimeout(() => {
-        this.$emit("input", this.cronExpression());
+        Vue.nextTick(() => {
+          this.$emit("input", this.cronExpression());
+        });
       }, 0);
     },
     dailyValue() {
       setTimeout(() => {
-        this.$emit("input", this.cronExpression());
-        this.$emit("change-saved-accordion-num-item", this.index);
+        Vue.nextTick(() => {
+          this.$emit("input", this.cronExpression());
+          this.$emit("change-saved-accordion-num-item", this.index);
+        });
       }, 0);
     }
   },
