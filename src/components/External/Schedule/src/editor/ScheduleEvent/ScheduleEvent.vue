@@ -702,7 +702,9 @@ export default {
       deep: true
     }
   },
-
+  created() {
+    this.doExpressions();
+  },
   components: {
     Accordion,
     TimePeriodList,
