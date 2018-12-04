@@ -463,21 +463,19 @@ export default {
         this.dataStateComp !== "canceled" &&
         this.dataStateComp !== "saved"
       ) {
+        this.expressionsForNotRecurring();
+        this.copyScheduleEventData.saved = true;
+        this.$emit("apply-changes");
+
+        this.loadingApply = true;
         setTimeout(() => {
-          this.expressionsForNotRecurring();
-          this.copyScheduleEventData.saved = true;
-          this.$emit("apply-changes");
+          this.loadingApply = false;
+        }, 200);
 
-          this.loadingApply = true;
-          setTimeout(() => {
-            this.loadingApply = false;
-          }, 200);
-
-          this.dataStateComp = "saved";
-          this.$emit("update:editableEventNum", null);
-          // this.$emit('update:copyScheduleEventData.startExpression.date', '');
-          // this.$emit('saved-event');
-        }, 0);
+        this.dataStateComp = "saved";
+        this.$emit("update:editableEventNum", null);
+        // this.$emit('update:copyScheduleEventData.startExpression.date', '');
+        // this.$emit('saved-event');
       }
     },
     cancel() {
