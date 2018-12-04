@@ -1,4 +1,3 @@
-
 <template>
   <div class="Calendar">
     <div class="nav">

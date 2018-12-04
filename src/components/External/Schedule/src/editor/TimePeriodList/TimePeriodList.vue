@@ -53,12 +53,12 @@ export default {
     listNewItemTime() {
       return {
         start: {
-          HH: "",
-          mm: ""
+          HH: "00",
+          mm: "00"
         },
         end: {
-          HH: "",
-          mm: ""
+          HH: "00",
+          mm: "00"
         },
         every: {
           val: 10,

@@ -8,10 +8,6 @@ console.log('later', later);
 later.date.localTime();
 
 export default {
-  created() {
-    // console.log('highlightedDates', this.highlightedDates);
-    // console.log('timeZoneCalendar', this.timeZoneCalendar);
-  },
   data() {
     return { startDate: null };
   },
@@ -134,10 +130,6 @@ export default {
                       .tz(this.timeZoneCalendar)
                   );
                 });
-                // console.log('expItemexpItem', item.expressions);
-                // console.log('endendendendend', end);
-                // console.log('startstartstart', start);
-                console.log('atDates', atDates);
                 returnValue = {
                   dates: []
                     .concat(
@@ -222,9 +214,12 @@ export default {
                 );
                 return obj;
               }, {});
-              // console.log('reduceDatesreduceDates', reduceDates);
 
-              // let flagLiter = false;
+              // if (_.isEmpty(reduceDates))
+              //   reduceDates = {
+              //     '2018-12-04': ['00:mm']
+              //   };
+
               _.forOwn(reduceDates, (timesValue, dateKey) => {
                 console.log('timesValue', timesValue);
                 const date = moment(dateKey, 'YYYY-MM-DD');
@@ -300,12 +295,4 @@ export default {
       return resultArr;
     }
   }
-  // watch: {
-  //     selectedDays: {
-  //         handler(newValue) {
-  //             console.log('newValue', newValue);
-  //         },
-  //         deep: true
-  //     }
-  // }
 };

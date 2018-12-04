@@ -192,7 +192,6 @@ export default {
         $each: {
           start: {
             custom(value, state) {
-              // console.log('__valueStart__', value);
               let valid = true;
               if (state) {
                 valid =

@@ -568,22 +568,11 @@ export default {
       this.$emit("cancel-event");
     },
     expressionsForNotRecurring() {
-      console.log(121212);
       const date = moment(
         this.copyScheduleEventData.startExpression.date,
         "YYYY-MM-DD"
       );
       if (!this.copyScheduleEventData.isReccuring) {
-        // this.copyScheduleEventData.expressions = this.runAtTimeLocal.map(
-        //   item =>
-        //     `${parseInt(item.mm, 10)} ${parseInt(item.HH, 10)} ${parseInt(
-        //       date.format('DD'),
-        //       10,
-        //     )}  ${parseInt(date.format('MM'), 10)} * ${parseInt(
-        //       date.format('YYYY'),
-        //       10,
-        //     )}`,
-        // );
         const expressionsLocal = [];
         const secondsOfhours = {};
         this.runAtTimeLocal.forEach(item => {
@@ -602,13 +591,7 @@ export default {
             )} * ${parseInt(date.format("YYYY"), 10)}`
           );
         });
-
         this.copyScheduleEventData.expressions = expressionsLocal;
-        // console.log('this.runAtTimeLocal', this.runAtTimeLocal);
-        // console.log('secondsOfhours', secondsOfhours);
-        // console.log('expressionsLocal', expressionsLocal);
-        // this.copyScheduleEventData.endExpression.date = date.add(1, 'day').format('YYYY-MM-DD');
-        //  console.log('this.copyScheduleEventData.endExpression',this.copyScheduleEventData.endExpression.date);
       }
     },
     getRunAtTimeLocal(newVal) {
