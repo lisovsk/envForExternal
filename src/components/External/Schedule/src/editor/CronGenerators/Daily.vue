@@ -1,63 +1,53 @@
 <template>
-<div class="daily-scope">
-  <div class="daily">
+  <div class="daily-scope">
+    <div class="daily">
       <!-- {{value}} -->
       <div v-show="isEditable">
         <div class="radio-custom__wr">
-              <or-radio v-model="periodModeLocal" true-value="everyDay" class="" :disabled="readonly">
-                  Every:
-              </or-radio>
-              <or-textbox 
-                :disabled="readonly || periodModeLocal !== 'everyDay'" 
-                :class="['xs-input', /*{'text-box-error': !dailySchedule.isDailyDaysValid}*/]"
-                label=""
-                v-model="periodLocal"
-                placeholder=""
-                mask="##########"
-                :invalid="validationPeriod"
-              >
-              </or-textbox>
-              <div class="">day(s)</div>
-          </div>
-          <div class="radio-custom__wr">
-              <or-radio v-model="periodModeLocal" true-value="evenDay" class="" :disabled="readonly">
-                  Every
-              </or-radio>
-              <div class="">even day</div>
-          </div>
-          <div class="radio-custom__wr">
-              <or-radio v-model="periodModeLocal" true-value="oddDay" class="" :disabled="readonly">
-                  Every
-              </or-radio>
-              <div class="">odd day</div>
-          </div>
-      </div>
-      <div v-show="!isEditable">
-        <div 
-          v-html="textWhenScheduled"
-          v-show="!invalid"
-        ></div>
-        <div
-          v-show="invalid"
-          class="cron-gen__error"
-        >
-          Please correct errors
+          <or-radio
+            v-model="periodModeLocal"
+            true-value="everyDay"
+            class
+            :disabled="readonly"
+          >Every:</or-radio>
+          <or-textbox
+            :disabled="readonly || periodModeLocal !== 'everyDay'"
+            :class="['xs-input', /*{'text-box-error': !dailySchedule.isDailyDaysValid}*/]"
+            label
+            v-model="periodLocal"
+            placeholder
+            mask="##########"
+            :invalid="validationPeriod"
+          ></or-textbox>
+          <div class>day(s)</div>
+        </div>
+        <div class="radio-custom__wr">
+          <or-radio v-model="periodModeLocal" true-value="evenDay" class :disabled="readonly">Every</or-radio>
+          <div class>even day</div>
+        </div>
+        <div class="radio-custom__wr">
+          <or-radio v-model="periodModeLocal" true-value="oddDay" class :disabled="readonly">Every</or-radio>
+          <div class>odd day</div>
         </div>
       </div>
+      <div v-show="!isEditable">
+        <div v-html="textWhenScheduled" v-show="!invalid"></div>
+        <div v-show="invalid" class="cron-gen__error">Please correct errors</div>
+      </div>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from "lodash";
 /* eslint-disable */
-import savedState from './savedState.js';
+import savedState from "./savedState.js";
 /* eslint-enable */
 // import later from 'later';
 
 export default {
   created() {
-    this.$emit('input', this.cronExpression());
+    this.$emit("input", this.cronExpression());
   },
   data() {
     return {};
@@ -69,11 +59,11 @@ export default {
     },
     period: {
       type: String,
-      default: '1'
+      default: "1"
     },
     periodMode: {
       type: String,
-      default: 'everyDay'
+      default: "everyDay"
     },
     runAtTime: {
       type: Array,
@@ -107,7 +97,7 @@ export default {
         return this.period;
       },
       set(newValue) {
-        this.$emit('update:period', newValue);
+        this.$emit("update:period", newValue);
       }
     },
     periodModeLocal: {
@@ -115,35 +105,35 @@ export default {
         return this.periodMode;
       },
       set(newValue) {
-        this.$emit('update:periodMode', newValue);
+        this.$emit("update:periodMode", newValue);
       }
     },
     dailyValue() {
       switch (this.periodModeLocal) {
-        case 'everyDay':
+        case "everyDay":
           return `1/${this.periodLocal}`;
-        case 'oddDay':
-          return '1-31/2';
-        case 'evenDay':
-          return '2-30/2';
+        case "oddDay":
+          return "1-31/2";
+        case "evenDay":
+          return "2-30/2";
         default:
-          return '1/1';
+          return "1/1";
       }
     },
     textWhenScheduled() {
-      let text = '';
+      let text = "";
       switch (this.periodModeLocal) {
-        case 'everyDay':
+        case "everyDay":
           text = `Every <span class="bold-text">${this.periodLocal}</span> day`;
           break;
-        case 'oddDay':
+        case "oddDay":
           text = 'Every <span class="bold-text">odd</span> days';
           break;
-        case 'evenDay':
+        case "evenDay":
           text = 'Every <span class="bold-text">even</span> days';
           break;
         default:
-          text = '';
+          text = "";
           break;
       }
       this.previewTexts.reccuring = text;
@@ -152,7 +142,7 @@ export default {
     validationPeriod() {
       return _.get(
         this.$v,
-        'validationCopyScheduleEventData.daily.period.$invalid',
+        "validationCopyScheduleEventData.daily.period.$invalid",
         false
       );
     }
@@ -167,11 +157,11 @@ export default {
   },
   watch: {
     runAtTime() {
-      this.$emit('input', this.cronExpression());
+      this.$emit("input", this.cronExpression());
     },
     dailyValue() {
-      this.$emit('input', this.cronExpression());
-      this.$emit('change-saved-accordion-num-item', this.index);
+      this.$emit("input", this.cronExpression());
+      this.$emit("change-saved-accordion-num-item", this.index);
     }
   },
   mixins: [savedState]

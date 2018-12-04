@@ -505,17 +505,17 @@ export default {
     },
 
     doExpressions() {
-      setTimeout(() => {
-        if (this.copyScheduleEventData.isReccuring) {
-          const expressions = [].concat(
-            this.copyScheduleEventData.daily.cronExpressions,
-            this.copyScheduleEventData.weekly.cronExpressions,
-            this.copyScheduleEventData.monthly.cronExpressions,
-            this.copyScheduleEventData.yearly.cronExpressions
-          );
-          this.copyScheduleEventData.expressions = expressions;
-        }
-      }, 0);
+      // setTimeout(() => {
+      if (this.copyScheduleEventData.isReccuring) {
+        const expressions = [].concat(
+          this.copyScheduleEventData.daily.cronExpressions,
+          this.copyScheduleEventData.weekly.cronExpressions,
+          this.copyScheduleEventData.monthly.cronExpressions,
+          this.copyScheduleEventData.yearly.cronExpressions
+        );
+        this.copyScheduleEventData.expressions = expressions;
+      }
+      // }, 0);
     },
     changeSavedAccordionSlotName(number) {
       // console.log(number);
@@ -702,9 +702,9 @@ export default {
       deep: true
     }
   },
-  created() {
-    this.doExpressions();
-  },
+  // created() {
+  //   this.doExpressions();
+  // },
   components: {
     Accordion,
     TimePeriodList,
