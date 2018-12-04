@@ -1,5 +1,6 @@
 <template>
   <div class="schedule-event-scope">
+    {{copyScheduleEventData.daily.cronExpressions}}
     <div class="schedule-event">
       <div class="schedule-event__title">
         <div :style="{background: copyScheduleEventData.color}" class="schedule-event__circle"></div>
@@ -464,6 +465,7 @@ export default {
         this.dataStateComp !== "saved"
       ) {
         this.expressionsForNotRecurring();
+        this.doExpressions();
         this.copyScheduleEventData.saved = true;
         this.$emit("apply-changes");
 
@@ -702,9 +704,9 @@ export default {
       deep: true
     }
   },
-  // created() {
-  //   this.doExpressions();
-  // },
+  created() {
+    this.doExpressions();
+  },
   components: {
     Accordion,
     TimePeriodList,
