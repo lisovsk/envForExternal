@@ -149,19 +149,19 @@ export default {
   },
   methods: {
     cronExpression() {
-      setTimeout(() => {
-        console.log(
-          "cronExpressionsdsdsdsd",
-          _.map(
-            this.runAtTime,
-            item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
-          )
-        );
-        return _.map(
+      // setTimeout(() => {
+      console.log(
+        "cronExpressionsdsdsdsd",
+        _.map(
           this.runAtTime,
           item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
-        );
-      }, 0);
+        )
+      );
+      return _.map(
+        this.runAtTime,
+        item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
+      );
+      // }, 0);
     }
   },
   watch: {
