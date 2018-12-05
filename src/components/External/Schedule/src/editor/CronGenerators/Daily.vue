@@ -152,8 +152,24 @@ export default {
     }
   },
   methods: {
-    cronExpression() {
-      // setTimeout(() => {
+    // cronExpression() {
+    //   // setTimeout(() => {
+    //   console.log(
+    //     "cronExpressionsdsdsdsd",
+    //     _.map(
+    //       this.runAtTime,
+    //       item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
+    //     )
+    //   );
+    //   console.log("this.runAtTime", this.runAtTime);
+    //   return _.map(
+    //     this.runAtTime,
+    //     item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
+    //   );
+    //   // }, 0);
+    // },
+    async cronExpression:  function() {
+      await this.$nextTick();
       console.log(
         "cronExpressionsdsdsdsd",
         _.map(
@@ -166,7 +182,6 @@ export default {
         this.runAtTime,
         item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
       );
-      // }, 0);
     }
   },
   watch: {
