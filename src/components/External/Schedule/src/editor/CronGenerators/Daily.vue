@@ -40,6 +40,7 @@
 
 <script>
 import _ from "lodash";
+import Vue from "vue";
 /* eslint-disable */
 import savedState from "./savedState.js";
 /* eslint-enable */
@@ -47,11 +48,11 @@ import savedState from "./savedState.js";
 
 export default {
   created() {
-    setTimeout(() => {
-      Vue.nextTick(() => {
-        this.$emit("input", this.cronExpression());
-      });
-    }, 0);
+    // setTimeout(() => {
+    Vue.nextTick(() => {
+      this.$emit("input", this.cronExpression());
+    });
+    // }, 0);
   },
   data() {
     return {};
@@ -152,24 +153,8 @@ export default {
     }
   },
   methods: {
-    // cronExpression() {
-    //   // setTimeout(() => {
-    //   console.log(
-    //     "cronExpressionsdsdsdsd",
-    //     _.map(
-    //       this.runAtTime,
-    //       item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
-    //     )
-    //   );
-    //   console.log("this.runAtTime", this.runAtTime);
-    //   return _.map(
-    //     this.runAtTime,
-    //     item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
-    //   );
-    //   // }, 0);
-    // },
-    async cronExpression:  function() {
-      await this.$nextTick();
+    cronExpression() {
+      // setTimeout(() => {
       console.log(
         "cronExpressionsdsdsdsd",
         _.map(
@@ -182,23 +167,39 @@ export default {
         this.runAtTime,
         item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
       );
+      // }, 0);
     }
+    // async cronExpression:  function() {
+    //   await this.$nextTick();
+    //   console.log(
+    //     "cronExpressionsdsdsdsd",
+    //     _.map(
+    //       this.runAtTime,
+    //       item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
+    //     )
+    //   );
+    //   console.log("this.runAtTime", this.runAtTime);
+    //   return _.map(
+    //     this.runAtTime,
+    //     item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
+    //   );
+    // }
   },
   watch: {
     runAtTime() {
-      setTimeout(() => {
-        Vue.nextTick(() => {
-          this.$emit("input", this.cronExpression());
-        });
-      }, 0);
+      // setTimeout(() => {
+      Vue.nextTick(() => {
+        this.$emit("input", this.cronExpression());
+      });
+      // }, 0);
     },
     dailyValue() {
-      setTimeout(() => {
-        Vue.nextTick(() => {
-          this.$emit("input", this.cronExpression());
-          this.$emit("change-saved-accordion-num-item", this.index);
-        });
-      }, 0);
+      // setTimeout(() => {
+      Vue.nextTick(() => {
+        this.$emit("input", this.cronExpression());
+        this.$emit("change-saved-accordion-num-item", this.index);
+      });
+      // }, 0);
     }
   },
   mixins: [savedState]
