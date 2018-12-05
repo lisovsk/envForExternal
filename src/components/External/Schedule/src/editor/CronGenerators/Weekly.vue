@@ -53,9 +53,7 @@ import savedState from "./savedState.js";
 
 export default {
   created() {
-    Vue.nextTick(() => {
-      this.$emit("input", this.cronExpression());
-    });
+    this.$emit("input", this.cronExpression());
   },
   data() {
     return {
@@ -208,21 +206,15 @@ export default {
   },
   watch: {
     runAtTime() {
-      Vue.nextTick(() => {
-        this.$emit("input", this.cronExpression());
-      });
+      this.$emit("input", this.cronExpression());
     },
     weekDaysLocal() {
-      Vue.nextTick(() => {
-        this.$emit("input", this.cronExpression());
-        this.$emit("change-saved-accordion-num-item", this.index);
-      });
+      this.$emit("input", this.cronExpression());
+      this.$emit("change-saved-accordion-num-item", this.index);
     },
     periodLocal() {
-      Vue.nextTick(() => {
-        this.$emit("input", this.cronExpression());
-        this.$emit("change-saved-accordion-num-item", this.index);
-      });
+      this.$emit("input", this.cronExpression());
+      this.$emit("change-saved-accordion-num-item", this.index);
     }
   },
   mixins: [savedState]

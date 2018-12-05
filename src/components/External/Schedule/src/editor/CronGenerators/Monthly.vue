@@ -78,9 +78,7 @@ import savedState from "./savedState.js";
 
 export default {
   created() {
-    Vue.nextTick(() => {
-      this.$emit("input", this.cronExpression());
-    });
+    this.$emit("input", this.cronExpression());
   },
   props: {
     readonly: {
@@ -270,34 +268,24 @@ export default {
     },
 
     runAtTime() {
-      Vue.nextTick(() => {
-        this.$emit("input", this.cronExpression());
-      });
+      this.$emit("input", this.cronExpression());
     },
     selectedDays() {
-      Vue.nextTick(() => {
-        this.$emit("input", this.cronExpression());
-        this.$emit("change-saved-accordion-num-item", this.index);
-      });
+      this.$emit("input", this.cronExpression());
+      this.$emit("change-saved-accordion-num-item", this.index);
     },
     selectedMonths() {
-      Vue.nextTick(() => {
-        this.$emit("input", this.cronExpression());
-        this.$emit("change-saved-accordion-num-item", this.index);
-      });
+      this.$emit("input", this.cronExpression());
+      this.$emit("change-saved-accordion-num-item", this.index);
     },
     mode() {
-      Vue.nextTick(() => {
-        this.$emit("input", this.cronExpression());
-        this.$emit("change-saved-accordion-num-item", this.index);
-      });
+      this.$emit("input", this.cronExpression());
+      this.$emit("change-saved-accordion-num-item", this.index);
     },
     daysPeriodComp: {
       handler() {
-        Vue.nextTick(() => {
-          this.$emit("input", this.cronExpression());
-          this.$emit("change-saved-accordion-num-item", this.index);
-        });
+        this.$emit("input", this.cronExpression());
+        this.$emit("change-saved-accordion-num-item", this.index);
       },
       deep: true
     }
