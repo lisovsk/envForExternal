@@ -14,6 +14,7 @@
         :can-delete-items="false"
         :can-drag-items="false"
         :readonly="readonly"
+        ref="eventList"
       >
         <template scope="item">
           <div class="schedule__wr-event-preview" @click="doEditable(item.index)">
@@ -60,7 +61,6 @@
               v-model="scheduleEventsLocal"
               :steps="steps"
               :step-id="stepId"
-              add-button-label="Add Event"
               :new-item-method="listNewItemMethod"
               :drag-handle-right="true"
               @item-added="eventAdded"
@@ -69,6 +69,9 @@
               :can-drag-items="false"
               :readonly="readonly"
             >
+              <div slot="footer" @click="addItem">
+                <or-button class="add-buttom" color="primary" icon="add" type="secondary">Add Event</or-button>
+              </div>
               <template scope="item">
                 <schedule-event
                   v-if="editableEventNum == item.index && copyScheduleEventData"
@@ -271,6 +274,10 @@ export default {
     getChangedCalendarTimeZone(newCalendarTimeZone) {
       this.calendarTimeZone = newCalendarTimeZone;
     },
+
+    addItem: _.debounce(function() {
+      this.$refs.eventList.addItem();
+    }, 400),
 
     listNewItemMethod() {
       return {
@@ -565,6 +572,9 @@ export default {
       min-width: 410px;
       width: 100%;
     }
+  }
+  .add-buttom {
+    border: none;
   }
 }
 </style>
