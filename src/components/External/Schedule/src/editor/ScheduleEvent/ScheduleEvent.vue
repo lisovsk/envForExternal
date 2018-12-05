@@ -1,5 +1,6 @@
 <template>
   <div class="schedule-event-scope">
+    {{dataStateComp}}
     <div class="schedule-event">
       <div class="schedule-event__title">
         <div :style="{background: copyScheduleEventData.color}" class="schedule-event__circle"></div>
@@ -226,6 +227,7 @@ import CronGeneratorsMonthly from "../CronGenerators/Monthly.vue";
 import CronGeneratorsYearly from "../CronGenerators/Yearly.vue";
 import defaultValues from "../Constants/DefaultValues.js";
 import valdationsReccurin from "../validation/validationReccuring.js";
+import getRegions from "../../../../../helpers/getRegions.js";
 /* eslint-enable */
 
 export default {
@@ -277,21 +279,7 @@ export default {
   },
   computed: {
     getRegions() {
-      // return only canonical zones
-      const timeZones = moment.tz._zones; // eslint-disable-line no-underscore-dangle
-
-      return _.chain(timeZones)
-        .keys()
-        .map(key => {
-          // due to mutation in moment we need check if it's object
-          // mutation is caused when invoke moment.tz()
-          const zone = timeZones[key];
-          return _.isObject(zone) ? zone.name : zone.split("|")[0];
-        })
-        .filter(zone => zone.indexOf("/") >= 0)
-        .sort()
-        .map(value => ({ label: value, value }))
-        .value();
+      return getRegions();
     },
     timeZoneComp: {
       get() {

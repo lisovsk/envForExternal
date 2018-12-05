@@ -58,6 +58,7 @@ import moment from "moment";
 import OneMonthCalendar from "./OneMonthCalendar.vue";
 import OneYearCalendar from "./OneYearCalendar.vue";
 import getScheduledDays from "./getScheduledDaysMixin.js";
+import getRegions from "../../helpers/getRegions.js";
 /* eslint-enable */
 
 export default {
@@ -172,21 +173,7 @@ export default {
       return moment(this.month, "MM").format("MMMM");
     },
     getRegions() {
-      // return only canonical zones
-      const timeZones = moment.tz._zones; // eslint-disable-line no-underscore-dangle
-
-      return _.chain(timeZones)
-        .keys()
-        .map(key => {
-          // due to mutation in moment we need check if it's object
-          // mutation is caused when invoke moment.tz()
-          const zone = timeZones[key];
-          return _.isObject(zone) ? zone.name : zone.split("|")[0];
-        })
-        .filter(zone => zone.indexOf("/") >= 0)
-        .sort()
-        .map(value => ({ label: value, value }))
-        .value();
+      return getRegions();
     }
   },
 

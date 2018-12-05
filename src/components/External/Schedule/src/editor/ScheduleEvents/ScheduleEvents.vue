@@ -46,6 +46,7 @@
         @close="closeModalEvent('modal')"
         size="large"
       >
+        sdfsdfsdfsdfsdsdfsfsdfdsfsfdsfdsfdsffddjdjdjjfdjdsjdfjdfsjfdjfdjsdfjfjfdsjsfdjfdj {{scheduleEventsLocal.length}}
         <div class="schedule__wr-events-calendar">
           <div class="schedule__calendar">
             <calendar
@@ -277,7 +278,7 @@ export default {
 
     addItem: _.debounce(function() {
       this.$refs.eventList.addItem();
-    }, 400),
+    }, 500),
 
     listNewItemMethod() {
       return {
