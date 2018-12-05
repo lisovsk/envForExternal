@@ -702,6 +702,9 @@ export default {
     }
   },
   created() {
+    this.runAtTimeLocal = this.getRunAtTimeLocal(
+      this.copyScheduleEventData.times
+    );
     this.doExpressions();
   },
   components: {
