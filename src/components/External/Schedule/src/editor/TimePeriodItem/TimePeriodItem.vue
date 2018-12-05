@@ -1,65 +1,73 @@
 <template>
-<div class="time-period-item-scope">
-   <div class="wr-time-item">
-        <div class="wr-configs-every">
-            <div class="configs-time__wr">
-              <!-- {{$v.validationCopyScheduleEventData.times.$each[this.index]
-          .start}} -->
-                <div class="configs-time">
-                    <or-icon class="configs-time__icon" icon="query_builder"></or-icon>
-                    <or-timepicker
-                      v-model="localStart"
-                      :class="[{ readony: readonly, 'timepicker-error': timepickerStartError()}]"
-                      format="HH:mm"
-                      hideClearButton
-                      @close-dropdown="touchStartTime"
-                    ></or-timepicker>
-                </div>
-                <span class="configs-time__from-to" v-if="endTime">To</span>
-                <div class="configs-time" v-if="localEndTime">
-                    <or-icon class="configs-time__icon" icon="query_builder"></or-icon>
-                    <div class="time-item__wr-end-time">
-                      <or-timepicker
-                        v-model="localEnd"
-                        :class="[{ readony: readonly, 'timepicker-error': timepickerEndError()}]"
-                        format="HH:mm" 
-                        hideClearButton
-                        @close-dropdown="touchEndTime"
-                      ></or-timepicker>
-                      <span @click="cancelEndTime">
-                        <or-icon class="time-item__cancel-end-time" icon="close"></or-icon>
-                      </span>
-                    </div>
-                </div>
+  <div class="time-period-item-scope">
+    <div class="wr-time-item">
+      <div class="wr-configs-every">
+        <div class="configs-time__wr">
+          <!-- {{$v.validationCopyScheduleEventData.times.$each[this.index]
+          .start}}-->
+          <div class="configs-time">
+            <or-icon class="configs-time__icon" icon="query_builder"></or-icon>
+            <or-timepicker
+              v-model="localStart"
+              :class="[{ readony: readonly, 'timepicker-error': timepickerStartError()}]"
+              format="HH:mm"
+              hideClearButton
+              @close-dropdown="touchStartTime"
+            ></or-timepicker>
+          </div>
+          <span class="configs-time__from-to" v-if="endTime">To</span>
+          <div class="configs-time" v-if="localEndTime">
+            <or-icon class="configs-time__icon" icon="query_builder"></or-icon>
+            <div class="time-item__wr-end-time">
+              <or-timepicker
+                v-model="localEnd"
+                :class="[{ readony: readonly, 'timepicker-error': timepickerEndError()}]"
+                format="HH:mm"
+                hideClearButton
+                @close-dropdown="touchEndTime"
+              ></or-timepicker>
+              <span @click="cancelEndTime">
+                <or-icon class="time-item__cancel-end-time" icon="close"></or-icon>
+              </span>
             </div>
-            <div v-if="localEndTime" class="every">
-                <span>every</span>
-                <or-textbox
-                  label=""
-                  placeholder="00" 
-                  class="xs-input"
-                  :invalid="timepickerEveryValError()"
-                  :disabled="readonly"
-                  v-model="localEvery.val"
-                  mask="##########"
-                  @change="touchEveryTime"
-                >
-                </or-textbox>
-                <or-select label="" :disabled="readonly" class="dimention-selector" :options="[{value:'hh', label:'hr'}, {value:'mm', label:'min'}]"
-                    v-model="localEvery.units">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                        <path d="M6.984 9.984h10.03L12 15z" />
-                    </svg>
-                </or-select>
-            </div>
+          </div>
         </div>
-        <span class="configs-time__end-time" v-if="!localEndTime" @click="localEndTime=!localEndTime">+ End Time</span>
+        <div v-if="localEndTime" class="every">
+          <span>every</span>
+          <or-textbox
+            label
+            placeholder="00"
+            class="xs-input"
+            :invalid="timepickerEveryValError()"
+            :disabled="readonly"
+            v-model="localEvery.val"
+            mask="##########"
+            @change="touchEveryTime"
+          ></or-textbox>
+          <or-select
+            label
+            :disabled="readonly"
+            class="dimention-selector"
+            :options="[{value:'hh', label:'hr'}, {value:'mm', label:'min'}]"
+            v-model="localEvery.units"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M6.984 9.984h10.03L12 15z"></path>
+            </svg>
+          </or-select>
+        </div>
+      </div>
+      <span
+        class="configs-time__end-time"
+        v-if="!localEndTime"
+        @click="localEndTime=!localEndTime"
+      >+ End Time</span>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from "lodash";
 
 export default {
   props: {
@@ -67,8 +75,8 @@ export default {
       type: Object,
       default() {
         return {
-          HH: '',
-          mm: ''
+          HH: "00",
+          mm: "00"
         };
       }
     },
@@ -77,8 +85,8 @@ export default {
       type: Object,
       default() {
         return {
-          HH: '',
-          mm: ''
+          HH: "00",
+          mm: "00"
         };
       }
     },
@@ -92,8 +100,8 @@ export default {
       type: Object,
       default() {
         return {
-          val: '',
-          units: ''
+          val: "",
+          units: ""
         };
       }
     },
@@ -113,7 +121,7 @@ export default {
         return this.start;
       },
       set(newStart) {
-        this.$emit('update:start', newStart);
+        this.$emit("update:start", newStart);
       }
     },
     localEnd: {
@@ -121,7 +129,7 @@ export default {
         return this.end;
       },
       set(newEnd) {
-        this.$emit('update:end', newEnd);
+        this.$emit("update:end", newEnd);
       }
     },
     localEvery: {
@@ -129,7 +137,7 @@ export default {
         return this.every;
       },
       set(newEvery) {
-        this.$emit('update:every', newEvery);
+        this.$emit("update:every", newEvery);
       }
     },
     localEndTime: {
@@ -137,7 +145,7 @@ export default {
         return this.endTime;
       },
       set(newEndTime) {
-        this.$emit('update:endTime', newEndTime);
+        this.$emit("update:endTime", newEndTime);
       }
     }
   },
@@ -196,14 +204,14 @@ export default {
       // return !(this.localEvery.val && this.localEvery.val > 0);
     },
     cancelEndTime() {
-      this.$emit('update:endTime', false);
-      this.$emit('update:every', {
-        val: '10',
-        units: 'mm'
+      this.$emit("update:endTime", false);
+      this.$emit("update:every", {
+        val: "10",
+        units: "mm"
       });
-      this.$emit('update:end', {
-        HH: '',
-        mm: ''
+      this.$emit("update:end", {
+        HH: "00",
+        mm: "00"
       });
     }
   }
