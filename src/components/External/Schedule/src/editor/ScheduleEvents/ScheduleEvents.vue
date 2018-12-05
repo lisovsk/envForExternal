@@ -466,6 +466,7 @@ export default {
       this.$emit("update:scheduleEvents", this.scheduleEventsLocal);
       this.closeModal("deleteEvent");
       this.$v.validationCopyScheduleEventData.$reset();
+      this.deleteCopyScheduleEventData();
     },
     catchRunAtTime(newValue, index) {
       this.runAtTime = newValue;
