@@ -46,7 +46,7 @@
         @close="closeModalEvent('modal')"
         size="large"
       >
-        sdfsdfsdfsdfsdsdfsfsdfdsfsfdsfdsfdsffddjdjdjjfdjdsjdfjdfsjfdjfdjsdfjfjfdsjsfdjfdj {{scheduleEventsLocal.length}}
+        sdfsdfsdfsdfsdsdfsfsdfdsfsfdsfdsfdsffddjdjdjjfdjdsjdfjdfsjfdjfdjsdfjfjfdsjsfdjfdj {{scheduleEventsLocal.length}} sdfs {{scheduleEventsLocaSavedLength}} sdf {{dataStates}}
         <div class="schedule__wr-events-calendar">
           <div class="schedule__calendar">
             <calendar
@@ -268,6 +268,11 @@ export default {
     },
     changedNumber() {
       return this.dataStates.indexOf("changed");
+    },
+    scheduleEventsLocaSavedLength() {
+      return this.scheduleEventsLocal.filter(
+        item => item.scheduleEventData.saved
+      ).length;
     }
   },
 
@@ -278,7 +283,7 @@ export default {
 
     addItem: _.debounce(function() {
       this.$refs.eventList.addItem();
-    }, 500),
+    }, 400),
 
     listNewItemMethod() {
       return {
@@ -425,9 +430,9 @@ export default {
     },
     eventAdded() {
       setTimeout(() => {
-        this.$set(this.dataStates, this.scheduleEventsLocal.length - 1, "new");
-        this.doEditable(this.scheduleEventsLocal.length - 1, true);
-        this.numOfTryEdit = this.scheduleEventsLocal.length - 2;
+        this.$set(this.dataStates, this.scheduleEventsLocaSavedLength, "new");
+        this.doEditable(this.scheduleEventsLocaSavedLength, true);
+        this.numOfTryEdit = this.scheduleEventsLocaSavedLength - 1;
       }, 0);
     },
     deleteNotSaved(isDelCurrEditable = false, isNewItem = false) {
