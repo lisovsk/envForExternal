@@ -1,19 +1,20 @@
 <template>
   <div
-    :class="['schedule-event-preview', {'schedule-event-preview_invalid': invalid}]"
+    :class="['schedule-event-preview', {'schedule-event-preview_invalid': invalid, 'schedule-event-preview_will-be--no-start': !this.isWillBeStart}, ]"
     @click="doEditable"
   >
     <template v-if="!invalid">
+      <!-- {{startsAt}} -->
       <span class="schedule-event-preview__circle" :style="{background: color}"></span>
       <div class="schedule-event-preview__content">
         <div class="schedule-event-preview__title-text">{{eventName}}</div>
-        <div class="schedule-event-preview__dates" v-if="startsAt.length">
+        <div class="schedule-event-preview__dates" v-if="isWillBeStart">
           <span
             :key="index"
             v-for="(date, index) in startsAt || []"
             :class="{
-                'bold-text': !!(index === 0)
-              }"
+                  'bold-text': !!(index === 0)
+                }"
             v-if="conditionalStartsAt(index)"
           >
             {{date}}
@@ -22,6 +23,7 @@
             >,</span>
             <span v-if="conditionalEllipsisForDate(index)">...</span>
           </span>
+          
           <span
             class="schedule-event-preview__see-more"
             @click.stop="seeMoreDates"
@@ -33,6 +35,7 @@
             class="schedule-event-preview__see-more"
           >see less</span>
         </div>
+        <div v-else class="error-text schedule-event-preview__dates">Here will be no launches</div>
         <span class="bold-text">{{timeZone}}</span>
         <div class="schedule-event-preview__times">
           <span
@@ -279,6 +282,11 @@ export default {
                 .next(this.countAtDates + 1, startDate, endDate)
             )
           )
+          .filter(
+            item =>
+              moment(item, "YYYY-MM-DD", true).isValid() &&
+              moment().isBefore(moment.tz(item, this.timeZone), "second")
+          )
           .map(item => moment(item).format("L"));
 
         // console.log('startsAt', result);
@@ -305,6 +313,9 @@ export default {
     },
     conditionalEllipsisForTimes() {
       return !this.moreTimes && this.startTimes.length > 3;
+    },
+    isWillBeStart() {
+      return !!this.startsAt.length;
     }
   }
 };
@@ -342,6 +353,10 @@ export default {
     .schedule-event-preview__settings {
       top: 25px;
     }
+  }
+
+  &_will-be--no-start {
+    border: 2px solid #f95d5d;
   }
 
   &__settings {
@@ -401,6 +416,10 @@ export default {
 
   &__is-visible {
     display: none;
+  }
+  .error-text {
+    color: #f95d5d;
+    font-weight: bold;
   }
 }
 </style>

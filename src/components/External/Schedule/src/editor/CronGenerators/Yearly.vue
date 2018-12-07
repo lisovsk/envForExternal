@@ -229,6 +229,19 @@ export default {
           false
         )
       );
+    },
+    periodForDayOption() {
+      switch (this.daysPeriodComp.period) {
+        case "":
+          return "*";
+          break;
+        case "L":
+          return "L";
+          break;
+        default:
+          return this.daysPeriodComp.period[1];
+          break;
+      }
     }
   },
   watch: {
@@ -270,9 +283,11 @@ export default {
       exp = _.map(
         this.runAtTime,
         item =>
-          `${item.mm} ${item.HH} ? ${this.selectedMonthsComp} ${
-            this.daysPeriodComp.day
-          }${this.daysPeriodComp.period} ${this.startYear}/${this.periodComp}`
+          `${item.mm} ${item.HH} ${
+            this.daysPeriodComp.day === "*" ? this.periodForDayOption : "?"
+          } ${this.selectedMonthsComp} ${this.daysPeriodComp.day}${
+            this.daysPeriodComp.day === "*" ? "" : this.daysPeriodComp.period
+          } ${this.startYear}/${this.periodComp}`
       );
       // }
       return exp;
