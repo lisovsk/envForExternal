@@ -1,6 +1,5 @@
 <template>
   <div class="schedule-event-scope">
-    {{dataStateComp}}
     <div class="schedule-event">
       <div class="schedule-event__title">
         <div :style="{background: copyScheduleEventData.color}" class="schedule-event__circle"></div>
@@ -634,7 +633,6 @@ export default {
             "scheduleEventData11",
             JSON.stringify(this.scheduleEventData)
           );
-
           this.dataStateComp = "changed";
         } else if (this.dataStateComp !== "new") {
           this.dataStateComp = "canceled";

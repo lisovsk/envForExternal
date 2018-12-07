@@ -46,7 +46,6 @@
         @close="closeModalEvent('modal')"
         size="large"
       >
-        sdfsdfsdfsdfsdsdfsfsdfdsfsfdsfdsfdsffddjdjdjjfdjdsjdfjdfsjfdjfdjsdfjfjfdsjsfdjfdj {{scheduleEventsLocal.length}} sdfs {{scheduleEventsLocaSavedLength}} sdf {{dataStates}}
         <div class="schedule__wr-events-calendar">
           <div class="schedule__calendar">
             <calendar
@@ -330,6 +329,12 @@ export default {
             }
           ],
           color: randomColor(),
+          runAtTime: [
+            {
+              HH: 0,
+              mm: 0
+            }
+          ],
           savedAccordionSlotName: null
         },
         previewTexts: {
@@ -422,21 +427,27 @@ export default {
     },
     deleteEvent(index) {
       this.itemIndexForDelete = index;
-      if (this.dataStates[this.itemIndexForDelete] !== "new") {
-        this.openModal("deleteEvent");
-      } else {
+      if (
+        this.dataStates[this.itemIndexForDelete] === "new" ||
+        (this.dataStates[this.itemIndexForDelete] === "canceled" &&
+          !this.copyScheduleEventData.saved)
+      ) {
         this.deleteСonfirmation();
+      } else {
+        this.openModal("deleteEvent");
       }
     },
     eventAdded() {
       setTimeout(() => {
-        this.$set(this.dataStates, this.scheduleEventsLocaSavedLength, "new");
+        if (this.dataStates[this.scheduleEventsLocaSavedLength] !== "changed") {
+          this.$set(this.dataStates, this.scheduleEventsLocaSavedLength, "new");
+        }
         this.doEditable(this.scheduleEventsLocaSavedLength, true);
-        this.numOfTryEdit = this.scheduleEventsLocaSavedLength - 1;
+        this.numOfTryEdit = this.scheduleEventsLocaSavedLength;
       }, 0);
     },
     deleteNotSaved(isDelCurrEditable = false, isNewItem = false) {
-      this.dataStates[this.itemIndexForDelete] = "canceled";
+      // this.dataStates[this.itemIndexForDelete] = "canceled";
       this.scheduleEventsLocal = this.scheduleEventsLocal.filter(
         (item, index) => {
           let res;
