@@ -1,8 +1,4 @@
-// import Vue from 'vue';
-
 import { storiesOf } from '@storybook/vue';
-// import { action } from '@storybook/addon-actions';
-// import _ from 'lodash';
 
 /* eslint-disable */
 import MonthPicker from './src/editor/MonthPicker/MonthPicker.vue';
@@ -10,10 +6,6 @@ import ScheduleEvent from './src/editor/ScheduleEvent/ScheduleEvent.vue';
 import ScheduleEditor, { data as schemaData } from './src/editor/editor.vue';
 import ValidationStep from '../../helpers/Validation.vue';
 import Vue from 'vue';
-// Vue.localStorage.set('schema', JSON.stringify(schema()));
-
-// console.log('data', schema());
-
 /* eslint-enable */
 
 storiesOf('Schedule', module)
@@ -88,7 +80,6 @@ storiesOf('Schedule', module)
       schema: {
         handler(newSchema) {
           Vue.localStorage.set('schema', JSON.stringify(newSchema));
-          // console.log('newSchema', newSchema);
         },
         deep: true
       }
@@ -96,7 +87,6 @@ storiesOf('Schedule', module)
     methods: {
       stepValidation(newValue) {
         this.invalid = newValue.$invalid;
-        // console.log('$v$v$v', newValue);
       }
     },
     components: { ScheduleEditor, ValidationStep },

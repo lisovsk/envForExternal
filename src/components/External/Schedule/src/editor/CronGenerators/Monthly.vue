@@ -159,8 +159,6 @@ export default {
         { label: "Thursday", value: "THU" },
         { label: "Friday", value: "FRI" },
         { label: "Saturday", value: "SAT" }
-        // { label: 'Weekday', value: ['MON', 'TUE', 'WED', 'THU', 'FRI'] },
-        // { label: 'Weekend', value: ['SAT', 'SUN'] },
       ],
       modeComp: this.mode
     };
@@ -232,7 +230,6 @@ export default {
         }</span>`;
       }
       this.previewTexts.reccuring = text;
-      console.log("previewTexts", this.previewTexts.reccuring);
       return text;
     },
     validdationSelectedMonths() {
@@ -325,7 +322,6 @@ export default {
 .monthly-scope {
   .monthly {
     &__month-picker {
-      // padding-left: 85px;
       width: 262px;
     }
     &__each {

@@ -157,13 +157,6 @@ import randomMC from "random-material-color";
 
 /* eslint-disable */
 import defaultValues from "../Constants/DefaultValues.js";
-/* eslint-enable */
-
-// import * as _ from 'lodash';
-// import { validators } from '_validators';
-// const { required, jsExpressionNonEmptyString, validateIf } = validators;
-
-/* eslint-disable */
 import ScheduleEvent from "../ScheduleEvent/ScheduleEvent.vue";
 import ScheduleEventPreview from "../ScheduleEventPreview/ScheduleEventPreview.vue";
 import Calendar from "../../../../../Ui/Calendar/Calendar.vue";
@@ -505,9 +498,6 @@ export default {
       },
       deep: true
     }
-    // scheduleEventsLocal(newValue) {
-    //   console.log("newValuenewValue", newValue);
-    // }
   }
 };
 </script>

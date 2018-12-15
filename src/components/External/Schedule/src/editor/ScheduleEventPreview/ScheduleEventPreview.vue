@@ -4,7 +4,6 @@
     @click="doEditable"
   >
     <template v-if="!invalid">
-      <!-- {{startsAt}} -->
       <span class="schedule-event-preview__circle" :style="{background: color}"></span>
       <div class="schedule-event-preview__content">
         <div class="schedule-event-preview__title-text">{{eventName}}</div>
@@ -94,11 +93,6 @@ import _ from "lodash";
 import uuid from "uuid";
 
 export default {
-  // created() {
-  // console.log('countAtDates', this.countAtDates);
-  // console.log('moreDates', this.moreDates);
-  // this.ref = uuid.v4()
-  // },
   created() {
     document.body.addEventListener("click", () => {
       this.isMenuVisible = false;
@@ -208,7 +202,6 @@ export default {
           this.doEditable();
           break;
         case "copy":
-          // console.log('copy');
           this.$emit("copy-event", this.index);
           break;
         case "delete":
@@ -243,7 +236,6 @@ export default {
         : index !== this.startTimes.length - 1;
     },
     getRef() {
-      // console.log('getRef', `menu${this.index}`);
       return `menu${this.index}`;
     },
     doMenuVisible() {
@@ -251,7 +243,6 @@ export default {
       this.isMenuVisible = true;
     },
     doMenuUnvisible() {
-      // console.log('1sdffsfsdsdsfsfsdffsfsdsdsfsfsdffsfsdsdsfsf');
       this.isMenuVisible = false;
     }
   },
@@ -272,7 +263,6 @@ export default {
         const endDate = this.endDate.noEnd
           ? undefined
           : new Date(`${moment(this.endDate.date).format("YYYY-MM-DD")} 23:59`);
-        // console.log('endDate', endDate);
         const result = [].concat // eslint-disable-line
           .apply(
             [],
@@ -289,21 +279,10 @@ export default {
           )
           .map(item => moment(item).format("L"));
 
-        // console.log('startsAt', result);
-
         return _.uniq(result);
       } catch (e) {
         return [];
       }
-      // return []
-      //   .concat(
-      //     ...this.expressions.map(item =>
-      //       later
-      //         .schedule(later.parse.cron(item))
-      //         .next(this.countAtDates + 1, startDate, endDate),
-      //     ),
-      //   )
-      //   .map(item => moment(item).format('L'));
     },
     conditionalSeeMoreTimes() {
       return !this.moreTimes && this.startTimes.length > 3;
@@ -323,7 +302,6 @@ export default {
 
 <style lang="scss">
 .schedule-event-preview {
-  // min-width: 305px;
   .ui-icon-button--type-primary.ui-icon-button--color-default {
     &:hover {
       background-color: inherit;
@@ -334,7 +312,6 @@ export default {
 </style>
 <style lang="scss" scoped>
 .schedule-event-preview {
-  // border-radius: 4px 0 4px 4px;
   background-color: #fafafa;
   width: 100%;
   padding: 32px 60px 32px 16px;

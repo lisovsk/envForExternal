@@ -1,11 +1,9 @@
 <template>
   <div class="Calendar">
+    <!-- {{highlightedDates}} -->
     <div class="nav">
       <div>
-        <span class="nav__interval">
-          <!-- {{state === 'month' ?  `${interval.start} - ${interval.end}, ${interval.year}` : year}} -->
-          {{state === 'month' ? `${monthComp}, ${interval.year}` : year}}
-        </span>
+        <span class="nav__interval">{{state === 'month' ? `${monthComp}, ${interval.year}` : year}}</span>
         <label class="select__wr" v-if="!hideTimeZone">
           <span class="select__label">Timezone</span>
           <or-select
@@ -62,12 +60,6 @@ import getRegions from "../../helpers/getRegions.js";
 /* eslint-enable */
 
 export default {
-  // mounted() {
-  //   this.$on('select-date', (day, month, year) => {
-  //     this.$emit('select-date', day, month, year);
-  //     console.log(12);
-  //   });
-  // },
   data() {
     return {
       interval: {},
@@ -156,13 +148,8 @@ export default {
       this.state = "year";
     },
     selectDateHandler(day, month, year) {
-      // this.selectedDate = { day, month, year };
       this.$emit("selected-date", day, month, year);
     },
-    // preventClickOnCalendar(event) {
-    //   event.stopPropagation();
-    //   event.preventDefault();
-    // },
     moveToCurrent() {
       this.month = new Date().getMonth() + 1;
       this.year = new Date().getFullYear();
@@ -216,10 +203,6 @@ export default {
   display: flex;
   align-items: center;
   cursor: pointer;
-}
-
-.nav__wr-right {
-  /* margin-right: 35px; */
 }
 
 .nav__month {

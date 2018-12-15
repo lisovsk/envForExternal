@@ -3,8 +3,6 @@
     <div class="wr-time-item">
       <div class="wr-configs-every">
         <div class="configs-time__wr">
-          <!-- {{$v.validationCopyScheduleEventData.times.$each[this.index]
-          .start}}-->
           <div class="configs-time">
             <or-icon class="configs-time__icon" icon="query_builder"></or-icon>
             <or-timepicker
@@ -151,7 +149,6 @@ export default {
   },
   methods: {
     touchStartTime() {
-      // console.log('touchStartTime');
       const touch = _.get(
         this.$v,
         `validationCopyScheduleEventData.times.$each[${this.index}].start`
@@ -161,7 +158,6 @@ export default {
       }
     },
     touchEndTime() {
-      // console.log('touchEndTime');
       const touch = _.get(
         this.$v,
         `validationCopyScheduleEventData.times.$each[${this.index}].end`
@@ -171,7 +167,6 @@ export default {
       }
     },
     touchEveryTime() {
-      // console.log('touchEveryTime');
       const touch = _.get(
         this.$v,
         `validationCopyScheduleEventData.times.$each[${this.index}].every`
@@ -201,7 +196,6 @@ export default {
         `validationCopyScheduleEventData.times.$each[${this.index}].every`
       );
       return item && item.$invalid && item.$dirty;
-      // return !(this.localEvery.val && this.localEvery.val > 0);
     },
     cancelEndTime() {
       this.$emit("update:endTime", false);

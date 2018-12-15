@@ -4,19 +4,12 @@ import _ from 'lodash';
 import later from 'later';
 import moment from 'moment-timezone';
 
-console.log('later', later);
 later.date.localTime();
 
 export default {
   data() {
     return { startDate: null };
   },
-  // props: {
-  //   runAtTime: {
-  //     type: Array,
-  //     default: () => []
-  //   }
-  // },
   methods: {
     sortTime(times) {
       return times.sort(
@@ -25,32 +18,22 @@ export default {
     }
   },
   computed: {
-    // runAtTimeComp() {
-    //   return this.runAtTime || [];
-    // },
     highlightedDates() {
+      // setTimeout(() => {
       const resultArr = {};
       []
         .concat(
           this.selectedDays.map(item => {
-            console.log('itemitemitem', item);
-            // const timeZoneItem = item.timeZone.value;
             let startInterval;
             let endInterval;
             const endDate = !item.isEndTime
-              ? moment(`${item.endExpression.date} 23:59:59`)
-                  // .tz(`${item.endExpression.date} 23:59:59`, timeZoneItem)
-                  // .tz(this.timeZoneCalendar)
-                  .format('YYYY-MM-DD HH:mm:ss')
+              ? moment(`${item.endExpression.date} 23:59:59`).format(
+                  'YYYY-MM-DD HH:mm:ss'
+                )
               : undefined;
-            console.log('item.endExpression.date', item.endExpression.date);
-            console.log('endDateendDate', endDate);
-            this.startDate = moment(`${item.startExpression.date} 00:00:00`)
-              // .tz(`${item.startExpression.date} 00:00:00`, timeZoneItem)
-              // .tz(this.timeZoneCalendar)
-              .format('YYYY-MM-DD HH:mm:ss');
-            console.log('startDatestartDate', this.startDate);
-            console.log('item.startExpression.date', item.startExpression);
+            this.startDate = moment(
+              `${item.startExpression.date} 00:00:00`
+            ).format('YYYY-MM-DD HH:mm:ss');
 
             let atDates = [];
             let returnValue = [];
@@ -61,7 +44,6 @@ export default {
               endInterval = moment(
                 `${this.interval.end}, ${_.get(this.interval, 'year')}`
               );
-              console.log('endIntervalendInterval', endInterval);
               if (
                 endInterval.format('MM') === '01' &&
                 endInterval.format('DD') !== '31'
@@ -83,15 +65,10 @@ export default {
                 .add(7, 'days')
                 .format('YYYY-MM-DD');
             }
-            // console.log('startIntervalstartInterval', startInterval);
-            // console.log('endIntervalendInterval', endInterval);
 
             if (this.startDate && startInterval !== 'Invalid date') {
               startInterval += ' 00:00:00';
               endInterval += ' 23:59:59';
-              console.log('startDate', this.startDate);
-              console.log('startInterval', startInterval);
-              console.log('endInterval', endInterval);
 
               const start =
                 !this.startDate ||
@@ -103,15 +80,10 @@ export default {
                   ? endInterval
                   : endDate;
 
-              console.log('start', start.replace(' ', 'T'));
-              console.log('end', end.replace(' ', 'T'));
               if (item.isReccuring && item.expressions.length > 0) {
                 atDates = item.expressions.map(expItem => {
                   const next = later
                     .schedule(later.parse.cron(expItem))
-                    // .schedule(
-                    //   later.parse.cron(expItem, false, item.timeZone.value)
-                    // )
                     .next(
                       Infinity,
                       new Date(start.replace(' ', 'T')),
@@ -199,6 +171,7 @@ export default {
               );
 
               const reduceDates = times.reduce((obj, currentTime) => {
+                // setTimeout(() => {
                 const currentDate = moment
                   .tz(
                     `${itemSelectedDays.startExpression.date} ${currentTime}`,
@@ -213,17 +186,11 @@ export default {
                   currentDate.format('HH:mm')
                 );
                 return obj;
+                // }, 0);
               }, {});
 
-              // if (_.isEmpty(reduceDates))
-              //   reduceDates = {
-              //     '2018-12-04': ['00:mm']
-              //   };
-
               _.forOwn(reduceDates, (timesValue, dateKey) => {
-                console.log('timesValue', timesValue);
                 const date = moment(dateKey, 'YYYY-MM-DD');
-                // flagLiter = true;
                 allItemSelectedDays.push({
                   dates: [
                     {
@@ -274,7 +241,6 @@ export default {
                 moment(item.startDate, 'YYYY-MM-DD HH:mm:ss').format(
                   'YYYY-MM-DD'
                 );
-            console.log('lighter', item);
             resultArr[date].push({
               color: item.color,
               eventName: item.eventName,
@@ -293,6 +259,7 @@ export default {
         return undefined;
       });
       return resultArr;
+      // }, 0);
     }
   }
 };

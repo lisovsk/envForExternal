@@ -16,42 +16,18 @@ import * as _ from "lodash";
 import moment from "moment";
 
 /* eslint-disable */
-// if (process.env.NODE_ENV === 'development') {
-// import { validators } from '../../../../../validators.js';
-// } else {
-// import { validators } from '_validators';
-// }
-
 import ScheduleEvents from "./ScheduleEvents/ScheduleEvents.vue";
-
 import valdationsReccurin from "./validation/validationReccuring.js";
-
 import defaultValues from "./Constants/DefaultValues.js";
-
 /* eslint-enable */
-
-// const { required, generateValidators, minValue } = validators;
 import { required } from "vuelidate/lib/validators";
 
 export const validator = template => {
   return { scheduleEvents: { required } };
-  // return {
-  //   // scheduleEventsValidation: {
-  //   // required,
-  //   // scheduleEvents: {
-  //   // required,
-  //   //     $each: {
-  //   //       scheduleEventData: _.cloneDeep(schemaValidation),
-  //   //     },
-  //   // },
-  //   // },
-  // };
 };
 
 export const data = template => ({
   scheduleEvents: _.get(this, "schema.scheduleEvents", null) || []
-  // scheduleEventsValidation: _.get(this, 'schema.scheduleEvents', null) || [];
-  // validationCopyScheduleEventData: {},
 });
 
 export default {
@@ -77,29 +53,11 @@ export default {
       set(newValue) {
         if (_.get(this, "schema.scheduleEvents", null)) {
           this.schema.scheduleEvents = newValue;
-          // this.scheduleEventsValidation = newValue;
-          // this.$set(this.scheduleEventsValidation, 'scheduleEvents', newValue);
-          // if (newValue.scheduleEvents) {
-          //   this.scheduleEventsValidation.scheduleEvents = this.schema.scheduleEvents;
-          // }
         }
       }
     }
-    // this.validationCopyScheduleEventDataComp() {
-    //   return validationCopyScheduleEventData
-    // }
   },
   watch: {
-    // schema: {
-    //   handler(newValue) {
-    //     // console.log('newValue234234234', JSON.stringify(newValue));
-    //     if (newValue.scheduleEvents) {
-    //       this.scheduleEventsValidation.scheduleEvents =
-    //         newValue.scheduleEvents;
-    //     }
-    //   },
-    //   deep: true,
-    // },
     $v: {
       handler(newValue) {
         this.$emit("step-validation", newValue);
@@ -109,10 +67,6 @@ export default {
   },
   methods: {
     newCopyScheduleEventData(newValue) {
-      // console.log(
-      //   'validationCopyScheduleEventData',
-      //   this.schema.validationCopyScheduleEventData,
-      // );
       if (this.validationCopyScheduleEventData) {
         this.validationCopyScheduleEventData = newValue;
       }
@@ -121,42 +75,7 @@ export default {
   components: { ScheduleEvents },
   validations: {
     validationCopyScheduleEventData: {
-      // required,
       eventName: { required },
-      // custom(value) {
-      //   // console.log('valuevalue', value);
-      //   if (!value) {
-      //     return false;
-      //   }
-      //   let valid = true;
-      //   if (value.isReccuring) {
-      //     if (!value.isEndTime && !value.endExpression.date) {
-      //       valid = false;
-      //     }
-
-      //     if (!value.savedAccordionSlotName) {
-      //       valid = false;
-      //     }
-
-      //     if (!valdationsReccurin.daily(value)) {
-      //       valid = false;
-      //     }
-
-      //     if (!valdationsReccurin.weekly(value)) {
-      //       valid = false;
-      //     }
-
-      //     if (!valdationsReccurin.monthly(value)) {
-      //       valid = false;
-      //     }
-
-      //     if (!valdationsReccurin.yearly(value)) {
-      //       valid = false;
-      //     }
-      //   }
-
-      //   return valid;
-      // },
       startExpression: {
         required,
         date: {
@@ -206,7 +125,6 @@ export default {
             custom(value, state) {
               let valid = true;
               if (state) {
-                console.log("__this__", state.start);
                 if (_.get(state, "endTime", false)) {
                   valid =
                     !!_.get(value, "HH", false) &&
@@ -226,7 +144,6 @@ export default {
           endTime: {},
           every: {
             custom(value, state) {
-              // console.log('__valueEvery__', value);
               let valid = true;
               if (state) {
                 valid =
@@ -239,25 +156,6 @@ export default {
             }
           }
         }
-        // custom(value) {
-        //   // console.log('valuevalue', value);
-        //   if (!value) {
-        //     return false;
-        //   }
-        //   let valid = true;
-        //   value.forEach(item => {
-        //     if (!item.start.HH || !item.start.mm) {
-        //       valid = false;
-        //     }
-        //     if (item.endTime && (!item.end.HH || !item.end.mm)) {
-        //       valid = false;
-        //     }
-        //     if (item.endTime && (!item.every.val || item.every.val < 1)) {
-        //       valid = false;
-        //     }
-        //   });
-        //   return valid;
-        // },
       },
       savedAccordionSlotName: {
         custom(value) {
@@ -290,7 +188,6 @@ export default {
       weekly: {
         period: {
           custom(value) {
-            console.log("validationCopyScheduleEventData3", this);
             let valid = true;
             if (
               _.get(this, "validationCopyScheduleEventData.isReccuring") &&
@@ -395,12 +292,6 @@ export default {
       }
     }
   },
-  // validations() {
-  //   return validator(this.template);
-  // },
-  // created() {
-  //   this.validationCopyScheduleEventData = this.schema.validationCopyScheduleEventData;
-  // },
   created() {
     this.schema.scheduleEvents = this.schema.scheduleEvents || [];
   },

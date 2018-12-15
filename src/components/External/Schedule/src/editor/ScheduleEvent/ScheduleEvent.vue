@@ -92,7 +92,6 @@
         v-if="copyScheduleEventData.isReccuring"
         :saved-accordion-num-item="scheduleEventData.savedAccordionSlotName"
         @close-item="closeAccordionItem"
-        @opened-item="openedAccordionItem"
         @do-editable="doEditable"
         :slot-errors="errorsAccordion"
         :invalid="$v.validationCopyScheduleEventData.savedAccordionSlotName.$invalid && $v.validationCopyScheduleEventData.savedAccordionSlotName.$dirty"
@@ -311,11 +310,10 @@ export default {
     startDate: {
       get() {
         const date = _.get(this.copyScheduleEventData, "startExpression.date");
-        return date ? new Date(date) : null;
+        return date ? new Date(`${date}T00:00:00`) : null;
       },
       set(newValue) {
         const date = new Date(newValue);
-        console.log("datedatedatedate", date);
         this.copyScheduleEventData.startExpression.date = moment(date).format(
           "YYYY-MM-DD"
         );
@@ -353,7 +351,6 @@ export default {
             "validationCopyScheduleEventData.daily.$invalid",
             false
           ),
-        // item1: !valdationsReccurin.daily(this.copyScheduleEventData),
         item2:
           _.get(
             this.$v,
@@ -365,7 +362,6 @@ export default {
             "validationCopyScheduleEventData.weekly.$invalid",
             false
           ),
-        // item2: !valdationsReccurin.weekly(this.copyScheduleEventData),
         item3:
           _.get(
             this.$v,
@@ -377,8 +373,6 @@ export default {
             "validationCopyScheduleEventData.monthly.$invalid",
             false
           ),
-        // item3: !valdationsReccurin.monthly(this.copyScheduleEventData),
-        // item4: !valdationsReccurin.yearly(this.copyScheduleEventData),
         item4:
           _.get(
             this.$v,
@@ -461,8 +455,6 @@ export default {
 
         this.dataStateComp = "saved";
         this.$emit("update:editableEventNum", null);
-        // this.$emit('update:copyScheduleEventData.startExpression.date', '');
-        // this.$emit('saved-event');
       }
     },
     cancel() {
@@ -503,7 +495,6 @@ export default {
       }
     },
     changeSavedAccordionSlotName(number) {
-      // console.log(number);
       this.copyScheduleEventData.savedAccordionSlotName = number;
     },
     closeAccordionItem(item) {
@@ -525,30 +516,13 @@ export default {
         default:
           throw new Error("incorrect number of accordion item");
       }
-      console.log(item);
-      // this.copyScheduleEventData.savedAccordionSlotName = null;
-    },
-    openedAccordionItem(itemNum) {
-      console.log("itemNum", itemNum);
-      // this.copyScheduleEventData.savedAccordionSlotName = itemNum;
     },
     doEditable() {
       this.isEditable = true;
-      // if (
-      //   this.copyScheduleEventData.savedAccordionSlotName === index ||
-      //   this.savedAccordionNumItemComp === -1
-      // ) {
-      //   this.isEditable = true;
-      // }
     },
     deleteEvent() {
       this.$emit("delete-event", this.index);
     },
-    //TODO
-    // textWhenScheduled(text) {
-    //   console.log('textWhenScheduled', text);
-    //   this.copyScheduleEventData.previewTexts.reccuring = text;
-    // }
     discardNotSaved() {
       this.$emit("cancel-changes");
       this.dataStateComp = "canceled";
@@ -583,8 +557,10 @@ export default {
     },
     getRunAtTimeLocal(newVal) {
       const runAtTimeLocal = [];
-
+      // window.index = 0;
       _.forEach(newVal, item => {
+        // window.index++;
+        // console.log(window.index);
         const evertVal = item.every.val ? item.every.val : 1;
         if (item.start.HH && item.start.mm && parseInt(evertVal, 10)) {
           const units = item.every.units === "hh" ? "hours" : "minutes";
@@ -623,21 +599,14 @@ export default {
 
     copyScheduleEventData: {
       handler(newValue, oldValue) {
-        // setTimeout(() => {
         if (
           !_.isEqual(newValue, this.scheduleEventData) &&
           newValue.id === oldValue.id
         ) {
-          console.log("newValue11", JSON.stringify(newValue));
-          console.log(
-            "scheduleEventData11",
-            JSON.stringify(this.scheduleEventData)
-          );
           this.dataStateComp = "changed";
         } else if (this.dataStateComp !== "new") {
           this.dataStateComp = "canceled";
         }
-        // }, 0);
       },
       deep: true
     },
@@ -669,18 +638,8 @@ export default {
       },
       deep: true
     },
-    // dataState(newValue) {
-    //   this.$emit('data-state', newValue);
-    // },
-    // dataStateGlobal(newValue) {
-    //   console.log(this.index);
-    //   if(newValue.index === this.index) {
-    //     this.dataState = 'saved';
-    //   }
-    // }
     runAtTimeLocal: {
       handler(newValue) {
-        // this.$emit('run-at-time', newValue);
         this.copyScheduleEventData.runAtTime = newValue;
       },
       deep: true
@@ -880,12 +839,6 @@ export default {
     &_start {
       padding-right: 10px;
     }
-
-    // &_end {
-    //   max-width: 120px;
-    //   display: flex;
-    //   align-items: center;
-    // }
   }
 
   .recurring-controls {
