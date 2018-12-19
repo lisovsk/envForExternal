@@ -586,7 +586,8 @@ export default {
           );
         }
       });
-      return _.uniqWith(runAtTimeLocal, _.isEqual);
+      // return _.uniqWith(runAtTimeLocal, _.isEqual);
+      return [];
     }
   },
   watch: {
