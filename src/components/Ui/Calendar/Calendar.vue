@@ -1,6 +1,6 @@
 <template>
   <div class="Calendar">
-    {{highlightedDates}}
+    <!-- {{highlightedDates}} -->
     <div class="nav">
       <div>
         <span class="nav__interval">{{state === 'month' ? `${monthComp}, ${interval.year}` : year}}</span>
