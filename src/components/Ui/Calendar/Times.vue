@@ -1,33 +1,24 @@
 <template>
-<div
-    class="times__wr"
->
+  <div class="times__wr">
     <div
-    :style="{background: lighter ? convertColor(color, '0.3') : color, opacity: opacity}"
-    class="times"
-    v-if="items.length"
+      :style="{background: lighter ? convertColor(color, '0.3') : color, opacity: opacity}"
+      class="times"
+      v-if="items.length"
     >
-    <div
+      <div
         class="times__item"
         v-for="(time, index) in items"
         :key="`${time}${index}`"
         v-if="index < 10"
-    >
-        {{time}}
+      >{{time}}</div>
+      <div class="times__item times__item_ellipsis" v-if="items.length > 10">...</div>
     </div>
-    <div
-        class="times__item times__item_ellipsis"
-        v-if="items.length > 10"
-    >
-        ...
-    </div>
-    </div>
-</div>
+  </div>
 </template>
 
 <script>
 /* eslint-disable */
-import hex2rgb from '../../helpers/convertColor.js';
+import hex2rgb from "../../helpers/convertColor.js";
 /* eslint-enable */
 
 export default {
@@ -38,7 +29,7 @@ export default {
     },
     color: {
       type: String,
-      default: ''
+      default: ""
     },
     items: {
       type: Array,

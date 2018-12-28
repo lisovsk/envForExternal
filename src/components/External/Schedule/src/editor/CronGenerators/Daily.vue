@@ -1,7 +1,7 @@
 <template>
   <div class="daily-scope">
     <div class="daily">
-      <!-- {{value}} -->
+      {{value}}
       <div v-show="isEditable">
         <div class="radio-custom__wr">
           <or-radio
@@ -148,10 +148,48 @@ export default {
     }
   },
   methods: {
+    // cronExpression() {
+    //   return _.map(
+    //     this.runAtTime,
+    //     item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
+    //   );
+    // }
     cronExpression() {
-      return _.map(
-        this.runAtTime,
-        item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
+      let runAtTime = {};
+      // let runAtTimeHH = "";
+      _.forEach(this.runAtTime, (item, index) => {
+        if (!_.isString(runAtTime[item.HH])) {
+          runAtTime[item.HH] = "";
+          runAtTime[item.HH] += `${item.mm}`;
+        } else {
+          runAtTime[item.HH] += `,${item.mm}`;
+        }
+      });
+
+      console.log("runAtTimeMM", runAtTime);
+
+      // return _.map(
+      //   this.runAtTime,
+      //   item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
+      // );
+
+      // console.log(
+      //   _.reduce(
+      //     runAtTime,
+      //     (result, value, key) => {
+      //       result.push(`${value} ${key} ${this.dailyValue}  * ? *`);
+      //       return result;
+      //     },
+      //     []
+      //   )
+      // );
+      return _.reduce(
+        runAtTime,
+        (result, value, key) => {
+          result.push(`${value} ${key} ${this.dailyValue}  * ? *`);
+          return result;
+        },
+        []
       );
     }
   },

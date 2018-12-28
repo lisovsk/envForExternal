@@ -19,6 +19,7 @@ export default {
   },
   computed: {
     highlightedDates() {
+      
       // setTimeout(() => {
       const resultArr = {};
       []

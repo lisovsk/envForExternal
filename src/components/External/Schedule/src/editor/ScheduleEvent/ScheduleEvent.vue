@@ -1,5 +1,6 @@
 <template>
   <div class="schedule-event-scope">
+    <!-- {{copyScheduleEventData.expressions}} -->
     <div class="schedule-event">
       <div class="schedule-event__title">
         <div :style="{background: copyScheduleEventData.color}" class="schedule-event__circle"></div>
@@ -543,7 +544,7 @@ export default {
 
         Object.keys(secondsOfhours).forEach(keySecondsOfhours => {
           expressionsLocal.push(
-            `-1,${secondsOfhours[keySecondsOfhours]} ${parseInt(
+            `${secondsOfhours[keySecondsOfhours]} ${parseInt(
               keySecondsOfhours,
               10
             )} ${parseInt(date.format("DD"), 10)}  ${parseInt(
