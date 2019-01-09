@@ -393,7 +393,7 @@ export default {
       this.deleteCopyScheduleEventData();
     },
     deleteCopyScheduleEventData() {
-      this.copyScheduleEventData.startExpression.date = "";
+      _.set(this, "copyScheduleEventData.startExpression.date", "");
       this.copyScheduleEventData.expressions = [];
       this.editableEventNum = null;
     },
