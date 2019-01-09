@@ -166,7 +166,7 @@ export default {
         return this.period;
       },
       set(newPeriod) {
-        this.$emit("update:period", newPeriod);
+        this.$emit("update:period", parseInt(newPeriod, 10).toString());
       }
     },
     textWhenScheduled() {

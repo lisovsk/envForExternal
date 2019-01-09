@@ -97,7 +97,7 @@ export default {
         return this.period;
       },
       set(newValue) {
-        this.$emit("update:period", newValue);
+        this.$emit("update:period", parseInt(newValue, 10).toString());
       }
     },
     periodModeLocal: {
