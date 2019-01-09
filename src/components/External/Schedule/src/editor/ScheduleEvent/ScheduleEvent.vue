@@ -8,7 +8,7 @@
           placeholder="Specify event name…"
           class="textbox-without-border"
           :class="{'textbox-without-border_invalid': invalidNameOfEvent}"
-          v-model="copyScheduleEventData.eventName"
+          v-model.trim="copyScheduleEventData.eventName"
           :invalid="invalidNameOfEvent"
           @blur="$v.validationCopyScheduleEventData.eventName.$touch()"
           @input="handleName()"
@@ -277,6 +277,14 @@ export default {
     };
   },
   computed: {
+    // eventNameTrim: {
+    //   get() {
+    //     return this.copyScheduleEventData.eventName;
+    //   },
+    //   set(newEventName) {
+    //     this.copyScheduleEventData.eventName = newEventName.trim();
+    //   }
+    // },
     getRegions() {
       return getRegions();
     },
@@ -439,6 +447,10 @@ export default {
       this.$refs[ref].close();
     },
     apply() {
+      if (this.copyScheduleEventData.eventName === "") {
+        this.copyScheduleEventData.eventName = "No Name";
+      }
+
       if (this.$v.validationCopyScheduleEventData.$invalid) {
         this.$v.validationCopyScheduleEventData.$touch();
       } else if (
@@ -598,6 +610,12 @@ export default {
       deep: true
     },
 
+    // "copyScheduleEventData.eventName": {
+    //   handler(newVal) {
+    //     this.copyScheduleEventData.eventName = newVal.trim();
+    //   }
+    // },
+
     copyScheduleEventData: {
       handler(newValue, oldValue) {
         if (
@@ -647,6 +665,10 @@ export default {
     }
   },
   created() {
+    if (this.copyScheduleEventData.eventName === "No Name") {
+      this.copyScheduleEventData.eventName = "";
+    }
+
     this.runAtTimeLocal = this.getRunAtTimeLocal(
       this.copyScheduleEventData.times
     );

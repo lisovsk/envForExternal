@@ -75,7 +75,7 @@ export default {
   components: { ScheduleEvents },
   validations: {
     validationCopyScheduleEventData: {
-      eventName: { required },
+      eventName: {},
       startExpression: {
         required,
         date: {
