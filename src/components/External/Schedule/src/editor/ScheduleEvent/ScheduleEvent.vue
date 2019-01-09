@@ -773,6 +773,10 @@ export default {
         width: 100%;
       }
     }
+
+    .ui-select .ui-select__content .ui-select__label .ui-select__display-value {
+      width: 25px;
+    }
   }
 
   .config-line__select {

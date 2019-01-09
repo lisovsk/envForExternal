@@ -416,7 +416,7 @@ export default {
       copyOfEvent.scheduleEventData.id = uuid.v4();
       copyOfEvent.scheduleEventData.eventName = `Copy of ${
         copyOfEvent.scheduleEventData.eventName
-      }`;
+      }`.slice(0, 140);
       copyOfEvent.scheduleEventData.color = randomColor();
       this.scheduleEventsLocal.push(copyOfEvent);
       this.$emit("update:scheduleEvents", this.scheduleEventsLocal);
