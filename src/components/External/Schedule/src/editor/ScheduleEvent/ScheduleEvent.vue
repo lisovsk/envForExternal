@@ -447,10 +447,6 @@ export default {
       this.$refs[ref].close();
     },
     apply() {
-      if (this.copyScheduleEventData.eventName === "") {
-        this.copyScheduleEventData.eventName = "No Name";
-      }
-
       if (this.$v.validationCopyScheduleEventData.$invalid) {
         this.$v.validationCopyScheduleEventData.$touch();
       } else if (
@@ -665,10 +661,6 @@ export default {
     }
   },
   created() {
-    if (this.copyScheduleEventData.eventName === "No Name") {
-      this.copyScheduleEventData.eventName = "";
-    }
-
     this.runAtTimeLocal = this.getRunAtTimeLocal(
       this.copyScheduleEventData.times
     );

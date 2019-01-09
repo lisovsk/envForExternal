@@ -6,7 +6,7 @@
     <template v-if="!invalid">
       <span class="schedule-event-preview__circle" :style="{background: color}"></span>
       <div class="schedule-event-preview__content">
-        <div class="schedule-event-preview__title-text">{{eventName}}</div>
+        <div class="schedule-event-preview__title-text">{{eventName || 'No Name'}}</div>
         <div class="schedule-event-preview__dates" v-if="isWillBeStart">
           <span
             :key="index"

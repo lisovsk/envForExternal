@@ -63,7 +63,7 @@
                     <span
                       class="calendar__event-text"
                       :style="{opacity : value.lighter ? '0.5' : ''}"
-                    >{{value.eventName}}</span>
+                    >{{value.eventName || 'No Name'}}</span>
                     <times
                       :items="value.times"
                       :color="value.color"
@@ -99,7 +99,7 @@
                     <span
                       class="calendar__event-text"
                       :style="{opacity : value.lighter ? '0.5' : ''}"
-                    >{{value.eventName}}</span>
+                    >{{value.eventName || 'No Name'}}</span>
                     <times
                       :items="value.times"
                       :color="value.color"
@@ -160,7 +160,7 @@
                       class="calendar__event-background"
                       :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
                     ></span>
-                    <span class="calendar__event-text">{{value.eventName}}</span>
+                    <span class="calendar__event-text">{{value.eventName || 'No Name'}}</span>
                     <times :items="value.times" :color="value.color" :lighter="value.lighter"></times>
                   </span>
                 </div>
@@ -187,7 +187,7 @@
                       class="calendar__event-background"
                       :style="{background: value.color, opacity : value.lighter ? '0.3' : ''}"
                     ></span>
-                    <span class="calendar__event-text">{{value.eventName}}</span>
+                    <span class="calendar__event-text">{{value.eventName || 'No Name'}}</span>
                     <times :items="value.times" :color="value.color" :lighter="value.lighter"></times>
                   </span>
                 </div>
@@ -241,7 +241,7 @@
                     <span
                       class="calendar__event-text"
                       :style="{opacity : value.lighter ? '0.5' : ''}"
-                    >{{value.eventName}}</span>
+                    >{{value.eventName || 'No Name'}}</span>
                     <times
                       :items="value.times"
                       :color="value.color"
@@ -277,7 +277,7 @@
                     <span
                       class="calendar__event-text"
                       :style="{opacity : value.lighter ? '0.5' : ''}"
-                    >{{value.eventName}}</span>
+                    >{{value.eventName || 'No Name'}}</span>
                     <times
                       :items="value.times"
                       :color="value.color"
