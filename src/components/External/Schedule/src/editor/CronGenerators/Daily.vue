@@ -1,7 +1,7 @@
 <template>
   <div class="daily-scope">
+    <!-- {{value}} -->
     <div class="daily">
-      {{value}}
       <div v-show="isEditable">
         <div class="radio-custom__wr">
           <or-radio
@@ -148,48 +148,49 @@ export default {
     }
   },
   methods: {
-    // cronExpression() {
-    //   return _.map(
-    //     this.runAtTime,
-    //     item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
-    //   );
-    // }
     cronExpression() {
-      let runAtTime = {};
-      // let runAtTimeHH = "";
-      _.forEach(this.runAtTime, (item, index) => {
-        if (!_.isString(runAtTime[item.HH])) {
-          runAtTime[item.HH] = "";
-          runAtTime[item.HH] += `${item.mm}`;
-        } else {
-          runAtTime[item.HH] += `,${item.mm}`;
-        }
-      });
+      // let runAtTimeHoursMinutes = {};
+      // let runAtTimeMinutesHours = {};
 
-      console.log("runAtTimeMM", runAtTime);
+      // _.forEach(this.runAtTime, (item, index) => {
+      //   if (!_.isString(runAtTimeHoursMinutes[item.HH])) {
+      //     runAtTimeHoursMinutes[item.HH] = "";
+      //     runAtTimeHoursMinutes[item.HH] += `${item.mm}`;
+      //   } else {
+      //     runAtTimeHoursMinutes[item.HH] += `,${item.mm}`;
+      //   }
+      // });
 
-      // return _.map(
-      //   this.runAtTime,
-      //   item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
+      // _.forEach(runAtTimeHoursMinutes, (item, key) => {
+      //   if (!_.isString(runAtTimeMinutesHours[item])) {
+      //     runAtTimeMinutesHours[item] = "";
+      //     runAtTimeMinutesHours[item] += `${key}`;
+      //   } else {
+      //     runAtTimeMinutesHours[item] += `,${key}`;
+      //   }
+      // });
+
+      // return _.reduce(
+      //   runAtTimeHoursMinutes,
+      //   (result, key, value) => {
+      //     result.push(`${key} ${value} ${this.dailyValue} * * *`);
+      //     return result;
+      //   },
+      //   []
       // );
 
-      // console.log(
-      //   _.reduce(
-      //     runAtTime,
-      //     (result, value, key) => {
-      //       result.push(`${value} ${key} ${this.dailyValue}  * ? *`);
-      //       return result;
-      //     },
-      //     []
-      //   )
+      // return _.reduce(
+      //   runAtTimeHoursMinutes,
+      //   (result, value, key) => {
+      //     result.push(`${value} ${key} ${this.dailyValue}  * ? *`);
+      //     return result;
+      //   },
+      //   []
       // );
-      return _.reduce(
-        runAtTime,
-        (result, value, key) => {
-          result.push(`${value} ${key} ${this.dailyValue}  * ? *`);
-          return result;
-        },
-        []
+
+      return _.map(
+        this.runAtTime,
+        item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
       );
     }
   },

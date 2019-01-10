@@ -19,7 +19,6 @@ export default {
   },
   computed: {
     highlightedDates() {
-      
       // setTimeout(() => {
       const resultArr = {};
       []
@@ -90,6 +89,7 @@ export default {
                       new Date(start.replace(' ', 'T')),
                       new Date(end.replace(' ', 'T'))
                     );
+                  // console.log('nextnext', next, next.length);
                   if (!next || !next.length) return [];
 
                   return next.map(itemConvertTimeZone =>
