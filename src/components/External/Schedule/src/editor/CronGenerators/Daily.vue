@@ -151,7 +151,6 @@ export default {
     cronExpression() {
       // let runAtTimeHoursMinutes = {};
       // let runAtTimeMinutesHours = {};
-
       // _.forEach(this.runAtTime, (item, index) => {
       //   if (!_.isString(runAtTimeHoursMinutes[item.HH])) {
       //     runAtTimeHoursMinutes[item.HH] = "";
@@ -160,7 +159,6 @@ export default {
       //     runAtTimeHoursMinutes[item.HH] += `,${item.mm}`;
       //   }
       // });
-
       // _.forEach(runAtTimeHoursMinutes, (item, key) => {
       //   if (!_.isString(runAtTimeMinutesHours[item])) {
       //     runAtTimeMinutesHours[item] = "";
@@ -169,25 +167,22 @@ export default {
       //     runAtTimeMinutesHours[item] += `,${key}`;
       //   }
       // });
-
       // return _.reduce(
-      //   runAtTimeHoursMinutes,
+      //   runAtTimeMinutesHours,
       //   (result, key, value) => {
-      //     result.push(`${key} ${value} ${this.dailyValue} * * *`);
-      //     return result;
-      //   },
-      //   []
-      // );
-
-      // return _.reduce(
-      //   runAtTimeHoursMinutes,
-      //   (result, value, key) => {
       //     result.push(`${value} ${key} ${this.dailyValue}  * ? *`);
       //     return result;
       //   },
       //   []
       // );
-
+      // return _.reduce(
+      //   runAtTimeHoursMinutes,
+      //   (result, value, key) => {
+      //     result.push(`${key} ${value} ${this.dailyValue} * * *`);
+      //     return result;
+      //   },
+      //   []
+      // );
       return _.map(
         this.runAtTime,
         item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`

@@ -153,7 +153,7 @@
 import _ from "lodash";
 import moment from "moment";
 import uuid from "uuid";
-// import randomMC from "random-material-color";
+import randomMC from "random-material-color";
 
 /* eslint-disable */
 import defaultValues from "../Constants/DefaultValues.js";
@@ -162,14 +162,15 @@ import ScheduleEventPreview from "../ScheduleEventPreview/ScheduleEventPreview.v
 import Calendar from "../../../../../Ui/Calendar/Calendar.vue";
 /* eslint-enable */
 
-const randomColor = function() {
-  return "red";
-};
-// _.get(
-//   randomMC,
-//   "module.exports.getColor",
-//   randomMC.getColor
-// );
+// const randomColor = function() {
+//   return "red";
+// };
+
+const randomColor = _.get(
+  randomMC,
+  "module.exports.getColor",
+  randomMC.getColor
+);
 
 export default {
   name: "schedule-events",

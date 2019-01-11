@@ -44,7 +44,7 @@
           >
             <span v-html="`<span class='bold-text'>${time.start.HH}:${time.start.mm}</span>`"></span>
             <span
-              v-html="time.endTime ? ` to  <span class='bold-text'>${time.end.HH}:${time.end.mm}</span> every <span class='bold-text'>${time.every.val} ${time.every.units === 'mm' ? 'min' : 'h'}</span>`: ''"
+              v-html="time.endTime ? ` to  <span class='bold-text'>${time.end.HH}:${time.end.mm}</span> every <span class='bold-text'>${parseInt(time.every.val)} ${time.every.units === 'mm' ? 'min' : 'h'}</span>`: ''"
             ></span>
             <span v-if="conditionalTimeСomma(index)">,</span>
           </span>
@@ -294,6 +294,7 @@ export default {
       return !this.moreTimes && this.startTimes.length > 3;
     },
     isWillBeStart() {
+      console.log("startsAt", this.startsAt);
       return !!this.startsAt.length;
     }
   }
