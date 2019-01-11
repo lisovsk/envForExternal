@@ -60,6 +60,7 @@ import moment from "moment-timezone";
 /* eslint-disable */
 import MonthPicker from "../MonthPicker/MonthPicker.vue";
 import savedState from "./savedState.js";
+import CRON_THAT_NEVER_RUN from "./Constants.js";
 /* eslint-enable */
 
 export default {
@@ -155,7 +156,9 @@ export default {
         return this.period;
       },
       set(newPeriod) {
-        this.$emit("update:period", parseInt(newPeriod, 10).toString());
+        let period = parseInt(newPeriod, 10);
+        period = period ? period.toString() : "";
+        this.$emit("update:period", period);
       }
     },
     selectedMonthsComp: {
@@ -280,15 +283,15 @@ export default {
       //       }`,
       //   );
       // } else {
-      exp = _.map(
-        this.runAtTime,
-        item =>
-          `${item.mm} ${item.HH} ${
-            this.daysPeriodComp.day === "*" ? this.periodForDayOption : "?"
-          } ${this.selectedMonthsComp} ${this.daysPeriodComp.day}${
-            this.daysPeriodComp.day === "*" ? "" : this.daysPeriodComp.period
-          } ${this.startYear}/${this.periodComp}`
-      );
+      exp = _.map(this.runAtTime, item => {
+        return _.isEmpty(this.periodComp) || !this.selectedMonths.length
+          ? CRON_THAT_NEVER_RUN
+          : `${item.mm} ${item.HH} ${
+              this.daysPeriodComp.day === "*" ? this.periodForDayOption : "?"
+            } ${this.selectedMonthsComp} ${this.daysPeriodComp.day}${
+              this.daysPeriodComp.day === "*" ? "" : this.daysPeriodComp.period
+            } ${this.startYear}/${this.periodComp}`;
+      });
       // }
       return exp;
     }
@@ -382,6 +385,10 @@ export default {
     }
     .cron-gen__error {
       color: #f95d5d;
+    }
+
+    .ui-select__label {
+      min-width: 105px;
     }
   }
 }

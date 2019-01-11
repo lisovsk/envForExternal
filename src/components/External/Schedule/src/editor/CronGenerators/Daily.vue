@@ -42,8 +42,8 @@
 import _ from "lodash";
 /* eslint-disable */
 import savedState from "./savedState.js";
+import CRON_THAT_NEVER_RUN from "./Constants.js";
 /* eslint-enable */
-// import later from 'later';
 
 export default {
   created() {
@@ -97,7 +97,9 @@ export default {
         return this.period;
       },
       set(newValue) {
-        this.$emit("update:period", parseInt(newValue, 10).toString());
+        let period = parseInt(newValue, 10);
+        period = period ? period.toString() : "";
+        this.$emit("update:period", period);
       }
     },
     periodModeLocal: {
@@ -183,10 +185,11 @@ export default {
       //   },
       //   []
       // );
-      return _.map(
-        this.runAtTime,
-        item => `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
-      );
+      return _.map(this.runAtTime, item => {
+        return !_.isEmpty(this.periodLocal)
+          ? `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
+          : CRON_THAT_NEVER_RUN;
+      });
     }
   },
   watch: {

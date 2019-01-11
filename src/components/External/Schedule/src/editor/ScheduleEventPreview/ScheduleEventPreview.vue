@@ -294,7 +294,7 @@ export default {
       return !this.moreTimes && this.startTimes.length > 3;
     },
     isWillBeStart() {
-      console.log("startsAt", this.startsAt);
+      // console.log("startsAt", this.startsAt);
       return !!this.startsAt.length;
     }
   }

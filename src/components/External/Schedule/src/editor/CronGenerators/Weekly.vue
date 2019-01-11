@@ -49,6 +49,7 @@
 import _ from "lodash";
 /* eslint-disable */
 import savedState from "./savedState.js";
+import CRON_THAT_NEVER_RUN from "./Constants.js";
 /* eslint-enable */
 
 export default {
@@ -128,19 +129,17 @@ export default {
     },
     cronExpression() {
       return _.map(this.runAtTime, item => {
-        if (
-          this.periodLocal === "0" ||
-          this.periodLocal === "" ||
+        return this.periodLocal === "0" ||
+          _.isEmpty(this.periodLocal) ||
           !this.weekDaysLocal.length
-        )
-          return "";
-        return `${item.mm} ${item.HH} ${_.map(
-          this.weekDaysLocal,
-          weekDay =>
-            `${weekDay.label.toUpperCase()}${
-              this.periodLocal ? `#${this.periodLocal}` : ""
-            }`
-        )}  * ? *`;
+          ? CRON_THAT_NEVER_RUN
+          : `${item.mm} ${item.HH} ${_.map(
+              this.weekDaysLocal,
+              weekDay =>
+                `${weekDay.label.toUpperCase()}${
+                  this.periodLocal ? `#${this.periodLocal}` : ""
+                }`
+            )}  * ? *`;
       });
     }
   },
@@ -166,7 +165,9 @@ export default {
         return this.period;
       },
       set(newPeriod) {
-        this.$emit("update:period", parseInt(newPeriod, 10).toString());
+        let period = parseInt(newPeriod, 10);
+        period = period ? period.toString() : "";
+        this.$emit("update:period", period);
       }
     },
     textWhenScheduled() {

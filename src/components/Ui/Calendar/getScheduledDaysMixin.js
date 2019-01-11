@@ -82,6 +82,7 @@ export default {
 
               if (item.isReccuring && item.expressions.length > 0) {
                 atDates = item.expressions.map(expItem => {
+                  // console.log('start', start);
                   const next = later
                     .schedule(later.parse.cron(expItem))
                     .next(
