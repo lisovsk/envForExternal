@@ -103,7 +103,7 @@ export default {
       type: Number,
       default: -1
     },
-    previewTexts: {
+    previewTextsLocal: {
       type: Object,
       default: null
     },
@@ -180,7 +180,7 @@ export default {
           text += ", ";
         }
       });
-      this.previewTexts.reccuring = text;
+      this.previewTextsLocal.reccuring = text;
       return text;
     },
     validdationPeriod() {

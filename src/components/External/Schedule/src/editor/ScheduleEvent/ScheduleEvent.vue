@@ -110,7 +110,7 @@
               :index="0"
               :data-state="dataStateComp"
               :is-editable.sync="isEditable"
-              :preview-texts.sync="previewTexts"
+              :preview-texts-local.sync="previewTextsLocal"
               @text-when-scheduled="/*textWhenScheduled*/"
               :$v="$v"
               :invalid="errorsAccordion.item1"
@@ -128,7 +128,7 @@
               :index="1"
               :data-state="dataStateComp"
               :is-editable.sync="isEditable"
-              :preview-texts.sync="previewTexts"
+              :preview-texts-local.sync="previewTextsLocal"
               :$v="$v"
               :invalid="errorsAccordion.item2"
             ></cron-generators-weekly>
@@ -148,7 +148,7 @@
               :index="2"
               :data-state="dataStateComp"
               :is-editable.sync="isEditable"
-              :preview-texts.sync="previewTexts"
+              :preview-texts-local.sync="previewTextsLocal"
               :$v="$v"
               :invalid="errorsAccordion.item3"
             ></cron-generators-monthly>
@@ -167,7 +167,7 @@
               :index="3"
               :data-state="dataStateComp"
               :is-editable.sync="isEditable"
-              :preview-texts.sync="previewTexts"
+              :preview-texts-local.sync="previewTextsLocal"
               :$v="$v"
               :invalid="errorsAccordion.item4"
             ></cron-generators-yearly>
@@ -273,7 +273,8 @@ export default {
       i: 0,
       runAtTimeLocal: [],
       loadingApply: false,
-      isEditable: false
+      isEditable: false,
+      previewTextsLocal: { reccuring: "" }
     };
   },
   computed: {
@@ -464,6 +465,8 @@ export default {
 
         this.dataStateComp = "saved";
         this.$emit("update:editableEventNum", null);
+
+        this.previewTexts.reccuring = this.previewTextsLocal.reccuring;
       }
     },
     cancel() {

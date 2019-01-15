@@ -250,8 +250,8 @@ export default {
     endDateComp() {
       if (!this.isReccuring) return "";
       return _.get(this, "endDate.noEnd")
-        ? 'Reccuring <span class="bold-text">no end</span>'
-        : `Reccuring till <span class="bold-text">${moment(
+        ? 'Recurring <span class="bold-text">no end</span>'
+        : `Recurring till <span class="bold-text">${moment(
             _.get(this, "endDate.date")
           ).format("ll")}</span>`;
     },

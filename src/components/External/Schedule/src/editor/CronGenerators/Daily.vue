@@ -81,7 +81,7 @@ export default {
       type: Number,
       default: -1
     },
-    previewTexts: {
+    previewTextsLocal: {
       type: Object,
       default: null
     },
@@ -138,7 +138,7 @@ export default {
           text = "";
           break;
       }
-      this.previewTexts.reccuring = text;
+      this.previewTextsLocal.reccuring = text;
       return text;
     },
     validationPeriod() {
