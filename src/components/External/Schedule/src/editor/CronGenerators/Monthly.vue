@@ -26,6 +26,7 @@
               :readonly="readonly || modeComp === 'onThe'"
               :invalid="validdationSelectedDays"
               :$v="$v"
+              @changed-month-days="changedMonthDays"
               @touch="$v.validationCopyScheduleEventData.monthly.selectedDays.$touch()"
             ></days-picker>
           </div>
@@ -311,6 +312,18 @@ export default {
         );
       }
       return exp;
+    },
+    changedMonthDays(newDays) {
+      this.selectedDaysComp = _.reduce(
+        this.selectedDaysComp,
+        (result, item) => {
+          if (_.includes(newDays, item)) {
+            result.push(item);
+          }
+          return result;
+        },
+        []
+      );
     }
   },
   components: { MonthPicker, DaysPicker },

@@ -256,33 +256,33 @@ export default {
           ).format("ll")}</span>`;
     },
     startsAt() {
-      try {
-        const startDate = new Date(
-          `${moment(this.startDate).format("YYYY-MM-DD")} 00:00`
-        );
-        const endDate = this.endDate.noEnd
-          ? undefined
-          : new Date(`${moment(this.endDate.date).format("YYYY-MM-DD")} 23:59`);
-        const result = [].concat // eslint-disable-line
-          .apply(
-            [],
-            this.expressions.map(item =>
-              later
-                .schedule(later.parse.cron(item))
-                .next(this.countAtDates + 1, startDate, endDate)
-            )
-          )
-          .filter(
-            item =>
-              moment(item, "YYYY-MM-DD", true).isValid() &&
-              moment().isBefore(moment.tz(item, this.timeZone), "second")
-          )
-          .map(item => moment(item).format("L"));
+      const startDateCalendar = `${moment(`${this.startDate} 00:00`).format(
+        "YYYY-MM-DDTHH:mm"
+      )}`;
+      const startDate = moment().isBefore(
+        moment.tz(startDateCalendar, this.timeZone),
+        "second"
+      )
+        ? startDateCalendar
+        : moment().format("YYYY-MM-DDTHH:mm");
 
-        return _.uniq(result);
-      } catch (e) {
-        return [];
-      }
+      const endDate = this.endDate.noEnd
+        ? undefined
+        : new Date(`${moment(this.endDate.date).format("YYYY-MM-DD")} 23:59`);
+      const result = [].concat // eslint-disable-line
+        .apply(
+          [],
+          this.expressions.map(item =>
+            later
+              .schedule(later.parse.cron(item))
+              .next(this.countAtDates + 1, startDate, endDate)
+          )
+        )
+        .filter(item => {
+          return moment(item, "YYYY-MM-DD", true).isValid();
+        })
+        .map(item => moment(item).format("L"));
+      return _.uniq(result);
     },
     conditionalSeeMoreTimes() {
       return !this.moreTimes && this.startTimes.length > 3;
@@ -294,8 +294,8 @@ export default {
       return !this.moreTimes && this.startTimes.length > 3;
     },
     isWillBeStart() {
-      // console.log("startsAt", this.startsAt);
-      return !!this.startsAt.length;
+      return true;
+      // return !!this.startsAt.length;
     }
   }
 };
