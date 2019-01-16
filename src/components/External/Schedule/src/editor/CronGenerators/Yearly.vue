@@ -1,7 +1,6 @@
 <template>
   <div class="yearly-scope">
     <div class="recuring-configs__monthly-day_configs yearly">
-      <!-- {{value}} -->
       <div v-show="isEditable">
         <div class="radio-custom__wr">Every
           <or-textbox
@@ -263,6 +262,9 @@ export default {
     //   this.$emit('input', this.cronExpression());
     //   this.$emit('change-saved-accordion-num-item', this.index);
     // },
+    startYear() {
+      this.$emit("input", this.cronExpression());
+    },
     daysPeriodComp: {
       handler() {
         this.$emit("input", this.cronExpression());

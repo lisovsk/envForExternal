@@ -320,6 +320,9 @@ export default {
     startDate: {
       get() {
         const date = _.get(this.copyScheduleEventData, "startExpression.date");
+        this.copyScheduleEventData.yearly.startYear = parseInt(
+          moment(date).format("YYYY")
+        );
         return date ? new Date(`${date}T00:00:00`) : null;
       },
       set(newValue) {
