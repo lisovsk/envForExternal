@@ -16,8 +16,7 @@
                 }"
             v-if="conditionalStartsAt(index)"
           >
-            {{date}}
-            <span
+            {{date}}<span
               v-if="startsAt && index !== startsAt.length - 1 && !conditionalEllipsisForDate(index)"
             >,</span>
             <span v-if="conditionalEllipsisForDate(index)">...</span>
