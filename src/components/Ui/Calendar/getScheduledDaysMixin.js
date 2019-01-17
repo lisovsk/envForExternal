@@ -19,7 +19,6 @@ export default {
   },
   computed: {
     highlightedDates() {
-      // setTimeout(() => {
       const resultArr = {};
       []
         .concat(
@@ -82,7 +81,6 @@ export default {
 
               if (item.isReccuring && item.expressions.length > 0) {
                 atDates = item.expressions.map(expItem => {
-                  // console.log('start', start);
                   const next = later
                     .schedule(later.parse.cron(expItem))
                     .next(
@@ -90,7 +88,7 @@ export default {
                       new Date(start.replace(' ', 'T')),
                       new Date(end.replace(' ', 'T'))
                     );
-                  // console.log('nextnext', next, next.length);
+
                   if (!next || !next.length) return [];
 
                   return next.map(itemConvertTimeZone =>
@@ -173,7 +171,6 @@ export default {
               );
 
               const reduceDates = times.reduce((obj, currentTime) => {
-                // setTimeout(() => {
                 const currentDate = moment
                   .tz(
                     `${itemSelectedDays.startExpression.date} ${currentTime}`,
@@ -188,7 +185,6 @@ export default {
                   currentDate.format('HH:mm')
                 );
                 return obj;
-                // }, 0);
               }, {});
 
               _.forOwn(reduceDates, (timesValue, dateKey) => {
@@ -261,7 +257,6 @@ export default {
         return undefined;
       });
       return resultArr;
-      // }, 0);
     }
   }
 };

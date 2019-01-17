@@ -73,9 +73,6 @@ storiesOf('Schedule', module)
         invalid: false
       };
     },
-    created() {
-      // console.log('this.schema', this.schema);
-    },
     watch: {
       schema: {
         handler(newSchema) {

@@ -11,7 +11,6 @@ import 'keen-ui/dist/keen-ui.css';
 import 'or-ui/dist/or-ui.css';
 // import '!style-loader!css-loader!sass-loader!./styles.scss';
 
-console.log('orUi', orUi);
 Vue.use(orUi);
 Vue.use(Router);
 

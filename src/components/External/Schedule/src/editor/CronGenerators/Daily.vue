@@ -1,6 +1,5 @@
 <template>
   <div class="daily-scope">
-    <!-- {{value}} -->
     <div class="daily">
       <div v-show="isEditable">
         <div class="radio-custom__wr">
@@ -151,6 +150,8 @@ export default {
   },
   methods: {
     cronExpression() {
+      /******* TODO ::: FOR PERFORMANCE *******/
+
       // let runAtTimeHoursMinutes = {};
       // let runAtTimeMinutesHours = {};
       // _.forEach(this.runAtTime, (item, index) => {
@@ -185,6 +186,7 @@ export default {
       //   },
       //   []
       // );
+
       return _.map(this.runAtTime, item => {
         return !_.isEmpty(this.periodLocal)
           ? `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`

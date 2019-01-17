@@ -572,10 +572,7 @@ export default {
     },
     getRunAtTimeLocal(newVal) {
       const runAtTimeLocal = [];
-      // window.index = 0;
       _.forEach(newVal, item => {
-        // window.index++;
-        // console.log(window.index);
         const evertVal = item.every.val ? item.every.val : 1;
         if (item.start.HH && item.start.mm && parseInt(evertVal, 10)) {
           const units = item.every.units === "hh" ? "hours" : "minutes";
