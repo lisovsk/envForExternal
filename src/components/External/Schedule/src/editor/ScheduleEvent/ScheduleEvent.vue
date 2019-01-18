@@ -320,9 +320,7 @@ export default {
     startDate: {
       get() {
         const date = _.get(this.copyScheduleEventData, "startExpression.date");
-        this.copyScheduleEventData.yearly.startYear = parseInt(
-          moment(date).format("YYYY")
-        );
+
         return date ? new Date(`${date}T00:00:00`) : null;
       },
       set(newValue) {
@@ -330,6 +328,11 @@ export default {
         this.copyScheduleEventData.startExpression.date = moment(date).format(
           "YYYY-MM-DD"
         );
+
+        const year = parseInt(moment(date).format("YYYY"));
+        this.copyScheduleEventData.yearly.startYear = year
+          ? year
+          : new Date().getFullYear();
       }
     },
     dataStateComp: {

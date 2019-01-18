@@ -162,10 +162,6 @@ import ScheduleEventPreview from "../ScheduleEventPreview/ScheduleEventPreview.v
 import Calendar from "../../../../../Ui/Calendar/Calendar.vue";
 /* eslint-enable */
 
-// const randomColor = function() {
-//   return "red";
-// };
-
 const randomColor = _.get(
   randomMC,
   "module.exports.getColor",
@@ -424,6 +420,7 @@ export default {
     },
     deleteEvent(index) {
       this.itemIndexForDelete = index;
+
       if (
         this.dataStates[this.itemIndexForDelete] === "new" ||
         (this.dataStates[this.itemIndexForDelete] === "canceled" &&
@@ -436,9 +433,9 @@ export default {
     },
     eventAdded() {
       setTimeout(() => {
-        if (this.dataStates[this.scheduleEventsLocaSavedLength] !== "changed") {
-          this.$set(this.dataStates, this.scheduleEventsLocaSavedLength, "new");
-        }
+        // if (this.dataStates[this.scheduleEventsLocaSavedLength] !== "changed") {
+        this.$set(this.dataStates, this.scheduleEventsLocaSavedLength, "new");
+        // }
         this.doEditable(this.scheduleEventsLocaSavedLength, true);
         this.numOfTryEdit = this.scheduleEventsLocaSavedLength;
       }, 0);
