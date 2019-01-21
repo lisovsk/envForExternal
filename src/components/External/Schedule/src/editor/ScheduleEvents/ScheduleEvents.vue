@@ -1,7 +1,6 @@
 <template>
   <div class="schedule-events-scope">
     <div class="schedule-events">
-      <div class="schedule-events__title">Scheduled Events</div>
       <or-list
         v-model="scheduleEventsLocal"
         :steps="steps"
@@ -525,13 +524,6 @@ export default {
   }
 
   .schedule-events {
-    &__title {
-      color: #0f232e;
-      font-size: 16px;
-      font-weight: bold;
-      line-height: 22px;
-    }
-
     &__big-modal {
       display: inline-block;
       & > .ui-modal__wrapper > .ui-modal__container {
