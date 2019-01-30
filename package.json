@@ -19,6 +19,7 @@
     "later": "git+ssh://git@github.com/mansami/later.git",
     "lodash": "^4.17.5",
     "material-design-icons": "^3.0.1",
+    "material-icons": "^0.3.0",
     "moment": "^2.22.1",
     "moment-timezone": "^0.5.16",
     "normalize.css": "^8.0.0",

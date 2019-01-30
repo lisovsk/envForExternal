@@ -18,7 +18,7 @@
             mask="##########"
             :invalid="validationPeriod"
           ></or-textbox>
-          <div class>day(s)</div>
+          <div class>day(s) in each month</div>
         </div>
         <div class="radio-custom__wr">
           <or-radio v-model="periodModeLocal" true-value="evenDay" class :disabled="readonly">Every</or-radio>
