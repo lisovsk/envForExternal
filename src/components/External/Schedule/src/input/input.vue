@@ -1,45 +1,53 @@
 <template>
-    <div class="schedule-wrapper">
-        <div class="wrapper">
-            <editor class="disabled">
-            </editor>
-        </div>
-
-        <or-modal ref="configModal" :remove-close-button="true"
-                  title="Configure component"
-                  class="input-message-settings"
-                  :contain-focus="false">
-                  fsdfsdfsdfsdfs
-        </or-modal>
+  <div class="schedule-wrapper">
+    <div class="wrapper">
+      <editor class="disabled" :schema.sync="defaultStep.data"></editor>
     </div>
+  </div>
 </template>
 
 <script>
-import _ from 'lodash';
-import base from '@default/src/inputs/_design_base.vue';
-import editor from '../editor/editor.vue';
+import editor from "../editor/editor.vue";
+let componentBase = () => {
+  let component = null;
+
+  try {
+    component = require("@default/src/inputs/_design_base.vue");
+
+    return require("@default/src/inputs/_design_base.vue").default;
+  } catch (error) {
+    return require("./BaseMock.vue").default;
+  }
+};
 
 export default {
-  extends: base,
-
+  extends: componentBase(),
+  name: "Input",
+  data() {
+    return {
+      defaultStep: {
+        data: {}
+      }
+    };
+  },
   components: {
-    editor,
+    editor
   },
 
   defaultValue() {
     return _.cloneDeep(data);
-  },
+  }
 };
 
-export const label = 'Schedule v0.5.0';
+export const label = "Schedule v0.5.0";
 export const data = {
-  scheduleEvents: [],
+  scheduleEvents: []
 };
 
 export const meta = {
-  name: 'schedule-component',
-  type: 'onereach-studio-form-input',
-  version: '0.5.0',
+  name: "schedule-component",
+  type: "onereach-studio-form-input",
+  version: "0.5.0"
 };
 </script>
 

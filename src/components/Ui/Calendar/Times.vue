@@ -17,9 +17,7 @@
 </template>
 
 <script>
-/* eslint-disable */
 import hex2rgb from "../../helpers/convertColor.js";
-/* eslint-enable */
 
 export default {
   props: {

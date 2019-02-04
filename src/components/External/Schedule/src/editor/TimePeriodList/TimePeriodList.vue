@@ -28,9 +28,7 @@
 <script>
 import uuid from "uuid";
 
-/* eslint-disable */
 import TimePeriodItem from "../TimePeriodItem/TimePeriodItem.vue";
-/* eslint-enable */
 
 export default {
   data() {

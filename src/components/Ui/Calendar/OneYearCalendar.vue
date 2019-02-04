@@ -2,58 +2,55 @@
   <div>
     <div class="months">
       <one-month-calendar
-          v-for="month in months"
-          :key="month"
-          :year="year"
-          :month="month"
-          :years-calendar="true"
-          :highlighted-dates="highlightedDates"
-          :editable="editable"
-          not-show-selected-on-prev-next-days
-          class="calendar_years"
-          @selected-date="selectDateHandler"
-      >
-      </one-month-calendar>
+        v-for="month in months"
+        :key="month"
+        :year="year"
+        :month="month"
+        :years-calendar="true"
+        :highlighted-dates="highlightedDates"
+        :editable="editable"
+        not-show-selected-on-prev-next-days
+        class="calendar_years"
+        @selected-date="selectDateHandler"
+      ></one-month-calendar>
     </div>
   </div>
 </template>
 
 <script>
-/* eslint-disable */
-import OneMonthCalendar from './OneMonthCalendar.vue';
-/* eslint-enable */
+import OneMonthCalendar from "./OneMonthCalendar.vue";
 
 export default {
   data() {
     return {
-      months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      months: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     };
   },
 
   props: {
     year: {
       type: Number,
-      default: new Date().getFullYear(),
+      default: new Date().getFullYear()
     },
     highlightedDates: {
       type: Object,
       default() {
         return {};
-      },
+      }
     },
     editable: {
       default: true,
-      type: Boolean,
-    },
+      type: Boolean
+    }
   },
 
   methods: {
     selectDateHandler(day, month, year) {
-      this.$emit('selected-date', day, month, year);
-    },
+      this.$emit("selected-date", day, month, year);
+    }
   },
 
-  components: { OneMonthCalendar },
+  components: { OneMonthCalendar }
 };
 </script>
 

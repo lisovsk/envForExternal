@@ -21,7 +21,8 @@ function loadStories() {
   require('../src/components/Ui/Calendar/Calendar.stories.js');
   require('../src/components/Ui/Accordion/Accordion.stories.js');
   require('../src/components/External/Schedule/Schedule.stories.js');
-  require('../src/components/Ui/Calendar/Calendr2.stories.js');
+  require('../src/components/External/PairedValue/PairedValue.stories.js')
+  // {{REPLACE_STR}}
 }
 
 configure(loadStories, module);

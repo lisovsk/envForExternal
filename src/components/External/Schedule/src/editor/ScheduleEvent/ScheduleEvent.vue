@@ -217,7 +217,6 @@
 import _ from "lodash";
 import moment from "moment-timezone";
 
-/* eslint-disable */
 import TimePeriodList from "../TimePeriodList/TimePeriodList.vue";
 import Accordion from "../../../../../Ui/Accordion/Accordion.vue";
 import CronGeneratorsDaily from "../CronGenerators/Daily.vue";
@@ -227,7 +226,6 @@ import CronGeneratorsYearly from "../CronGenerators/Yearly.vue";
 import defaultValues from "../Constants/DefaultValues.js";
 import valdationsReccurin from "../validation/validationReccuring.js";
 import getRegions from "../../../../../helpers/getRegions.js";
-/* eslint-enable */
 
 export default {
   props: {

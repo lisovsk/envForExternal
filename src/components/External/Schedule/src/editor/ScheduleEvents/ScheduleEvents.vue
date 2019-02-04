@@ -154,12 +154,10 @@ import moment from "moment";
 import uuid from "uuid";
 import randomMC from "random-material-color";
 
-/* eslint-disable */
 import defaultValues from "../Constants/DefaultValues.js";
 import ScheduleEvent from "../ScheduleEvent/ScheduleEvent.vue";
 import ScheduleEventPreview from "../ScheduleEventPreview/ScheduleEventPreview.vue";
 import Calendar from "../../../../../Ui/Calendar/Calendar.vue";
-/* eslint-enable */
 
 const randomColor = _.get(
   randomMC,

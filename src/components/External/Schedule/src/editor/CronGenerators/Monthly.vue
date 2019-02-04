@@ -69,13 +69,11 @@
 </template>
 
 <script>
-/* eslint-disable */
 import _ from "lodash";
 import MonthPicker from "../MonthPicker/MonthPicker.vue";
 import DaysPicker from "../DaysPicker/DaysPicker.vue";
 import moment from "moment-timezone";
 import savedState from "./savedState.js";
-/* eslint-enable */
 
 export default {
   created() {

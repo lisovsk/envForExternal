@@ -15,11 +15,9 @@
 import * as _ from "lodash";
 import moment from "moment";
 
-/* eslint-disable */
 import ScheduleEvents from "./ScheduleEvents/ScheduleEvents.vue";
 import valdationsReccurin from "./validation/validationReccuring.js";
 import defaultValues from "./Constants/DefaultValues.js";
-/* eslint-enable */
 import { required } from "vuelidate/lib/validators";
 
 export const validator = template => {

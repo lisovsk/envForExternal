@@ -1,27 +1,22 @@
-// import Vue from 'vue';
-
 import { storiesOf } from '@storybook/vue';
 // import { action } from '@storybook/addon-actions';
-// import _ from 'lodash';
 
-/* eslint-disable */
 import Accordion from './Accordion.vue';
-/* eslint-enable */
 storiesOf('Accordion', module).add('Base accordion', () => ({
-    data() {
-        return {
-            items: [
-                {
-                    title: 'sdfsd',
-                },
-            ],
-        };
-    },
-    methods: {},
-    components: {
-        Accordion,
-    },
-    template: `
+  data() {
+    return {
+      items: [
+        {
+          title: 'sdfsd'
+        }
+      ]
+    };
+  },
+  methods: {},
+  components: {
+    Accordion
+  },
+  template: `
     <div>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <accordion>
@@ -47,5 +42,5 @@ storiesOf('Accordion', module).add('Base accordion', () => ({
             </template>
         </accordion>
     </div>
-  `,
+  `
 }));

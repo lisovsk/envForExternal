@@ -321,10 +321,8 @@
 
 <script>
 import _ from "lodash";
-/* eslint-disable */
 import Times from "./Times.vue";
 import hex2rgb from "../../helpers/convertColor.js";
-/* eslint-enable */
 
 export default {
   beforeUpdate() {

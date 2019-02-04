@@ -56,11 +56,9 @@
 import _ from "lodash";
 import moment from "moment-timezone";
 
-/* eslint-disable */
 import MonthPicker from "../MonthPicker/MonthPicker.vue";
 import savedState from "./savedState.js";
 import CRON_THAT_NEVER_RUN from "./Constants.js";
-/* eslint-enable */
 
 export default {
   created() {

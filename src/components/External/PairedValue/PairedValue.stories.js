@@ -5,7 +5,7 @@ import stepEditor, { data as schemaData } from './src/editor/editor.vue';
 import stepInput from './src/input/input.vue';
 import MixinForBase from '../../../../.storybook/MixinForBase';
 
-storiesOf('Schedule', module).add('Base', () => ({
+storiesOf('PairedValue', module).add('Base', () => ({
   data() {
     return {
       schema: JSON.parse(Vue.localStorage.get('schema')) || schemaData()

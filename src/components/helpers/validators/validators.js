@@ -3,7 +3,6 @@ import * as vuelidators from 'vuelidate/lib/validators';
 import jsParser from './helpers/js_parser.js';
 import {Util} from 'or-ui';
 
-/* eslint-disable */
 export const validateBySchema = function (data, schema, siblings) {
 
     return !_.some(schema, function (validator, key) {
@@ -23,7 +22,6 @@ export const validateBySchema = function (data, schema, siblings) {
         return false;
     }.bind(this));
 };
-/* eslint-enable */
 
 export const validateReportingTag = function (tag) {
     return _.trim(Util.getReadableTextExpression(tag.category))

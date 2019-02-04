@@ -47,10 +47,8 @@
 
 <script>
 import _ from "lodash";
-/* eslint-disable */
 import savedState from "./savedState.js";
 import CRON_THAT_NEVER_RUN from "./Constants.js";
-/* eslint-enable */
 
 export default {
   created() {

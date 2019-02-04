@@ -51,13 +51,11 @@
 </template>
 
 <script>
-/* eslint-disable */
 import moment from "moment";
 import OneMonthCalendar from "./OneMonthCalendar.vue";
 import OneYearCalendar from "./OneYearCalendar.vue";
 import getScheduledDays from "./getScheduledDaysMixin.js";
 import getRegions from "../../helpers/getRegions.js";
-/* eslint-enable */
 
 export default {
   data() {
