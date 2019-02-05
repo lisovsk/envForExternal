@@ -45,7 +45,7 @@ let componentBase = () => {
 
     return require("@default/src/inputs/_design_base.vue").default;
   } catch (error) {
-    return require("./BaseMock.vue").default;
+    return require("./../../src/../../../helpers/InputBaseMock.vue").default;
   }
 };
 
