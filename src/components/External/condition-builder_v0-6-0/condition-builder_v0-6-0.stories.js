@@ -5,12 +5,17 @@ import stepEditor, { data as schemaData } from './src/editor/editor.vue';
 import stepInput from './src/input/input.vue';
 import MixinForBase from '../../../../.storybook/MixinForBase';
 
-storiesOf('Schedule', module).add('Base', () => ({
+storiesOf('condition-builder_v0-6-0', module).add('Base', () => ({
   data() {
     return {
-      schema: JSON.parse(Vue.localStorage.get('schema')) || {
-        ...schemaData(),
-        isRunAtActivation: false
+      schema: JSON.parse(Vue.localStorage.get('schema')) || schemaData(),
+      defaultStep: {
+        data: {}
+      },
+      data: {
+        isSingleExit: null,
+        conditionRuleHasDataOut: false,
+        hasNoConditionDataOut: null
       }
     };
   },
@@ -24,19 +29,18 @@ storiesOf('Schedule', module).add('Base', () => ({
             v-model="readonly"
           >Readonly</or-checkbox>
         </div>
-      <or-switch
-        label="Run flow at activation"
-        v-model="schema.isRunAtActivation"
-      ></or-switch>
       <step-editor
         :readonly="readonly"
         :schema.sync="schema"
-        @step-validation="stepValidation"
+        :template="data"
+        :step="defaultStep"
+        :steps="[defaultStep]"
       ></step-editor>
     </or-tab>
     <or-tab title="Input">
       <step-input></step-input>
     </or-tab>
   </or-tabs>
-</div>`
+  </div>
+  `
 }));

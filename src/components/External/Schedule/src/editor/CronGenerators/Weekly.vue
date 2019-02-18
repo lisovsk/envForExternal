@@ -15,7 +15,7 @@
             mask="##########"
             :invalid="validdationPeriod"
           ></or-textbox>
-          <div class>week(s) on:</div>
+          <div class>week of a month on</div>
         </div>
         <div
           :class="[

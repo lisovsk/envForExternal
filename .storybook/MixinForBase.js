@@ -9,16 +9,17 @@ export default {
     };
   },
   watch: {
+    readonly(newReadonly) {
+      Vue.localStorage.set('readonly', JSON.stringify(newReadonly));
+    },
     schema: {
       handler(newSchema) {
         Vue.localStorage.set('schema', JSON.stringify(newSchema));
       },
       deep: true
-    },
-    readonly(newReadonly) {
-      Vue.localStorage.set('readonly', JSON.stringify(newReadonly));
     }
   },
+
   methods: {
     stepValidation(newValue) {
       this.invalid = newValue.$invalid;

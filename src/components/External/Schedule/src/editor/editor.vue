@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="error-text" v-if="showError">At least 1 event should be created</div>
     <schedule-events
       :schedule-events.sync="scheduleEventsComp"
       :step="step"
@@ -21,7 +22,18 @@ import defaultValues from "./Constants/DefaultValues.js";
 import { required } from "vuelidate/lib/validators";
 
 export const validator = template => {
-  return { scheduleEvents: { required } };
+  return {
+    scheduleEvents: {
+      custom(newScheduleEvents, schema) {
+        console.log(_.get(newScheduleEvents, "length"));
+        console.log(_.get(schema, "isRunAtActivation", false));
+        return (
+          _.get(newScheduleEvents, "length") > 0 ||
+          _.get(schema, "isRunAtActivation", false)
+        );
+      }
+    }
+  };
 };
 
 export const data = template => ({
@@ -53,6 +65,12 @@ export default {
           this.schema.scheduleEvents = newValue;
         }
       }
+    },
+    isRunAtActivationComp() {
+      return _.get(this, "schema.isRunAtActivation", null) || false;
+    },
+    showError() {
+      return this.scheduleEventsComp.length < 1 && !this.isRunAtActivationComp;
     }
   },
   watch: {
@@ -308,6 +326,10 @@ export const meta = {
 </script>
 
 <style lang="scss" scoped>
+.error-text {
+  font-size: 14px;
+  color: #f95d5d;
+}
 .disabled {
   pointer-events: none;
 }

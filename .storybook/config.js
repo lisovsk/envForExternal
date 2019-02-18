@@ -22,6 +22,7 @@ function loadStories() {
   require('../src/components/Ui/Accordion/Accordion.stories.js');
   require('../src/components/External/Schedule/Schedule.stories.js');
   require('../src/components/External/PairedValue/PairedValue.stories.js');
+  require('../src/components/External/condition-builder_v0-6-0/condition-builder_v0-6-0.stories.js');
   // {{REPLACE_STR}}
 }
 
