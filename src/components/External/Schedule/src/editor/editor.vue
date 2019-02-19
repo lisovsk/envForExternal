@@ -25,8 +25,6 @@ export const validator = template => {
   return {
     scheduleEvents: {
       custom(newScheduleEvents, schema) {
-        console.log(_.get(newScheduleEvents, "length"));
-        console.log(_.get(schema, "isRunAtActivation", false));
         return (
           _.get(newScheduleEvents, "length") > 0 ||
           _.get(schema, "isRunAtActivation", false)
