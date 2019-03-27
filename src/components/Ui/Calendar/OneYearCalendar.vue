@@ -9,6 +9,7 @@
         :years-calendar="true"
         :highlighted-dates="highlightedDates"
         :editable="editable"
+        :timeZoneCalendar="timeZoneCalendar"
         not-show-selected-on-prev-next-days
         class="calendar_years"
         @selected-date="selectDateHandler"
@@ -41,6 +42,10 @@ export default {
     editable: {
       default: true,
       type: Boolean
+    },
+    timeZoneCalendar: {
+      type: String,
+      default: ""
     }
   },
 

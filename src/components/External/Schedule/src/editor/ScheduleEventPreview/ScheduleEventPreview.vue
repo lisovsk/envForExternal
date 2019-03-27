@@ -255,7 +255,7 @@ export default {
           ).format("ll")}</span>`;
     },
     startsAt() {
-      const startDateCalendar = `${moment(`${this.startDate} 00:00`).format(
+      const startDateCalendar = `${moment(`${this.startDate}T00:00`).format(
         "YYYY-MM-DDTHH:mm"
       )}`;
       const startDate = moment().isBefore(
@@ -267,7 +267,7 @@ export default {
 
       const endDate = this.endDate.noEnd
         ? undefined
-        : new Date(`${moment(this.endDate.date).format("YYYY-MM-DD")} 23:59`);
+        : new Date(`${moment(this.endDate.date).format("YYYY-MM-DD")}T23:59`);
       const result = [].concat // eslint-disable-line
         .apply(
           [],

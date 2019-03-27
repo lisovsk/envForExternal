@@ -3,24 +3,52 @@
     <div
       :style="{background: lighter ? convertColor(color, '0.3') : color, opacity: opacity}"
       class="times"
-      v-if="items.length"
+      v-if="timeLounches.length"
     >
       <div
         class="times__item"
-        v-for="(time, index) in items"
+        v-for="(time, index) in timeLounches"
         :key="`${time}${index}`"
-        v-if="index < 10"
+        v-if="index < lengthOfShownElements"
       >{{time}}</div>
-      <div class="times__item times__item_ellipsis" v-if="items.length > 10">...</div>
+      <div
+        class="times__item times__item_ellipsis"
+        v-if="timeLounches.length > lengthOfShownElements"
+      >...</div>
     </div>
   </div>
 </template>
 
 <script>
+import moment from "moment-timezone";
 import hex2rgb from "../../helpers/convertColor.js";
+import { getTimeLounchesFomCrons } from "./helpers/getLounchesFomCrons.js";
+import sortTime from "./../../helpers/sortTime.js";
 
 export default {
+  data() {
+    return {
+      lounches: [],
+      lengthOfShownElements: 10
+    };
+  },
   props: {
+    countLaunches: {
+      type: Boolean,
+      default: false
+    },
+    expressions: {
+      type: Array,
+      default: () => []
+    },
+    timeZoneFrom: {
+      type: String,
+      default: ""
+    },
+    date: {
+      type: String,
+      default: ""
+    },
     lighter: {
       type: Boolean,
       default: false
@@ -29,18 +57,49 @@ export default {
       type: String,
       default: ""
     },
-    items: {
+    extremeTimes: {
       type: Array,
       default: () => []
     },
     opacity: {
       type: Number,
       default: 1
+    },
+    timeZoneCalendar: {
+      type: String,
+      default: ""
+    }
+  },
+  computed: {
+    timeLounches() {
+      if (this.lounches === 0) return null;
+      else {
+        return this.lounches.reduce((result, item) => {
+          return sortTime(
+            result.concat(item.map(date => date.format("HH:mm")))
+          );
+        }, []);
+      }
     }
   },
   methods: {
     convertColor(color, transparency) {
       return hex2rgb(color, transparency);
+    },
+    getLounches() {
+      return getTimeLounchesFomCrons(
+        this.expressions,
+        moment(`${this.date} 00:00:00`).format("YYYY-MM-DD HH:mm:ss"),
+        moment(`${this.date} 23:59:59`).format("YYYY-MM-DD HH:mm:ss"),
+        this.timeZoneFrom,
+        this.timeZoneCalendar
+      );
+    }
+  },
+
+  watch: {
+    countLaunches(newCountLaunches) {
+      this.lounches = this.getLounches();
     }
   }
 };

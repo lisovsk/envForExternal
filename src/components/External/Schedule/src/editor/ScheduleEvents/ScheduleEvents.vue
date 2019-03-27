@@ -42,7 +42,8 @@
         class="schedule-events__big-modal"
         ref="modal"
         title="Set schedule"
-        @close="closeModalEvent('modal')"
+        @open="isOpenModal = true"
+        @close="closeModalEvent('modal'); isOpenModal = false"
         size="large"
       >
         <div class="schedule__wr-events-calendar">
@@ -85,6 +86,7 @@
                   :preview-texts.sync="item.item.previewTexts"
                   :editable-event-num.sync="editableEventNum"
                   :saved="item.item.scheduleEventData.saved"
+                  :is-open-modal="isOpenModal"
                   @save-copy="/*saveCopy*/"
                   @return-state="/*returnState*/"
                   @apply-changes="applyChanges"
@@ -192,7 +194,8 @@ export default {
       dataStates: [],
       numOfTryEdit: null,
       runAtTime: null,
-      calendarTimeZone: ""
+      calendarTimeZone: "",
+      isOpenModal: false
     };
   },
   beforeCreate() {
@@ -353,7 +356,7 @@ export default {
       ).format("YYYY-MM-DD");
     },
     doEditable(index, isNewItem) {
-      setTimeout(() => {
+      this.$nextTick(() => {
         this.numOfTryEdit = index;
         if (this.changedNumber !== -1) {
           this.openModal("dataNotSaveEndSwitchToOtherEvent");
@@ -371,7 +374,7 @@ export default {
           );
           this.deleteNotSaved(true, isNewItem);
         }
-      }, 0);
+      });
     },
     applyChanges() {
       this.scheduleEventsLocal[

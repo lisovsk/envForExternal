@@ -22,7 +22,6 @@
                 :class="[{ readony: readonly, 'timepicker-error': timepickerEndError()}]"
                 format="HH:mm"
                 hideClearButton
-                @close-dropdown="touchEndTime"
               ></or-timepicker>
               <span @click="cancelEndTime">
                 <or-icon class="time-item__cancel-end-time" icon="close"></or-icon>

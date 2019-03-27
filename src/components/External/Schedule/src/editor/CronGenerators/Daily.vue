@@ -41,6 +41,7 @@
 import _ from "lodash";
 import savedState from "./savedState.js";
 import CRON_THAT_NEVER_RUN from "./Constants.js";
+import { generateCrons } from "./helpers.js";
 
 export default {
   created() {
@@ -148,48 +149,12 @@ export default {
   },
   methods: {
     cronExpression() {
-      /******* TODO ::: FOR PERFORMANCE *******/
-
-      // let runAtTimeHoursMinutes = {};
-      // let runAtTimeMinutesHours = {};
-      // _.forEach(this.runAtTime, (item, index) => {
-      //   if (!_.isString(runAtTimeHoursMinutes[item.HH])) {
-      //     runAtTimeHoursMinutes[item.HH] = "";
-      //     runAtTimeHoursMinutes[item.HH] += `${item.mm}`;
-      //   } else {
-      //     runAtTimeHoursMinutes[item.HH] += `,${item.mm}`;
-      //   }
+      return generateCrons(this.runAtTime, `${this.dailyValue} * ? *`);
+      // return _.map(this.runAtTime, item => {
+      //   return !_.isEmpty(this.periodLocal)
+      //     ? `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
+      //     : CRON_THAT_NEVER_RUN;
       // });
-      // _.forEach(runAtTimeHoursMinutes, (item, key) => {
-      //   if (!_.isString(runAtTimeMinutesHours[item])) {
-      //     runAtTimeMinutesHours[item] = "";
-      //     runAtTimeMinutesHours[item] += `${key}`;
-      //   } else {
-      //     runAtTimeMinutesHours[item] += `,${key}`;
-      //   }
-      // });
-      // return _.reduce(
-      //   runAtTimeMinutesHours,
-      //   (result, key, value) => {
-      //     result.push(`${value} ${key} ${this.dailyValue}  * ? *`);
-      //     return result;
-      //   },
-      //   []
-      // );
-      // return _.reduce(
-      //   runAtTimeHoursMinutes,
-      //   (result, value, key) => {
-      //     result.push(`${key} ${value} ${this.dailyValue} * * *`);
-      //     return result;
-      //   },
-      //   []
-      // );
-
-      return _.map(this.runAtTime, item => {
-        return !_.isEmpty(this.periodLocal)
-          ? `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
-          : CRON_THAT_NEVER_RUN;
-      });
     }
   },
   watch: {

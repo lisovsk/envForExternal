@@ -1,6 +1,5 @@
 <template>
   <div class="Calendar">
-    <!-- {{highlightedDates}} -->
     <div class="nav">
       <div>
         <span class="nav__interval">{{state === 'month' ? `${monthComp}, ${interval.year}` : year}}</span>
@@ -38,6 +37,7 @@
         @selected-date="selectDateHandler"
         :highlighted-dates="highlightedDates"
         :editable="editable"
+        :timeZoneCalendar="timeZoneCalendar"
       ></one-month-calendar>
       <one-year-calendar
         :year="year"
@@ -45,6 +45,7 @@
         @selected-date="selectDateHandler"
         :highlighted-dates="highlightedDates"
         :editable="editable"
+        :timeZoneCalendar="timeZoneCalendar"
       ></one-year-calendar>
     </div>
   </div>

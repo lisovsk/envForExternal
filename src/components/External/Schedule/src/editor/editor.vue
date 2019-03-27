@@ -51,6 +51,10 @@ export default {
     readonly: {
       type: Boolean,
       default: false
+    },
+    isNew: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -68,7 +72,11 @@ export default {
       return _.get(this, "schema.isRunAtActivation", null) || false;
     },
     showError() {
-      return this.scheduleEventsComp.length < 1 && !this.isRunAtActivationComp;
+      return (
+        this.scheduleEventsComp.length < 1 &&
+        !this.isRunAtActivationComp &&
+        !this.isNew
+      );
     }
   },
   watch: {

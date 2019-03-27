@@ -73,6 +73,12 @@ export default {
         this.$emit("update:times", newTimesLocal);
       },
       deep: true
+    },
+    times: {
+      handler(newTimes) {
+        this.timesLocal = newTimes;
+      },
+      deep: true
     }
   },
   components: {

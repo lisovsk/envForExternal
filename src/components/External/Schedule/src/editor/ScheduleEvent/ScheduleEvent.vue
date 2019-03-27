@@ -1,6 +1,5 @@
 <template>
   <div class="schedule-event-scope">
-    <!-- {{copyScheduleEventData.expressions}} -->
     <div class="schedule-event">
       <div class="schedule-event__title">
         <div :style="{background: copyScheduleEventData.color}" class="schedule-event__circle"></div>
@@ -216,6 +215,7 @@
 <script>
 import _ from "lodash";
 import moment from "moment-timezone";
+import Vue from "vue";
 
 import TimePeriodList from "../TimePeriodList/TimePeriodList.vue";
 import Accordion from "../../../../../Ui/Accordion/Accordion.vue";
@@ -226,13 +226,14 @@ import CronGeneratorsYearly from "../CronGenerators/Yearly.vue";
 import defaultValues from "../Constants/DefaultValues.js";
 import valdationsReccurin from "../validation/validationReccuring.js";
 import getRegions from "../../../../../helpers/getRegions.js";
+import createEveryHourIntervals from "./helpers/createEveryHourIntervals.js";
+import sortTime from "../../../../../helpers/sortTime.js";
 
 export default {
   props: {
     readonly: {
       type: Boolean,
-      default: false,
-      isEditable: false
+      default: false
     },
     steps: null,
     stepId: null,
@@ -264,6 +265,10 @@ export default {
     saved: {
       type: Boolean,
       default: false
+    },
+    isOpenModal: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -272,18 +277,11 @@ export default {
       runAtTimeLocal: [],
       loadingApply: false,
       isEditable: false,
-      previewTextsLocal: { reccuring: "" }
+      previewTextsLocal: { reccuring: "" },
+      flagMounted: false
     };
   },
   computed: {
-    // eventNameTrim: {
-    //   get() {
-    //     return this.copyScheduleEventData.eventName;
-    //   },
-    //   set(newEventName) {
-    //     this.copyScheduleEventData.eventName = newEventName.trim();
-    //   }
-    // },
     getRegions() {
       return getRegions();
     },
@@ -458,6 +456,11 @@ export default {
         this.dataStateComp !== "canceled" &&
         this.dataStateComp !== "saved"
       ) {
+        Vue.localStorage.set(
+          `${this.copyScheduleEventData.id}-times`,
+          JSON.stringify(this.copyScheduleEventData.runAtTime)
+        );
+
         this.expressionsForNotRecurring();
         this.copyScheduleEventData.saved = true;
         this.$emit("apply-changes");
@@ -572,49 +575,56 @@ export default {
       }
     },
     getRunAtTimeLocal(newVal) {
-      const runAtTimeLocal = [];
+      let runAtTimeLocal = [];
       _.forEach(newVal, item => {
-        const evertVal = item.every.val ? item.every.val : 1;
+        const evertVal = item.every.val;
+        if (!evertVal) return;
         if (item.start.HH && item.start.mm && parseInt(evertVal, 10)) {
-          const units = item.every.units === "hh" ? "hours" : "minutes";
+          const units = item.every.units === "hh" ? "Hours" : "Minutes";
 
-          let nextRunAtTime = moment(`${item.start.HH}:${item.start.mm}`, [
-            "HH:mm"
-          ]);
-          const endTimeHmmA = moment(`${item.end.HH}:${item.end.mm}`, [
-            "HH:mm"
-          ]);
-
-          do {
-            runAtTimeLocal.push({
-              HH: nextRunAtTime.hours(),
-              mm: nextRunAtTime.minutes()
-            });
-
-            nextRunAtTime = nextRunAtTime.add(evertVal, units);
-          } while (
-            nextRunAtTime.isSameOrBefore(endTimeHmmA) &&
-            item.end.HH &&
-            item.end.mm
-          );
+          if (!item.endTime) {
+            runAtTimeLocal.push({ HH: item.start.HH, mm: item.start.mm });
+          } else {
+            runAtTimeLocal = runAtTimeLocal.concat(
+              createEveryHourIntervals(
+                `${item.start.HH}:${item.start.mm}`,
+                `${item.end.HH}:${item.end.mm}`,
+                evertVal,
+                units
+              )
+            );
+          }
         }
       });
-      return _.uniqWith(runAtTimeLocal, _.isEqual);
+      const timesResult = sortTime(
+        _.uniqWith(
+          runAtTimeLocal,
+          (a, b) =>
+            parseInt(a.HH) === parseInt(b.HH) &&
+            parseInt(a.mm) === parseInt(b.mm)
+        ),
+        time => {
+          return `${time.HH}:${time.mm}`;
+        }
+      );
+      return timesResult;
     }
   },
   watch: {
     "copyScheduleEventData.times": {
-      handler(newVal) {
-        this.runAtTimeLocal = this.getRunAtTimeLocal(newVal);
+      handler(newVal, old) {
+        if (this.isOpenModal && this.flagMounted) {
+          this.runAtTimeLocal = this.getRunAtTimeLocal(newVal);
+        }
       },
       deep: true
     },
+    editableEventNum: {
+      handler(newIndex) {
+        console.log("newIndex", newIndex);
+      }
+    },
 
-    // "copyScheduleEventData.eventName": {
-    //   handler(newVal) {
-    //     this.copyScheduleEventData.eventName = newVal.trim();
-    //   }
-    // },
 
     copyScheduleEventData: {
       handler(newValue, oldValue) {
@@ -665,10 +675,17 @@ export default {
     }
   },
   created() {
-    this.runAtTimeLocal = this.getRunAtTimeLocal(
-      this.copyScheduleEventData.times
-    );
+    this.runAtTimeLocal =
+      JSON.parse(
+        Vue.localStorage.get(`${this.copyScheduleEventData.id}-times`)
+      ) || this.getRunAtTimeLocal(this.copyScheduleEventData.times);
     this.doExpressions();
+    this.flagMounted = false;
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.flagMounted = true;
+    });
   },
   components: {
     Accordion,
