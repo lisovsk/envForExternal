@@ -2,7 +2,8 @@
   <div class="yearly-scope">
     <div class="recuring-configs__monthly-day_configs yearly">
       <div v-show="isEditable">
-        <div class="radio-custom__wr">Every
+        <div class="radio-custom__wr">
+          Every
           <or-textbox
             :disabled="readonly"
             :class="['xs-input', /*{'text-box-error': !dailySchedule.isDailyDaysValid}*/]"
@@ -23,7 +24,6 @@
           ></month-picker>
         </div>
         <div class="monthly-periods monthly-periods__yearly">
-          <!-- <or-checkbox class="yearly__onThe" v-model="onTheComp">on the</or-checkbox> -->
           <or-select
             :disabled="readonly"
             :class="['config-line__select', {/*'select-box-error': !daysPeriodComp.period*/}]"
@@ -58,7 +58,7 @@ import moment from "moment-timezone";
 
 import MonthPicker from "../MonthPicker/MonthPicker.vue";
 import savedState from "./savedState.js";
-import CRON_THAT_NEVER_RUN from "./Constants.js";
+import { generateCrons } from "./helpers.js";
 
 export default {
   created() {
@@ -84,8 +84,6 @@ export default {
         { label: "Thursday", value: "THU" },
         { label: "Friday", value: "FRI" },
         { label: "Saturday", value: "SAT" }
-        // { label: 'Weekday', value: ['MON', 'TUE', 'WED', 'THU', 'FRI'] },
-        // { label: 'Weekend', value: ['SAT', 'SUN'] },
       ]
     };
   },
@@ -129,10 +127,7 @@ export default {
       type: Number,
       default: new Date().getFullYear()
     },
-    // onThe: {
-    //   type: Boolean,
-    //   default: false,
-    // },
+
     index: {
       type: Number,
       default: -1
@@ -174,14 +169,7 @@ export default {
         this.$emit("update:daysPeriod", newValue);
       }
     },
-    // onTheComp: {
-    //   get() {
-    //     return this.onThe;
-    //   },
-    //   set(newValue) {
-    //     this.$emit('update:onThe', newValue);
-    //   },
-    // },
+
     textWhenScheduled() {
       let text = `Every <span class="bold-text">${this.period}</span> year on `;
       this.selectedMonthsComp.forEach((item, index) => {
@@ -192,7 +180,7 @@ export default {
           text += ", ";
         }
       });
-      // if (this.onTheComp) {
+
       text += ` <br/>on the <span class="bold-text">${
         _.find(
           this.getDaysPeriod,
@@ -205,7 +193,7 @@ export default {
             item => item.value === this.daysPeriodComp.day
           ).label
         }</span>`;
-      // }
+
       this.previewTextsLocal.reccuring = text;
       return text;
     },
@@ -256,10 +244,6 @@ export default {
       this.$emit("input", this.cronExpression());
       this.$emit("change-saved-accordion-num-item", this.index);
     },
-    // onThe() {
-    //   this.$emit('input', this.cronExpression());
-    //   this.$emit('change-saved-accordion-num-item', this.index);
-    // },
     startYear() {
       this.$emit("input", this.cronExpression());
     },
@@ -273,27 +257,16 @@ export default {
   },
   methods: {
     cronExpression() {
-      let exp = "";
-      // if (!this.onThe) {
-      //   exp = _.map(
-      //     this.runAtTime,
-      //     item =>
-      //       `${item.mm} ${item.HH} ? ${this.selectedMonthsComp} ? 1/${
-      //         this.periodComp
-      //       }`,
-      //   );
-      // } else {
-      exp = _.map(this.runAtTime, item => {
-        return _.isEmpty(this.periodComp) || !this.selectedMonths.length
-          ? CRON_THAT_NEVER_RUN
-          : `${item.mm} ${item.HH} ${
+      return _.isEmpty(this.periodComp) || !this.selectedMonths.length
+        ? []
+        : generateCrons(
+            this.runAtTime,
+            `${
               this.daysPeriodComp.day === "*" ? this.periodForDayOption : "?"
             } ${this.selectedMonthsComp} ${this.daysPeriodComp.day}${
               this.daysPeriodComp.day === "*" ? "" : this.daysPeriodComp.period
-            } ${this.startYear}/${this.periodComp}`;
-      });
-      // }
-      return exp;
+            } ${this.startYear}/${this.periodComp}`
+          );
     }
   },
   components: { MonthPicker },
@@ -304,9 +277,6 @@ export default {
 <style lang="scss">
 .yearly-scope {
   .yearly {
-    // &__onThe {
-    //   margin-right: 5px;
-    // }
     .radio-custom__wr {
       display: flex;
       align-items: center;
@@ -351,14 +321,7 @@ export default {
           margin-right: 0;
           width: 100%;
         }
-        // .ui-checkbox {
-        //   margin-bottom: 0;
-        // }
 
-        // .ui-checkbox .ui-checkbox__label-text {
-        //   color: #0f232e;
-        //   font-size: 14px;
-        // }
       }
     }
 

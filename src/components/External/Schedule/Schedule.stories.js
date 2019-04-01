@@ -10,7 +10,9 @@ storiesOf('Schedule', module).add('Base', () => ({
     return {
       schema: JSON.parse(Vue.localStorage.get('schema')) || {
         ...schemaData(),
-        isRunAtActivation: false
+        isRunAtActivation: false,
+        exits: [],
+        multipleLegs: false
       }
     };
   },

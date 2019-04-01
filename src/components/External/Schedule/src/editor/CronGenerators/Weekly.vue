@@ -48,7 +48,7 @@
 <script>
 import _ from "lodash";
 import savedState from "./savedState.js";
-import CRON_THAT_NEVER_RUN from "./Constants.js";
+import { generateCrons } from "./helpers.js";
 
 export default {
   created() {
@@ -126,19 +126,20 @@ export default {
       }
     },
     cronExpression() {
-      return _.map(this.runAtTime, item => {
-        return this.periodLocal === "0" ||
-          _.isEmpty(this.periodLocal) ||
-          !this.weekDaysLocal.length
-          ? CRON_THAT_NEVER_RUN
-          : `${item.mm} ${item.HH} ${_.map(
+      return this.periodLocal === "0" ||
+        _.isEmpty(this.periodLocal) ||
+        !this.weekDaysLocal.length
+        ? []
+        : generateCrons(
+            this.runAtTime,
+            `${_.map(
               this.weekDaysLocal,
               weekDay =>
                 `${weekDay.label.toUpperCase()}${
                   this.periodLocal ? `#${this.periodLocal}` : ""
                 }`
-            )}  * ? *`;
-      });
+            )}  * ? *`
+          );
     }
   },
   computed: {

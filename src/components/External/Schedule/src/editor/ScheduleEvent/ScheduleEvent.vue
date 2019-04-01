@@ -194,11 +194,8 @@
           color="primary"
         >Apply</or-button>
       </div>
-      <or-modal
-        :contain-focus="false"
-        ref="cancelAndDataNotSave"
-        title="Discard unsaved changes"
-      >You have unsaved changes. Are you sure you want to discard them?
+      <or-modal :contain-focus="false" ref="cancelAndDataNotSave" title="Discard unsaved changes">
+        You have unsaved changes. Are you sure you want to discard them?
         <div slot="footer">
           <or-button color="red" @click="discardNotSaved">Discard</or-button>
           <or-button
@@ -228,6 +225,8 @@ import valdationsReccurin from "../validation/validationReccuring.js";
 import getRegions from "../../../../../helpers/getRegions.js";
 import createEveryHourIntervals from "./helpers/createEveryHourIntervals.js";
 import sortTime from "../../../../../helpers/sortTime.js";
+
+const localStorage = window.localStorage;
 
 export default {
   props: {
@@ -456,7 +455,7 @@ export default {
         this.dataStateComp !== "canceled" &&
         this.dataStateComp !== "saved"
       ) {
-        Vue.localStorage.set(
+        localStorage.setItem(
           `${this.copyScheduleEventData.id}-times`,
           JSON.stringify(this.copyScheduleEventData.runAtTime)
         );
@@ -619,12 +618,6 @@ export default {
       },
       deep: true
     },
-    editableEventNum: {
-      handler(newIndex) {
-        console.log("newIndex", newIndex);
-      }
-    },
-
 
     copyScheduleEventData: {
       handler(newValue, oldValue) {
@@ -677,7 +670,7 @@ export default {
   created() {
     this.runAtTimeLocal =
       JSON.parse(
-        Vue.localStorage.get(`${this.copyScheduleEventData.id}-times`)
+        localStorage.getItem(`${this.copyScheduleEventData.id}-times`)
       ) || this.getRunAtTimeLocal(this.copyScheduleEventData.times);
     this.doExpressions();
     this.flagMounted = false;

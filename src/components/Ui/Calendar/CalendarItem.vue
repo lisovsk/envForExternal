@@ -14,13 +14,13 @@
             <span
               class="calendar__event"
               :key="value.color"
-              v-if="currentMonthDays ? key < 3: previousMonthDaysShowFirst3(key, dayValue.length)"
               v-for="(value, key) in dayValue"
               :style="{color : value.lighter ? '#0F232E' : ''}"
             >
               <span
                 class="calendar__event-background"
                 :style="{background: currentMonthDays ? value.color : convertColor(value.color, 0.5), opacity : value.lighter ? '0.3' : ''}"
+                v-if="howPrevMonthItem(key, dayValue.length)"
               ></span>
               <span
                 @mouseover="startCountLaunches"
@@ -204,6 +204,11 @@ export default {
     },
     startCountLaunches() {
       this.countLaunches = !this.countLaunches;
+    },
+    howPrevMonthItem(key, len) {
+      return this.currentMonthDays
+        ? key < 3
+        : this.previousMonthDaysShowFirst3(key, len);
     }
   },
   components: { Times }

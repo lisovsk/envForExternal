@@ -74,6 +74,7 @@ import MonthPicker from "../MonthPicker/MonthPicker.vue";
 import DaysPicker from "../DaysPicker/DaysPicker.vue";
 import moment from "moment-timezone";
 import savedState from "./savedState.js";
+import { generateCrons } from "./helpers.js";
 
 export default {
   created() {
@@ -293,20 +294,16 @@ export default {
       let exp = "";
       if (this.modeComp === "each") {
         if (!this.selectedDaysComp.length) return [];
-        exp = _.map(
+        exp = generateCrons(
           this.runAtTime,
-          item =>
-            `${item.mm} ${item.HH} ${this.selectedDaysComp} ${
-              this.selectedMonthsComp
-            } ? *`
+          `${this.selectedDaysComp} ${this.selectedMonthsComp} ? *`
         );
       } else if (this.modeComp === "onThe") {
-        exp = _.map(
+        exp = generateCrons(
           this.runAtTime,
-          item =>
-            `${item.mm} ${item.HH} ? ${this.selectedMonthsComp} ${
-              this.daysPeriodComp.day
-            }${this.daysPeriodComp.period} *`
+          `? ${this.selectedMonthsComp} ${this.daysPeriodComp.day}${
+            this.daysPeriodComp.period
+          } *`
         );
       }
       return exp;

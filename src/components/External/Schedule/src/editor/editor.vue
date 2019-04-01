@@ -35,7 +35,7 @@ export const validator = template => {
 };
 
 export const data = template => ({
-  scheduleEvents: _.get(this, "schema.scheduleEvents", null) || []
+  scheduleEvents: []
 });
 
 export default {
@@ -60,12 +60,10 @@ export default {
   computed: {
     scheduleEventsComp: {
       get() {
-        return _.get(this, "schema.scheduleEvents", null) || [];
+        return _.get(this.schema, "scheduleEvents", null) || [];
       },
       set(newValue) {
-        if (_.get(this, "schema.scheduleEvents", null)) {
-          this.schema.scheduleEvents = newValue;
-        }
+        _.set(this.schema, "scheduleEvents", newValue);
       }
     },
     isRunAtActivationComp() {
@@ -85,9 +83,99 @@ export default {
         this.$emit("step-validation", newValue);
       },
       deep: true
+    },
+    "schema.scheduleEvents": {
+      handler(newScheduleEvents) {
+        if (this.schema.multipleLegs) {
+          this.doMultipleLegs(newScheduleEvents);
+        } else {
+          this.doSingleLag();
+        }
+      }
+    },
+    "schema.multipleLegs": {
+      handler(newMultipleLegs) {
+        if (newMultipleLegs) {
+          this.doMultipleLegs(this.schema.scheduleEvents);
+        } else {
+          this.doSingleLag();
+        }
+      }
     }
   },
   methods: {
+    doMultipleLegs(newScheduleEvents) {
+      const firstEvent = _.get(newScheduleEvents[0], "scheduleEventData");
+
+      if (firstEvent) {
+        this.mapDefaultLeg(firstEvent.eventName || "No name", firstEvent.id);
+      }
+
+      const newExits = newScheduleEvents.map(item => {
+        return {
+          id: item.scheduleEventData.id,
+          label: item.scheduleEventData.eventName || "No name",
+          stepId: "",
+          dynamic: true
+        };
+      });
+
+      this.deleteExitsIfEvetsDeleted(newExits, this.schema.exits);
+      this.addExitsIfEvetsDeleted(newExits, this.schema.exits);
+      this.mapLabelForlegs(newExits, this.schema.exits);
+
+      if (!this.schema.exits.length) {
+        this.schema.exits.push({
+          id: "next",
+          label: "next",
+          stepId: "",
+          dynamic: true
+        });
+      }
+    },
+    doSingleLag(newMultipleLegs) {
+      if (this.schema.scheduleEvents && this.schema.exits) {
+        this.schema.exits.splice(0, 1);
+        this.schema.exits[0].label = "next";
+        this.schema.exits[0].id = "next";
+      }
+    },
+    mapDefaultLeg(newLabel, newId) {
+      _.each(this.schema.exits, item => {
+        if (item.id === "next") {
+          item.label = newLabel;
+          item.id = newId;
+        }
+      });
+    },
+    mapLabelForlegs(newLabel, currentExits) {
+      _.each(currentExits, itemFromCurr => {
+        const itemFromNewLabel = newLabel.find(
+          itemFromNew => itemFromNew.id === itemFromCurr.id
+        );
+        if (itemFromNewLabel) {
+          itemFromCurr.label = itemFromNewLabel.label;
+        }
+      });
+    },
+    deleteExitsIfEvetsDeleted(newExits, currentExits) {
+      const newExitsIds = newExits.map(item => item.id);
+      _.each(currentExits, (item, index) => {
+        if (item && !_.includes(newExitsIds, item.id)) {
+          currentExits.splice(index, 1);
+        }
+      });
+    },
+    addExitsIfEvetsDeleted(newExits, currentExits) {
+      const currentExitsIds = currentExits.map(item => item.id);
+      const diffNewExitsCurrentExits = newExits.filter(
+        item => !_.includes(currentExitsIds, item.id)
+      );
+
+      _.each(diffNewExitsCurrentExits, item => {
+        currentExits.push(item);
+      });
+    },
     newCopyScheduleEventData(newValue) {
       if (this.validationCopyScheduleEventData) {
         this.validationCopyScheduleEventData = newValue;
@@ -315,7 +403,11 @@ export default {
     }
   },
   created() {
-    this.schema.scheduleEvents = this.schema.scheduleEvents || [];
+    _.set(
+      this.schema,
+      "scheduleEvents",
+      _.get(this.schema, "scheduleEvents", []) || []
+    );
   },
   data() {
     return {

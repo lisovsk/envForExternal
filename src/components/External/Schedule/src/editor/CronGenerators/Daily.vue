@@ -150,11 +150,6 @@ export default {
   methods: {
     cronExpression() {
       return generateCrons(this.runAtTime, `${this.dailyValue} * ? *`);
-      // return _.map(this.runAtTime, item => {
-      //   return !_.isEmpty(this.periodLocal)
-      //     ? `${item.mm} ${item.HH} ${this.dailyValue}  * ? *`
-      //     : CRON_THAT_NEVER_RUN;
-      // });
     }
   },
   watch: {
