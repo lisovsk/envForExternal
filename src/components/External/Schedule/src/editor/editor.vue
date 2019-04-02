@@ -134,8 +134,8 @@ export default {
       }
     },
     doSingleLag(newMultipleLegs) {
-      if (this.schema.scheduleEvents && this.schema.exits) {
-        this.schema.exits.splice(0, 1);
+      if (this.schema.scheduleEvents.length && this.schema.exits.length) {
+        this.schema.exits.splice(1);
         this.schema.exits[0].label = "next";
         this.schema.exits[0].id = "next";
       }
