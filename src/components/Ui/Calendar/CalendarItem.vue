@@ -1,6 +1,6 @@
 <template>
   <div
-    class="calendar__item"
+    class="calendar__item calendar__item_scoped"
     :class="{'calendar__item_not-edit': !editable, 'calendar__item_not-curr': !currentMonthDays}"
     @click="sendChosenDate(dayKey, month, year)"
   >
@@ -103,7 +103,7 @@
                 cy="17"
                 cx="17"
                 :r="radius"
-              ></circle>
+              />
             </svg>
           </div>
           <div
@@ -215,7 +215,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .calendar__item_event {
   position: relative;
 

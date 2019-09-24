@@ -116,21 +116,15 @@
           </div>
         </div>
       </or-modal>
-      <or-modal
-        :contain-focus="false"
-        ref="deleteEvent"
-        title="Сonfirmation of delete"
-      >Are you sure want delete event?
+      <or-modal :contain-focus="false" ref="deleteEvent" title="Сonfirmation of delete">
+        Are you sure want delete event?
         <div slot="footer">
           <or-button color="red" @click="deleteСonfirmation()">Delete</or-button>
           <or-button color="primary" type="secondary" @click="closeModal('deleteEvent')">Cancel</or-button>
         </div>
       </or-modal>
-      <or-modal
-        :contain-focus="false"
-        ref="dataNotSave"
-        title="Discard unsaved changes"
-      >You have unsaved changes. Are you sure you want to discard them?
+      <or-modal :contain-focus="false" ref="dataNotSave" title="Discard unsaved changes">
+        You have unsaved changes. Are you sure you want to discard them?
         <div slot="footer">
           <or-button color="red" @click="discard">Discard</or-button>
           <or-button color="primary" type="secondary" @click="closeModal('dataNotSave')">Cancel</or-button>
@@ -141,7 +135,8 @@
         ref="dataNotSaveEndSwitchToOtherEvent"
         title="Discard unsaved changes"
         @close="cancelDiscard"
-      >You have unsaved changes. Are you sure you want to discard them?
+      >
+        You have unsaved changes. Are you sure you want to discard them?
         <div slot="footer">
           <or-button color="red" @click="discardSwitchToOtherEvent">Discard</or-button>
           <or-button color="primary" type="secondary" @click="cancelDiscard">Cancel</or-button>

@@ -416,6 +416,12 @@ export default {
   }
 };
 
+export const toJSON = ({ schema, inputData, context }) => {
+  return {
+    scheduleEvents: JSON.stringify(schema.scheduleEvents)
+  };
+};
+
 export const meta = {
   name: "schedule-component",
   type: "onereach-studio-form-editor",
