@@ -21,7 +21,7 @@
             >,</span>
             <span v-if="conditionalEllipsisForDate(index)">...</span>
           </span>
-          
+
           <span
             class="schedule-event-preview__see-more"
             @click.stop="seeMoreDates"
@@ -278,6 +278,7 @@ export default {
           )
         )
         .filter(item => {
+          console.log(item);
           return moment(item, "YYYY-MM-DD", true).isValid();
         })
         .map(item => moment(item).format("L"));
@@ -381,6 +382,7 @@ export default {
     color: #64b2da;
     cursor: pointer;
     white-space: nowrap;
+    pointer-events: auto;
   }
 
   &__times {

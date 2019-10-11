@@ -305,7 +305,7 @@ export default {
                 this,
                 "validationCopyScheduleEventData.savedAccordionSlotName"
               ) === "item2" &&
-              (!value || value < 1)
+              (!value || value < 1 || value > 5)
             ) {
               valid = false;
             }

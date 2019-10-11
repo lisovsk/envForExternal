@@ -12,7 +12,7 @@
             label
             v-model="periodLocal"
             placeholder
-            mask="##########"
+            mask="#"
             :invalid="validdationPeriod"
           ></or-textbox>
           <div class>week of a month on</div>
