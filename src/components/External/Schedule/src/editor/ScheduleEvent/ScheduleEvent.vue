@@ -11,7 +11,7 @@
           :invalid="invalidNameOfEvent"
           @blur="$v.validationCopyScheduleEventData.eventName.$touch()"
           @input="handleName()"
-        >
+        />
       </div>
       <div class="wr-tizezone-start-date">
         <div class="wr-top-start-date">
@@ -621,12 +621,14 @@ export default {
 
     copyScheduleEventData: {
       handler(newValue, oldValue) {
+        if (this.dataStateComp === "new") return;
+
         if (
           !_.isEqual(newValue, this.scheduleEventData) &&
           newValue.id === oldValue.id
         ) {
           this.dataStateComp = "changed";
-        } else if (this.dataStateComp !== "new") {
+        } else {
           this.dataStateComp = "canceled";
         }
       },

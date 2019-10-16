@@ -38,7 +38,7 @@
         <div class="schedule-event-preview__times">
           <span
             :key="time.id"
-            v-for="(time, index) in startTimes"
+            v-for="(time, index) in startTimesUniq"
             v-if="conditionalStartTimes(index)"
           >
             <span v-html="`<span class='bold-text'>${time.start.HH}:${time.start.mm}</span>`"></span>
@@ -56,7 +56,7 @@
           <span
             class="schedule-event-preview__see-more"
             @click.stop="seeLessTimes"
-            v-if="moreTimes && startTimes.length > 3"
+            v-if="moreTimes && startTimesUniq.length > 3"
           >see less</span>
         </div>
         <div class="schedule-event-preview__end-date" v-html="endDateComp"></div>
@@ -231,8 +231,8 @@ export default {
     },
     conditionalTimeСomma(index) {
       return !this.moreTimes
-        ? index !== 2 && index !== this.startTimes.length - 1
-        : index !== this.startTimes.length - 1;
+        ? index !== 2 && index !== this.startTimesUniq.length - 1
+        : index !== this.startTimesUniq.length - 1;
     },
     getRef() {
       return `menu${this.index}`;
@@ -278,24 +278,31 @@ export default {
           )
         )
         .filter(item => {
-          console.log(item);
           return moment(item, "YYYY-MM-DD", true).isValid();
         })
         .map(item => moment(item).format("L"));
       return _.uniq(result);
     },
     conditionalSeeMoreTimes() {
-      return !this.moreTimes && this.startTimes.length > 3;
+      return !this.moreTimes && this.startTimesUniq.length > 3;
     },
     conditionalSeeMoreDates() {
       return !this.moreDates && this.startsAt.length > 3;
     },
     conditionalEllipsisForTimes() {
-      return !this.moreTimes && this.startTimes.length > 3;
+      return !this.moreTimes && this.startTimesUniq.length > 3;
     },
     isWillBeStart() {
       return true;
-      // return !!this.startsAt.length;
+    },
+    startTimesUniq() {
+      return _.uniqWith(this.startTimes, (a, b) => {
+        const aCopy = _.cloneDeep(a);
+        const bCopy = _.cloneDeep(b);
+        delete aCopy.vforkey;
+        delete bCopy.vforkey;
+        return _.isEqual(aCopy, bCopy);
+      });
     }
   }
 };

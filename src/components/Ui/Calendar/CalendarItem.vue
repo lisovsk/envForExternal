@@ -16,6 +16,7 @@
               :key="value.color"
               v-for="(value, key) in dayValue"
               :style="{color : value.lighter ? '#0F232E' : ''}"
+              v-if="key < 3"
             >
               <span
                 class="calendar__event-background"

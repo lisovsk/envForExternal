@@ -31,9 +31,6 @@ import uuid from "uuid";
 import TimePeriodItem from "../TimePeriodItem/TimePeriodItem.vue";
 
 export default {
-  data() {
-    return { timesLocal: this.times };
-  },
   props: {
     times: {
       type: Array,
@@ -67,18 +64,17 @@ export default {
       };
     }
   },
-  watch: {
+  computed: {
     timesLocal: {
-      handler(newTimesLocal) {
-        this.$emit("update:times", newTimesLocal);
+      get() {
+        return this.times;
       },
-      deep: true
-    },
-    times: {
-      handler(newTimes) {
-        this.timesLocal = newTimes;
-      },
-      deep: true
+      set(newValue) {
+        this.$emit(
+          "update:times",
+          newValue
+        );
+      }
     }
   },
   components: {
