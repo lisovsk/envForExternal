@@ -573,5 +573,8 @@ export default {
   .add-buttom {
     border: none;
   }
+  .or-list-items + div {
+    max-width: 130px;
+  }
 }
 </style>
