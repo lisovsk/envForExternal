@@ -1,0 +1,28 @@
+{
+  "name": "schedule",
+  "version": "1.0.0",
+  "homepage": "https://gitlab.com/onereach/library/app-dev#readme",
+  "description": "OneReach Schedule Component",
+  "main": "index.js",
+  "scripts": {
+    "start": "http-server --cors --ext js .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/onereach/library/app-dev.git"
+  },
+  "author": "",
+  "license": "One Reach",
+  "bugs": {
+    "url": "https://gitlab.com/onereach/library/app-dev/-/boards"
+  },
+  "devDependencies": {
+    "http-server": "^0.11.1",
+    "or-ui-components": "^1.1832.51"
+  },
+  "dependencies": {
+    "random-material-color": "^1.0.3",
+    "vue-randomcolor": "^1.0.4"
+  }
+}
